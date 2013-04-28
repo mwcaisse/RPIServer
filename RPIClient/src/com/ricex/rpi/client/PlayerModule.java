@@ -46,7 +46,8 @@ public class PlayerModule {
 	 */
 
 	public synchronized void playVideo(String videoPath) {
-		String command = "/home/mitchell/play.sh /mnt/videos/" + videoPath.trim();
+		//String command = "/home/mitchell/play.sh /mnt/videos/" + videoPath.trim();
+		String command = "omxplayer -o hdmi /mnt/videos/" + videoPath.trim();
 		
 		//create and run the thread
 		//stop the currently running video before we decide to start a new one
