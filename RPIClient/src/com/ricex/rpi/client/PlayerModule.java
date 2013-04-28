@@ -66,6 +66,7 @@ public class PlayerModule {
 		if (out != null) {
 			System.out.println("Out was not null, stopping");
 			out.print("q");
+			out.close(); // see if closing the stream pushes the EOF.
 		}
 		else {
 			System.out.println("Else was null.... why?");
