@@ -1,7 +1,8 @@
 package com.ricex.rpi.client;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
 
 /**
  * The Player Module for the RPI Client
@@ -24,7 +25,7 @@ public class PlayerModule {
 	private Player player;
 	
 	/** The stream into the process */
-	private PrintWriter out;
+	private BufferedWriter out;
 
 	/** Gets the singleton instance of this class */
 	public static PlayerModule getInstance() {
@@ -65,8 +66,16 @@ public class PlayerModule {
 		//TODO: think of a better way to do this
 		if (out != null) {
 			System.out.println("Out was not null, stopping");
-			out.print("q");
-			out.close(); // see if closing the stream pushes the EOF.
+			try {
+				out.write("q");
+				out.flush(); //flush the stream, of course.
+			}
+			catch (IOException e) {
+				System.out.println("Error writting to omxplayer process");
+				e.printStackTrace();
+			}
+			
+			//out.close(); // see if closing the stream pushes the EOF.
 		}
 		else {
 			System.out.println("Else was null.... why?");
@@ -91,7 +100,7 @@ public class PlayerModule {
 			try {
 				//create a process and play the video, we shall wait for the process to be over.
 				movieProcess = Runtime.getRuntime().exec(command);
-				out = new PrintWriter(movieProcess.getOutputStream());
+				out = new BufferedWriter(new OutputStreamWriter(movieProcess.getOutputStream()));
 				movieProcess.waitFor();
 				out = null;
 			}
