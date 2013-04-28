@@ -1,6 +1,7 @@
 package com.ricex.rpi.client;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * The Player Module for the RPI Client
@@ -21,6 +22,9 @@ public class PlayerModule {
 	
 	/** The player that this class uses */
 	private Player player;
+	
+	/** The stream into the process */
+	private PrintWriter out;
 
 	/** Gets the singleton instance of this class */
 	public static PlayerModule getInstance() {
@@ -47,8 +51,9 @@ public class PlayerModule {
 		//create and run the thread
 		//stop the currently running video before we decide to start a new one
 		stopVideo();
-		playerThread = new Thread(new Player(command));
-		playerThread.start();
+		Player player = new Player(command);
+		playerThread = new Thread(player);
+		playerThread.start();		
 	}
 	
 	/** Stops the currently playing video 
@@ -56,11 +61,15 @@ public class PlayerModule {
 	 */
 	
 	public synchronized void stopVideo() {
-		if (playerThread != null) {
-			//there is a thread running
-			playerThread.interrupt();
-			playerThread = null;
+		//TODO: think of a better way to do this
+		if (out != null) {
+			System.out.println("Out was not null, stopping");
+			out.print("q");
 		}
+		else {
+			System.out.println("Else was null.... why?");
+		}
+		
 	}
 
 	
@@ -69,16 +78,20 @@ public class PlayerModule {
 		/** The command to execute */
 		private String command;
 		
+		private Process movieProcess;
+		
 		private  Player(String command) {
 			this.command = command;
+			movieProcess = null;
 		}
 
 		public void run() {
-			Process movieProcess = null;
 			try {
 				//create a process and play the video, we shall wait for the process to be over.
 				movieProcess = Runtime.getRuntime().exec(command);
+				out = new PrintWriter(movieProcess.getOutputStream());
 				movieProcess.waitFor();
+				out = null;
 			}
 			catch (IOException e) {
 				System.out.println("Error playing video: " + command);
@@ -90,7 +103,8 @@ public class PlayerModule {
 					movieProcess.destroy();
 				}
 			}
-		}
+		}		
+	
 	}
 
 

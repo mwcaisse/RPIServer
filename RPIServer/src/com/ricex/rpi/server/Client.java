@@ -31,9 +31,9 @@ public class Client {
 		//after we connect, lets send a message to play a video, and see how it works. muahah
 		handler.sendMessage(new MovieMessage("Movies/Red_720p.mkv", MovieMessage.MovieCommand.PLAY));
 		
-		//sleep for 20 seconds
+		//sleep for 60 seconds
 		try {
-			Thread.sleep(1000 * 20);
+			Thread.sleep(1000 * 60);
 		}
 		catch (InterruptedException e) {
 			//gah

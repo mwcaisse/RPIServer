@@ -95,9 +95,7 @@ public class ServerHandler implements Runnable {
 						PlayerModule.getInstance().stopVideo();
 					}
 				}
-				else {
-					System.out.println("Msg Received: " + msg);
-				}
+				System.out.println("Msg Received: " + msg);
 			}
 		}
 		catch (ClassNotFoundException | IOException e) {
