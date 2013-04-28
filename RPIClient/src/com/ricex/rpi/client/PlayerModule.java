@@ -18,14 +18,8 @@ public class PlayerModule {
 	/** The singleton instance of this class */
 	private static PlayerModule _instance;
 	
-	/** The thread that we play the video in */
-	private Thread playerThread;
-	
 	/** The player that this class uses */
 	private Player player;
-	
-	/** The stream into the process */
-	private BufferedWriter out;
 
 	/** Gets the singleton instance of this class */
 	public static PlayerModule getInstance() {
@@ -46,63 +40,68 @@ public class PlayerModule {
 	 * @param videoPath
 	 */
 
-	public synchronized void playVideo(String videoPath) {
+	public void playVideo(String videoPath) {
 		//String command = "/home/mitchell/play.sh /mnt/videos/" + videoPath.trim();
 		String command = "omxplayer -o hdmi /mnt/videos/" + videoPath.trim();
 		
 		//create and run the thread
 		//stop the currently running video before we decide to start a new one
 		stopVideo();
-		Player player = new Player(command);
-		playerThread = new Thread(player);
-		playerThread.start();		
+		player = new Player(command);
+		
 	}
 	
 	/** Stops the currently playing video 
 	 * 
 	 */
 	
-	public synchronized void stopVideo() {
-		//TODO: think of a better way to do this
-		if (out != null) {
-			System.out.println("Out was not null, stopping");
-			try {
-				out.write("q");
-				out.flush(); //flush the stream, of course.
-			}
-			catch (IOException e) {
-				System.out.println("Error writting to omxplayer process");
-				e.printStackTrace();
-			}
-			
-			//out.close(); // see if closing the stream pushes the EOF.
+	public void stopVideo() {
+		if (player != null) {
+			player.writeToProcess("q");
 		}
-		else {
-			System.out.println("Else was null.... why?");
-		}
-		
 	}
 
+	//want to be able to send commands to the process
+	//wait for the process to finish executing, so we know when it is running...
+	//
 	
 	private class Player implements Runnable {
 	
 		/** The command to execute */
 		private String command;
 		
+		/** The process that the movie is running in */
 		private Process movieProcess;
 		
+		/** The thread that this playing is running in */
+		private Thread playerThread;	
+		
+		/** whether the thread is running or not, aka a video is being played */
+		private boolean playing;
+		
+		/** The stream into the process */
+		private BufferedWriter out;
+		
 		private  Player(String command) {
+			playing = false;
 			this.command = command;
 			movieProcess = null;
+			playerThread = new Thread(this);
+			playerThread.start();
 		}
 
 		public void run() {
 			try {
+				playing = true;
+				
 				//create a process and play the video, we shall wait for the process to be over.
 				movieProcess = Runtime.getRuntime().exec(command);
+				
+				//create the output stream
 				out = new BufferedWriter(new OutputStreamWriter(movieProcess.getOutputStream()));
+				
+				//wait for the process to finish executing
 				movieProcess.waitFor();
-				out = null;
 			}
 			catch (IOException e) {
 				System.out.println("Error playing video: " + command);
@@ -114,7 +113,34 @@ public class PlayerModule {
 					movieProcess.destroy();
 				}
 			}
-		}		
+			playing = false;
+		}	
+		
+		public boolean isPlaying() {
+			return playing;
+		}
+		
+		/** Writes the given string to the process then flushes the stream
+		 * 
+		 * @param str The string to write
+		 * @return true of false depending on the sucess of the write.
+		 */
+		
+		public synchronized boolean writeToProcess(String str) {
+			if (!isPlaying()) {
+				return false; // there is nothing playing, we cant send commands
+			}
+			//the video is playing we can send the commands 
+			try {
+				out.write(str);
+				out.flush();
+			}
+			catch (IOException e) {
+				System.out.println("Error writing to process");
+				return false;
+			}			
+			return true;
+		}
 	
 	}
 
