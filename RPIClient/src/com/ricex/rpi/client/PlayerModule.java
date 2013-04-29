@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 /**
- * The Player Module for the RPI Client
- * 
- * Runs in its own thread, and is responsible for playing the videos
+ *  The player module for RPIClient
+ *  This will run on the Raspberry Pi itself, and is the controller around the omx player
+ *  It interacts with the omx process, and can issue commands to the omxplayer process by using
+ *  the output stream on the process.
+ *  
+ *  Only one video is allowed to be played at a time.
  * 
  * @author Mitchell
  * 
@@ -46,7 +49,7 @@ public class PlayerModule {
 		
 		//create and run the thread
 		//stop the currently running video before we decide to start a new one
-		stopVideo();
+		stop();
 		player = new Player(command);
 		
 	}
@@ -55,12 +58,22 @@ public class PlayerModule {
 	 * 
 	 */
 	
-	public void stopVideo() {
+	public void stop() {
 		if (player != null) {
 			player.writeToProcess("q");
+			player = null;
 		}
 	}
-
+	
+	/** Pause / resumes the currently playing video
+	 * 
+	 */
+	
+	public void pause() {
+		if (player != null && player.isPlaying()) {
+			player.writeToProcess("p");
+		}
+	}
 	//want to be able to send commands to the process
 	//wait for the process to finish executing, so we know when it is running...
 	//

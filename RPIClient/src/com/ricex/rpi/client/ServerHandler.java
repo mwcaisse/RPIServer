@@ -92,7 +92,7 @@ public class ServerHandler implements Runnable {
 						PlayerModule.getInstance().playVideo(mmsg.getMoviePath());
 					}
 					else {
-						PlayerModule.getInstance().stopVideo();
+						PlayerModule.getInstance().stop();
 					}
 				}
 				System.out.println("Msg Received: " + msg);
