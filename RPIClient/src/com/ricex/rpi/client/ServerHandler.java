@@ -104,4 +104,13 @@ public class ServerHandler implements Runnable {
 		}
 
 	}
+	
+	/** Processes the message received
+	 * 
+	 * @param message The message that was received from the server
+	 */
+	
+	private void processMessage(IMessage message) {
+		
+	}
 }
