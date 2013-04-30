@@ -23,15 +23,15 @@ public class ClientHandler implements Runnable {
 		
 		try {
 			outStream = new ObjectOutputStream(client.getSocket().getOutputStream());
+			inStream = new ObjectInputStream(client.getSocket().getInputStream());
 		}
 		catch (IOException e) {
-			System.out.println("Error creating output stream");
+			System.out.println("Error creating input/output streams");
 		}
 	}
 
 	public void run() {
-		try {
-			inStream = new ObjectInputStream(client.getSocket().getInputStream());
+		try {		
 			Object inputObject;
 			while ( (inputObject = inStream.readObject()) != null) {
 				System.out.println("Received message from client: " + inputObject);
