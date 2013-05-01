@@ -42,8 +42,8 @@ public class ServerHandler implements Runnable {
 	public ServerHandler(Socket socket) throws IOException {
 		this.serverSocket = socket;
 
-		outStream = new ObjectOutputStream(socket.getOutputStream());
 		inStream = new ObjectInputStream(socket.getInputStream());
+		outStream = new ObjectOutputStream(socket.getOutputStream());
 
 		System.out.println("We connected to the server, lets wait for messages!");
 		
