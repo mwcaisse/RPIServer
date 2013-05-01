@@ -85,17 +85,8 @@ public class ServerHandler implements Runnable {
 					System.out.println("Received invalid message object");
 					continue;
 				}
-				IMessage msg = (IMessage) input;
-				if (msg instanceof MovieMessage) {
-					MovieMessage mmsg = (MovieMessage)msg;
-					if (mmsg.getCommand() ==  MovieMessage.MovieCommand.PLAY) {
-						PlayerModule.getInstance().playVideo(mmsg.getMoviePath());
-					}
-					else {
-						PlayerModule.getInstance().stop();
-					}
-				}
-				System.out.println("Msg Received: " + msg);
+				IMessage msg = (IMessage) input;		
+				processMessage(msg); //process the received message 
 			}
 		}
 		catch (ClassNotFoundException | IOException e) {
@@ -111,6 +102,12 @@ public class ServerHandler implements Runnable {
 	 */
 	
 	private void processMessage(IMessage message) {
-		
+		if (message instanceof MovieMessage) {
+			// this is a movie message, lets print it out
+			((MovieMessage)message).execute(ThreadedPlayerModule.getInstance());
+		}
+		else {
+			System.out.println("Msg received: " + message);
+		}
 	}
 }

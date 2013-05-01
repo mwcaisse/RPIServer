@@ -4,6 +4,16 @@ import java.net.Socket;
 
 import com.ricex.rpi.common.MovieMessage;
 
+/** A client that is connected to the server
+ * 
+ * @author Mitchell
+ *
+ */
+
+//TODO: Add some type of ID and/or name to the client
+//TODO: Add a way to distinguish between RPI Clients and RemoteClients
+//			most likely just ask at start
+//TODO: Possibly turn this into an interface when we have multiple versions of the client
 
 public class Client {
 
@@ -29,7 +39,7 @@ public class Client {
 		clientThread.start();	
 		
 		//after we connect, lets send a message to play a video, and see how it works. muahah
-		handler.sendMessage(new MovieMessage("Movies/Red_720p.mkv", MovieMessage.MovieCommand.PLAY));
+		handler.sendMessage(new MovieMessage("Movies/Red_720p.mkv", MovieMessage.Command.PLAY));
 		
 		//sleep for 60 seconds
 		try {
@@ -39,17 +49,24 @@ public class Client {
 			//gah
 		}
 		//after 20 seconds stop the movie to see if this works
-		handler.sendMessage(new MovieMessage("Movies/Red_720p.mkv", MovieMessage.MovieCommand.STOP));
+		handler.sendMessage(new MovieMessage("Movies/Red_720p.mkv", MovieMessage.Command.STOP));
 		
 	}
+	
+	/** Returns the socket that this client is connected on
+	 */
 	
 	public Socket getSocket() {
 		return socket;
 	}
 	
+	/** Returns if the client is currently connected or not */
+	
 	public boolean isConnected() {
 		return connected;
 	}
+	
+	/** Sets the connected value of this client */
 	
 	protected void setConnected(boolean connected) {
 		this.connected = connected;

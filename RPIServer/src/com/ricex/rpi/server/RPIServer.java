@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ricex.rpi.server.player.RPIPlayer;
+
 /**
  * For now this server will only accept one client, the Raspberry Pi
  * 
@@ -27,6 +29,20 @@ public class RPIServer implements Runnable {
 
 	/** List of currently connected clients */
 	private List<Client> connectedClients;
+	
+	/** Launcher for the program */
+	
+	public static void main(String[] args) {	
+		//create and start a RPIServer		
+		RPIServer server = new RPIServer(PORT);
+		Thread serverThread = new Thread(server);
+		serverThread.start();
+		
+		//create some GUI
+		RPIPlayer player = new RPIPlayer(server);
+		player.setVisible(true);
+		
+	}
 
 	public RPIServer(int port) {
 		this.port = port;
@@ -37,6 +53,7 @@ public class RPIServer implements Runnable {
 		try {
 			socket = new ServerSocket(port);
 
+			System.out.println("Server Started");
 			// listen for conenctions to the server
 			while (true) {
 				/*
@@ -83,10 +100,13 @@ public class RPIServer implements Runnable {
 		}
 
 	}
-
-	public static void main(String[] args) {
-		Thread serverThread = new Thread(new RPIServer(PORT));
-		serverThread.start();
+	
+	/** Returns the list of connected clients
+	 * 
+	 */
+	
+	public List<Client> getConnectedClients() {
+		return connectedClients;
 	}
 
 }
