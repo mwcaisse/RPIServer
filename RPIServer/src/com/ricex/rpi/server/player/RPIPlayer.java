@@ -1,9 +1,7 @@
 package com.ricex.rpi.server.player;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-
-import javax.swing.JFrame;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 import com.ricex.rpi.server.RPIServer;
 
@@ -14,30 +12,32 @@ import com.ricex.rpi.server.RPIServer;
  *
  */
 
-public class RPIPlayer extends JFrame {
+public class RPIPlayer extends Application {
 
+	
 	/** Instance of the server that this GUI will interact with */
 	//TODO: should probally make this an interface later on
 	private RPIServer server;
 	
-	/** View for the list of movies */
-	private MovieListView movieListView;
+	/** The thread that the sever is running in */
+	private Thread serverThread;
 	
-	public RPIPlayer(RPIServer server) {
-		super("RPI Player");
-		this.server = server;
+	public RPIPlayer() {
+		server = new RPIServer(RPIServer.PORT);
+		serverThread = new Thread(server);
+		serverThread.setDaemon(true);
+		serverThread.start();	
 		
-		setPreferredSize(new Dimension(800, 600));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		movieListView = new MovieListView();
-		
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(movieListView, BorderLayout.CENTER);
-		
-		
-		pack();
-			
-		setLocationRelativeTo(null);
+	}
+	
+	public static void main (String[] args) {
+		launch();
+	}
+	
+
+	public void start(Stage stage) {
+		stage.setTitle("RPI Player");
+		stage.show();
+		stage.centerOnScreen();
 	}
 }
