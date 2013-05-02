@@ -25,19 +25,35 @@ public interface PlayerModule {
 	
 	public void pause();
 	
+	/** Move to the next chapter */
+	
 	public void nextChapter();
+	
+	/** Move the previous chapter */
 	
 	public void previousChapter();
 	
+	/** Turn the volume up */
+	
 	public void volumeUp();
+	
+	/** Turn the volume down */
 	
 	public void volumeDown();
 	
+	/** Seek to the right 30 seconds */
+	
 	public void seekForwardSlow();
+	
+	/** Seek to the right 600 seconds */
 	
 	public void seekForwardFast();
 	
+	/** Seek to the left 30 seconds */
+	
 	public void seekBackwardSlow();
+	
+	/** Seek to the right 600 seconds */
 	
 	public void seekBackwardFast();
 }

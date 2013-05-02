@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ricex.rpi.common.PlayerModule;
+
 /**
  * For now this server will only accept one client, the Raspberry Pi
  * 
@@ -26,7 +28,7 @@ public class RPIServer implements Runnable {
 	private int port;
 
 	/** List of currently connected clients */
-	private List<Client> connectedClients;
+	private List<Client> connectedClients;	
 	
 	public RPIServer(int port) {
 		this.port = port;

@@ -5,7 +5,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import com.ricex.rpi.common.PlayerModule;
 import com.ricex.rpi.server.RPIServer;
+import com.ricex.rpi.server.ServerPlayerModule;
 
 /** The gui for the server that will report status of the server, as well
  * 		as allowing the user to control the playing movie
@@ -30,13 +32,17 @@ public class RPIPlayer extends Application {
 	/** The pane for the button controls on the right */
 	private ButtonPane buttonPane;
 	
+	/** The player module for this GUI */
+	private PlayerModule playerModule;
+	
 	public RPIPlayer() {
-		/* For now lets not run the server
 		server = new RPIServer(RPIServer.PORT);
 		serverThread = new Thread(server);
 		serverThread.setDaemon(true);
 		serverThread.start();	
-		*/
+		
+		playerModule = new ServerPlayerModule(server);
+		
 		
 	}
 	
@@ -49,7 +55,7 @@ public class RPIPlayer extends Application {
 		stage.setTitle("RPI Player");
 		
 		movieListView = new MovieListView();	
-		buttonPane = new ButtonPane();
+		buttonPane = new ButtonPane(playerModule, movieListView);
 		
 		
 		BorderPane borderPane = new BorderPane();

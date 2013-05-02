@@ -29,6 +29,11 @@ public class MovieMessage implements IMessage {
 	/** Weather this movie will be played or stopped */
 	private Command command;
 	
+	public MovieMessage(Command command) {
+		this.command = command;
+		moviePath = "";
+	}
+	
 	public MovieMessage(String moviePath, Command command) {
 		this.moviePath = moviePath;
 		this.command = command;

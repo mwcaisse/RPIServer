@@ -2,6 +2,7 @@ package com.ricex.rpi.server;
 
 import java.net.Socket;
 
+import com.ricex.rpi.common.IMessage;
 import com.ricex.rpi.common.MovieMessage;
 
 /** A client that is connected to the server
@@ -70,5 +71,15 @@ public class Client {
 	
 	protected void setConnected(boolean connected) {
 		this.connected = connected;
+	}
+	
+	/** Sends a message to this client
+	 * 
+	 * @param message The message to send
+	 * @return Whether the send was sucessful or not
+	 */
+	
+	public boolean sendMessage(IMessage message) {
+		return handler.sendMessage(message);
 	}
 }
