@@ -2,13 +2,15 @@ package com.ricex.rpi.server.player;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import com.ricex.rpi.common.PlayerModule;
-import com.ricex.rpi.common.RPIProperties;
+import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.server.RPIServer;
 import com.ricex.rpi.server.ServerPlayerModule;
+import com.ricex.rpi.server.StatusListener;
 
 /** The gui for the server that will report status of the server, as well
  * 		as allowing the user to control the playing movie
@@ -17,7 +19,7 @@ import com.ricex.rpi.server.ServerPlayerModule;
  *
  */
 
-public class RPIPlayer extends Application {
+public class RPIPlayer extends Application implements StatusListener {
 	
 	/** Instance of the server that this GUI will interact with */
 	//TODO: should probally make this an interface later on
@@ -34,6 +36,9 @@ public class RPIPlayer extends Application {
 	
 	/** The player module for this GUI */
 	private PlayerModule playerModule;	
+	
+	/** The status label */
+	Label labStatus;
 	
 	public RPIPlayer() {
 		server = new RPIServer();
@@ -57,10 +62,12 @@ public class RPIPlayer extends Application {
 		movieListView = new VideoListView(createVideoRoot());	
 		buttonPane = new ButtonPane(playerModule, movieListView);
 		
+		labStatus = new Label("Status goes here");
 		
 		BorderPane borderPane = new BorderPane();
 		borderPane.setCenter(movieListView);		
 		borderPane.setRight(buttonPane);
+		borderPane.setBottom(labStatus);
 		
 		Scene scene = new Scene(borderPane, 800, 600);
 		stage.setScene(scene);
@@ -77,5 +84,15 @@ public class RPIPlayer extends Application {
 		}
 		
 		return root;
+	}
+
+
+	public void statusChanged(RPIStatus status, String filePlaying) {
+		if (status == RPIStatus.IDLE) {
+			labStatus.setText("Status: " + status);
+		}
+		else {
+			labStatus.setText("Status: " + status + " " + filePlaying);
+		}
 	}
 }

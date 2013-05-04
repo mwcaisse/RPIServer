@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import com.ricex.rpi.common.RPIStatus;
+
 /** The wrapper around the thread that will run the omx process
  * 
  * @author Mitchell
@@ -103,5 +105,4 @@ public class Player implements Runnable {
 		}			
 		return true;
 	}
-
 }

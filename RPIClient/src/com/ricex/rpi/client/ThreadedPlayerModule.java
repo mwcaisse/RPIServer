@@ -2,6 +2,7 @@ package com.ricex.rpi.client;
 
 import com.ricex.rpi.common.PlayerModule;
 import com.ricex.rpi.common.RPIProperties;
+import com.ricex.rpi.common.RPIStatus;
 
 /**
  *  The player module for RPIClient
@@ -30,6 +31,11 @@ public class ThreadedPlayerModule implements PlayerModule {
 	//TODO: Create property entry for base command
 	private String baseCommand;
 	
+	/** The status of this player module */
+	private RPIStatus status;
+	
+	private String filePlaying;
+	
 	/** Gets the singleton instance of this class */
 	public static ThreadedPlayerModule getInstance() {
 		if (_instance == null) {
@@ -45,6 +51,7 @@ public class ThreadedPlayerModule implements PlayerModule {
 	private ThreadedPlayerModule() {
 		baseDir = RPIProperties.getInstance().getClientBaseDir();
 		baseCommand = "/home/mitchell/play.sh";
+		filePlaying = "";
 	}
 
 	/**
@@ -55,6 +62,7 @@ public class ThreadedPlayerModule implements PlayerModule {
 	 */
 
 	public void play(String videoPath) {
+		filePlaying = videoPath;
 		System.out.println("We are starting the video: " + videoPath);
 		String command = baseCommand + " " + baseDir + videoPath.trim();
 	
@@ -63,6 +71,9 @@ public class ThreadedPlayerModule implements PlayerModule {
 		stop();
 		player = new Player(command);
 		player.start();
+		
+		//update the status
+		status = RPIStatus.PLAYING;
 		
 	}
 	
@@ -74,6 +85,8 @@ public class ThreadedPlayerModule implements PlayerModule {
 		if (player != null) {
 			player.writeToProcess("q");
 			player = null;
+			
+			status = RPIStatus.IDLE;
 		}
 	}
 	
@@ -84,6 +97,14 @@ public class ThreadedPlayerModule implements PlayerModule {
 	public void pause() {
 		if (player != null && player.isPlaying()) {
 			player.writeToProcess("p");
+			
+			//update the status
+			if (status == RPIStatus.PAUSED) {
+				status = RPIStatus.PLAYING;
+			}
+			else {
+				status = RPIStatus.PAUSED;
+			}
 		}
 	}
 	
@@ -160,6 +181,16 @@ public class ThreadedPlayerModule implements PlayerModule {
 		if (player != null && player.isPlaying()) {
 			player.writeToProcess(KEY_DOWN + "");
 		}
+	}
+
+	/** Returns the status of this player module */
+	
+	public RPIStatus getStatus() {	
+		return status;
+	}
+	
+	public String getFilePlaying() {
+		return filePlaying;
 	}
 
 

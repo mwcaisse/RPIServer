@@ -3,6 +3,7 @@ package com.ricex.rpi.server;
 import java.net.Socket;
 
 import com.ricex.rpi.common.IMessage;
+import com.ricex.rpi.common.RPIStatus;
 
 /** A client that is connected to the server
  * 
@@ -29,7 +30,10 @@ public class Client {
 	/** Indicates wether this client is still connected or not */
 	private boolean connected = false;
 	
-	public Client (Socket socket) {
+	/** The RPIServer */
+	private RPIServer server;
+	
+	public Client (Socket socket, RPIServer server) {
 		this.socket = socket;
 		this.handler = new ClientHandler(this);		
 		
@@ -68,5 +72,9 @@ public class Client {
 	public boolean sendMessage(IMessage message) {
 		System.out.println("Sending message to client: " + message);
 		return handler.sendMessage(message);
+	}
+	
+	public void notifyStatusListeners(RPIStatus status, String filePlaying) {
+		server.notifityStatusListeners(status,filePlaying);
 	}
 }

@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.ricex.rpi.common.IMessage;
-import com.ricex.rpi.common.StringMessage;
+import com.ricex.rpi.common.StatusMessage;
 
 public class ClientHandler implements Runnable {
 
@@ -34,8 +34,7 @@ public class ClientHandler implements Runnable {
 			inStream = new ObjectInputStream(client.getSocket().getInputStream());
 			Object inputObject;
 			while ( (inputObject = inStream.readObject()) != null) {
-				System.out.println("Received message from client: " + inputObject);
-				sendMessage(new StringMessage("Ack"));
+				processMessage((IMessage) inputObject);
 			}
 
 		}
@@ -49,6 +48,16 @@ public class ClientHandler implements Runnable {
 		
 		//we are done, notify of disconnect
 		client.setConnected(false);
+	}
+	
+	private void processMessage(IMessage msg) {
+		if (msg instanceof StatusMessage) {
+			StatusMessage smsg = (StatusMessage) msg;
+			client.notifyStatusListeners(smsg.getStatus(), smsg.getFilePlaying());
+		}
+		else {
+			System.out.println("Message received from client: " + msg);
+		}
 	}
 	
 	/** Sends the given message to the client

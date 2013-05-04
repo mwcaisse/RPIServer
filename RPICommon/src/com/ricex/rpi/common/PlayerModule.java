@@ -56,4 +56,12 @@ public interface PlayerModule {
 	/** Seek to the right 600 seconds */
 	
 	public void seekBackwardFast();
+	
+	/** Returns the status of this player module */
+	
+	public RPIStatus getStatus();
+	
+	/** Returns a string representing the file that is being played */
+	
+	public String getFilePlaying();
 }

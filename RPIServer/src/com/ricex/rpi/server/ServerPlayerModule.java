@@ -3,6 +3,8 @@ package com.ricex.rpi.server;
 import com.ricex.rpi.common.IMessage;
 import com.ricex.rpi.common.MovieMessage;
 import com.ricex.rpi.common.PlayerModule;
+import com.ricex.rpi.common.RPIStatus;
+import com.ricex.rpi.common.StatusRequestMessage;
 
 /** Temporary server player module to test out the functionality of the GUi and sever 
  * 
@@ -28,7 +30,7 @@ public class ServerPlayerModule implements PlayerModule {
 	
 	public void play(String videoPath) {
 		System.out.println("Server: Playing: " + videoPath);
-		sendMessage(new MovieMessage(videoPath, MovieMessage.Command.PLAY));
+		sendMessage(new MovieMessage(videoPath, MovieMessage.Command.PLAY));		
 	}
 	
 	/** Stops the currently playing movie */
@@ -102,7 +104,18 @@ public class ServerPlayerModule implements PlayerModule {
 	private void sendMessage(IMessage message) {
 		for (Client client : server.getConnectedClients()) {
 			client.sendMessage(message);
+			client.sendMessage(new StatusRequestMessage());
 		}	
+	}
+
+	/** Unsupported operation */
+	public RPIStatus getStatus() {
+		throw new UnsupportedOperationException();
+	}
+
+	/** Unsupported operation */
+	public String getFilePlaying() {
+		throw new UnsupportedOperationException();
 	}
 
 }

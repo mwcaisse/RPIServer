@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ricex.rpi.common.RPIProperties;
+import com.ricex.rpi.common.RPIStatus;
 
 /**
  * For now this server will only accept one client, the Raspberry Pi
@@ -31,6 +32,9 @@ public class RPIServer implements Runnable {
 
 	/** List of currently connected clients */
 	private List<Client> connectedClients;	
+	
+	/** List of status listeners for the clients */
+	private List<StatusListener> statusListeners;
 	
 	public RPIServer() {
 		
@@ -60,7 +64,7 @@ public class RPIServer implements Runnable {
 
 				if (connectedClients.size() < MAX_CLIENTS) {
 					// we only allow one connection at a time,
-					Client client = new Client(clientSocket);
+					Client client = new Client(clientSocket,this);
 					connectedClients.add(client);
 				}
 				else {
@@ -99,6 +103,18 @@ public class RPIServer implements Runnable {
 	
 	public synchronized List<Client> getConnectedClients() {
 		return connectedClients;
+	}
+	
+	/** Registers the given status listener */
+	
+	public void registerStatusListener(StatusListener listener) {
+		statusListeners.add(listener);
+	}
+	
+	public void notifityStatusListeners(RPIStatus status, String filePlaying) {
+		for (StatusListener listener : statusListeners) {
+			listener.statusChanged(status,filePlaying);
+		}
 	}
 
 }

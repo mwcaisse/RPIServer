@@ -7,6 +7,8 @@ import java.net.Socket;
 
 import com.ricex.rpi.common.IMessage;
 import com.ricex.rpi.common.MovieMessage;
+import com.ricex.rpi.common.StatusMessage;
+import com.ricex.rpi.common.StatusRequestMessage;
 import com.ricex.rpi.common.StringMessage;
 
 /**
@@ -72,9 +74,9 @@ public class ServerHandler implements Runnable {
 	 */
 
 	public void run() {
-		
+
 		System.out.println("We connected to the server, lets wait for messages!");
-		
+
 		Object input;
 		try {
 			while ((input = inStream.readObject()) != null) {
@@ -82,30 +84,38 @@ public class ServerHandler implements Runnable {
 					System.out.println("Received invalid message object");
 					continue;
 				}
-				IMessage msg = (IMessage) input;		
-				processMessage(msg); //process the received message 
+				IMessage msg = (IMessage) input;
+				processMessage(msg); // process the received message
 			}
 		}
 		catch (ClassNotFoundException | IOException e) {
 			System.out.println("Received invalid class");
 			e.printStackTrace();
 		}
-		
+
 		System.out.println("Disconnecting from server");
 
 	}
-	
-	/** Processes the message received
+
+	/**
+	 * Processes the message received
 	 * 
-	 * @param message The message that was received from the server
+	 * @param message
+	 *            The message that was received from the server
 	 */
-	
+
 	private void processMessage(IMessage message) {
 		if (message instanceof MovieMessage) {
 			System.out.println("We received a movie message from the server");
 			
 			// this is a movie message, lets print it out
 			((MovieMessage)message).execute(ThreadedPlayerModule.getInstance());
+		}
+		else if (message instanceof StatusRequestMessage) {
+			//send a status message to the server
+			IMessage toSend = new StatusMessage(ThreadedPlayerModule.getInstance().getStatus(), 
+					ThreadedPlayerModule.getInstance().getFilePlaying());
+			sendMessage(toSend);
 		}
 		else {
 			System.out.println("Msg received: " + message);
