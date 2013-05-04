@@ -1,6 +1,7 @@
 package com.ricex.rpi.client;
 
 import com.ricex.rpi.common.PlayerModule;
+import com.ricex.rpi.common.RPIProperties;
 
 /**
  *  The player module for RPIClient
@@ -22,6 +23,13 @@ public class ThreadedPlayerModule implements PlayerModule {
 	/** The player that this class uses */
 	private Player player;
 
+	/** The base directory for the movies */
+	private String baseDir;
+	
+	/** The base of the command for running the movies */
+	//TODO: Create property entry for base command
+	private String baseCommand;
+	
 	/** Gets the singleton instance of this class */
 	public static ThreadedPlayerModule getInstance() {
 		if (_instance == null) {
@@ -35,6 +43,8 @@ public class ThreadedPlayerModule implements PlayerModule {
 	 */
 	
 	private ThreadedPlayerModule() {
+		baseDir = RPIProperties.getInstance().getClientBaseDir();
+		baseCommand = "/home/mitchell/play.sh";
 	}
 
 	/**
@@ -45,10 +55,9 @@ public class ThreadedPlayerModule implements PlayerModule {
 	 */
 
 	public void play(String videoPath) {
-		System.out.println("We are starting the video");
-		
-		String command = "/home/mitchell/play.sh /mnt/videos/" + videoPath.trim();
-		//String command = "omxplayer -o hdmi /mnt/videos/" + videoPath.trim();		
+		System.out.println("We are starting the video: " + videoPath);
+		String command = baseCommand + " " + baseDir + videoPath.trim();
+	
 		//create and run the thread
 		//stop the currently running video before we decide to start a new one
 		stop();

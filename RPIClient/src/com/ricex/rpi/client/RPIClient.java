@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import com.ricex.rpi.common.RPIProperties;
+
 /**
  * RPI client that connects to the server
  * 
@@ -13,18 +15,23 @@ import java.net.UnknownHostException;
 
 public class RPIClient {
 
-	/** Constants for the Server IP Address and the Port */
-	public static final int SERVER_PORT = 1337;
-	public static final String SERVER_IP = "192.168.1.103";
-
 	/** The socket this will use to conenct to the server */
 	private Socket socket;
 	
 	/** The server handle for this client */
 	private ServerHandler serverHandler;
+	
+	/** The ip address of the server */
+	private String serverIp;
+	
+	/** Port of the server to connect to */
+	private int serverPort;
 
 	public RPIClient() throws UnknownHostException, IOException {
-		socket = new Socket(SERVER_IP, SERVER_PORT);
+		serverIp = RPIProperties.getInstance().getServerIp();
+		serverPort = RPIProperties.getInstance().getRPIPort();
+		
+		socket = new Socket(serverIp, serverPort);
 		serverHandler = new ServerHandler(socket);
 		
 		//block on the server handler

@@ -7,37 +7,43 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ricex.rpi.common.PlayerModule;
+import com.ricex.rpi.common.RPIProperties;
 
 /**
  * For now this server will only accept one client, the Raspberry Pi
- * 
+ * TODO: implement the different servers for the RPI clients and the remote clients
  * @author Mitchell
  * 
  */
 
 public class RPIServer implements Runnable {
-
-	public static final int PORT = 6510;
 	
+	//TODO: might want to add this to the rpi.conf
 	private static final int MAX_CLIENTS = 1;
 
 	private ServerSocket socket;
 
-	/** The port that the server will run on */
-	private int port;
+	/** The port that the server for the RPI's will run on */
+	private int rpiPort;
+	
+	/** The port that remote controls will run on */
+	private int remotePort;
 
 	/** List of currently connected clients */
 	private List<Client> connectedClients;	
 	
-	public RPIServer(int port) {
-		this.port = port;
+	public RPIServer() {
+		
+		//get the ports from the server config */
+		rpiPort = RPIProperties.getInstance().getRPIPort();
+		remotePort = RPIProperties.getInstance().getRemotePort();
+		
 		connectedClients = new ArrayList<Client>();
 	}
 
 	public void run() {
 		try {
-			socket = new ServerSocket(port);
+			socket = new ServerSocket(rpiPort);
 
 			System.out.println("Server Started");
 			// listen for conenctions to the server

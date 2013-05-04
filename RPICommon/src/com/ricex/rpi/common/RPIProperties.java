@@ -56,14 +56,14 @@ public class RPIProperties {
 	
 	/** Returns the port for the RaspberryPi clients to connect to */
 	
-	public String getRPIPort() {
-		return properties.getProperty(RPI_PORT);
+	public int getRPIPort() {
+		return Integer.parseInt(properties.getProperty(RPI_PORT));
 	}
 	
 	/** Returns the ports that remote clients will conenct to */
 	
-	public String getRemotePort() {
-		return properties.getProperty(REMOTE_PORT);
+	public int getRemotePort() {
+		return Integer.parseInt(properties.getProperty(REMOTE_PORT));
 	}
 	
 	/** Returns the IP address of the server for clients to conenct to */

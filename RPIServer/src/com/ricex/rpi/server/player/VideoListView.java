@@ -1,5 +1,7 @@
 package com.ricex.rpi.server.player;
 
+import com.ricex.rpi.common.RPIProperties;
+
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
@@ -19,7 +21,7 @@ public class VideoListView extends BorderPane {
 	public VideoListView(Video rootVideo) {
 		videoTree = new TreeView<Video>();		
 		//create the movie parser to use      
-		movieParser = new MovieParser(RPIPlayer.baseDirectory);	
+		movieParser = new MovieParser(RPIProperties.getInstance().getServerBaseDir());	
 		updateVideos(); // update the videos using the parser
 		setCenter(videoTree);
 
