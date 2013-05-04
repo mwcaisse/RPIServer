@@ -19,6 +19,8 @@ public class Directory implements Video {
 	/** The icon this directory will use */
 	private ImageView icon;	
 	
+	private static Image iconImage = new Image(Directory.class.getResourceAsStream("/data/icons/directory.png"));
+	
 	/** Creates a new directory with the given name 
 	 * 
 	 * @param name
@@ -35,7 +37,8 @@ public class Directory implements Video {
 	public Directory(String name, List<Video> children) {
 		this.name = name;
 		this.children = children;
-		//icon = new ImageView(dirImage);
+		icon = new ImageView(iconImage);
+
 	}
 
 	public String getVideoFile() {

@@ -1,14 +1,11 @@
 package com.ricex.rpi.server.player;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
-import javax.swing.ImageIcon;
-import javax.swing.filechooser.FileSystemView;
 
 /** Class representing a movie, its file and information about it
  * 
@@ -25,7 +22,10 @@ public class Movie implements Video {
 	private String filePath;	
 	
 	/** The icon for this movie in the tree view */
-	private Node icon;
+	private ImageView icon;
+	
+	/** The image to use for the icon */
+	private static Image iconImage = new Image(Movie.class.getResourceAsStream("/data/icons/movie.png"));
 	
 	/** Creates a new movie with the given file path */
 	
@@ -37,9 +37,7 @@ public class Movie implements Video {
 	
 	public Movie(String name, String filePath) {
 		this.name = name;
-		ImageIcon o = (ImageIcon)FileSystemView.getFileSystemView().getSystemIcon(new File(" "));
-				
-		
+		icon = new ImageView(iconImage);		
 	}
 
 	/** Returns the file of this movie */
@@ -56,7 +54,7 @@ public class Movie implements Video {
 	
 	/** Returns the icon to use when displaying this in the tree */
 	public Node getIcon() {
-		return new ImageView();
+		return icon;
 	}
 	
 	public String toString() {

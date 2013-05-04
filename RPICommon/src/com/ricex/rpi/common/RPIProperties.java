@@ -36,7 +36,7 @@ public class RPIProperties {
 	private RPIProperties() {
 		properties = new Properties();
 		try {
-			properties.load(getClass().getResourceAsStream("rpi.conf"));
+			properties.load(getClass().getResourceAsStream("/data/rpi.conf"));
 		}
 		catch (IOException e) {
 			System.out.println("Unable to create properties. IOException");
