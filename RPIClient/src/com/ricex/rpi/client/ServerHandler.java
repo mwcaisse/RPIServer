@@ -103,6 +103,8 @@ public class ServerHandler implements Runnable {
 	
 	private void processMessage(IMessage message) {
 		if (message instanceof MovieMessage) {
+			System.out.println("We received a movie message from the server");
+			
 			// this is a movie message, lets print it out
 			((MovieMessage)message).execute(ThreadedPlayerModule.getInstance());
 		}
