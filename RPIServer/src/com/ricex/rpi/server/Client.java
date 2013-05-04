@@ -3,7 +3,6 @@ package com.ricex.rpi.server;
 import java.net.Socket;
 
 import com.ricex.rpi.common.IMessage;
-import com.ricex.rpi.common.MovieMessage;
 
 /** A client that is connected to the server
  * 
@@ -37,20 +36,7 @@ public class Client {
 		connected = true;
 		
 		clientThread = new Thread(handler);
-		clientThread.start();	
-		
-		//after we connect, lets send a message to play a video, and see how it works. muahah
-		handler.sendMessage(new MovieMessage("Movies/Red_720p.mkv", MovieMessage.Command.PLAY));
-		
-		//sleep for 60 seconds
-		try {
-			Thread.sleep(1000 * 60);
-		}
-		catch (InterruptedException e) {
-			//gah
-		}
-		//after 20 seconds stop the movie to see if this works
-		handler.sendMessage(new MovieMessage("Movies/Red_720p.mkv", MovieMessage.Command.STOP));
+		clientThread.start();
 		
 	}
 	
@@ -80,6 +66,7 @@ public class Client {
 	 */
 	
 	public boolean sendMessage(IMessage message) {
+		System.out.println("Sending message to client: " + message);
 		return handler.sendMessage(message);
 	}
 }

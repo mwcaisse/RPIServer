@@ -15,7 +15,7 @@ public class RPIClient {
 
 	/** Constants for the Server IP Address and the Port */
 	public static final int SERVER_PORT = 1337;
-	public static final String SERVER_IP = "192.168.1.110";
+	public static final String SERVER_IP = "192.168.1.101";
 
 	/** The socket this will use to conenct to the server */
 	private Socket socket;

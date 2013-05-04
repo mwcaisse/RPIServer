@@ -3,6 +3,9 @@ package com.ricex.rpi.server.player;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.Node;
+import javafx.scene.image.ImageView;
+
 
 public class Directory implements Video {
 
@@ -41,6 +44,11 @@ public class Directory implements Video {
 	
 	public void addChild(Video video) {
 		children.add(video);
+	}
+	
+	/** Returns the icon to use when displaying this in the tree */
+	public Node getIcon() {
+		return new ImageView();
 	}
 	
 	public String toString() {

@@ -43,13 +43,13 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent> {
 	private PlayerModule playerModule;
 	
 	/** The list view representing the movies */
-	private VideoListView movieListView;
+	private VideoListView movieView;
 	
 	/** Creates a new ButtonPane for controlling the movies */
 	
-	public ButtonPane(PlayerModule playerModule, VideoListView movieListView) {
+	public ButtonPane(PlayerModule playerModule, VideoListView movieView) {
 		this.playerModule = playerModule;		
-		this.movieListView = movieListView;
+		this.movieView = movieView;
 		
 		//create the buttons
 		butPlay = new Button("Play");
@@ -96,7 +96,8 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent> {
 		Object source = e.getSource();		
 		
 		if (source.equals(butPlay)) {
-			
+			String movieFile = movieView.getSelectedItem().getVideoFile();
+			playerModule.play(movieFile);
 		}
 		else if (source.equals(butPause)) {
 			playerModule.pause();
