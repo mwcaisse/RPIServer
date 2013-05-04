@@ -22,4 +22,7 @@ public interface Video {
 	/** Returns the icon to use when displaying this in the tree */
 	public Node getIcon();
 	
+	/** Returns whether or not this Video is a directory */
+	public boolean isDirectory();
+	
 }

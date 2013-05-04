@@ -36,7 +36,7 @@ public class Movie implements Video {
 	/** Returns the file of this movie */
 	
 	public String getVideoFile() {
-		return "Movies/Red_720p.mkv";
+		return filePath;
 	}
 
 	/** Returns the list of sub children in this video node, in this case there are none */
@@ -52,5 +52,9 @@ public class Movie implements Video {
 	
 	public String toString() {
 		return name;
+	}
+	
+	public boolean isDirectory() {
+		return false;
 	}
 }

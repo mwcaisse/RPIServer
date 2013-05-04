@@ -54,5 +54,9 @@ public class Directory implements Video {
 	public String toString() {
 		return name;
 	}
+	
+	public boolean isDirectory() {
+		return true;
+	}
 
 }
