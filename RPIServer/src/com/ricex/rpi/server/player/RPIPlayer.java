@@ -6,6 +6,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import com.ricex.rpi.common.PlayerModule;
+import com.ricex.rpi.common.RPIProperties;
 import com.ricex.rpi.server.RPIServer;
 import com.ricex.rpi.server.ServerPlayerModule;
 
@@ -41,7 +42,9 @@ public class RPIPlayer extends Application {
 		server = new RPIServer(RPIServer.PORT);
 		serverThread = new Thread(server);
 		serverThread.setDaemon(true);
-		serverThread.start();	
+		//serverThread.start();	
+		
+		RPIProperties properties = RPIProperties.getInstance();
 		
 		playerModule = new ServerPlayerModule(server);
 		

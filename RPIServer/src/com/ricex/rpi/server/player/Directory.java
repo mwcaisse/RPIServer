@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 
@@ -15,6 +16,8 @@ public class Directory implements Video {
 	/** List of children */
 	private List<Video> children;
 	
+	/** The icon this directory will use */
+	private ImageView icon;	
 	
 	/** Creates a new directory with the given name 
 	 * 
@@ -32,6 +35,7 @@ public class Directory implements Video {
 	public Directory(String name, List<Video> children) {
 		this.name = name;
 		this.children = children;
+		//icon = new ImageView(dirImage);
 	}
 
 	public String getVideoFile() {
@@ -48,7 +52,7 @@ public class Directory implements Video {
 	
 	/** Returns the icon to use when displaying this in the tree */
 	public Node getIcon() {
-		return new ImageView();
+		return icon;
 	}
 	
 	public String toString() {

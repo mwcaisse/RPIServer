@@ -70,7 +70,6 @@ public class MovieParser {
 	/** Returns the Movie representing the given File */
 
 	private Movie parseFile(File file) {
-		System.out.println("Parsing File: " + getRelativeFilePath(file));
 		return new Movie(file.getName(), getRelativeFilePath(file));
 	}
 

@@ -18,7 +18,7 @@ import com.ricex.rpi.common.PlayerModule;
 
 public class RPIServer implements Runnable {
 
-	public static final int PORT = 1337;
+	public static final int PORT = 6510;
 	
 	private static final int MAX_CLIENTS = 1;
 
