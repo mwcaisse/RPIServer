@@ -44,7 +44,7 @@ public class RPIPlayer extends Application implements StatusListener {
 		server = new RPIServer();
 		serverThread = new Thread(server);
 		serverThread.setDaemon(true);
-		//serverThread.start();	
+		serverThread.start();	
 		
 		playerModule = new ServerPlayerModule(server);
 		
