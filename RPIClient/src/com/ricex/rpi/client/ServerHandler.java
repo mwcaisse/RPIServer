@@ -44,12 +44,6 @@ public class ServerHandler implements Runnable {
 
 		inStream = new ObjectInputStream(socket.getInputStream());
 		outStream = new ObjectOutputStream(socket.getOutputStream());
-
-		System.out.println("We connected to the server, lets wait for messages!");
-		
-		thread = new Thread(this);
-		thread.start();
-		
 		sendMessage(new StringMessage("Hello server!"));
 	}
 
@@ -78,6 +72,9 @@ public class ServerHandler implements Runnable {
 	 */
 
 	public void run() {
+		
+		System.out.println("We connected to the server, lets wait for messages!");
+		
 		Object input;
 		try {
 			while ((input = inStream.readObject()) != null) {
@@ -93,6 +90,8 @@ public class ServerHandler implements Runnable {
 			System.out.println("Received invalid class");
 			e.printStackTrace();
 		}
+		
+		System.out.println("Disconnecting from server");
 
 	}
 	
