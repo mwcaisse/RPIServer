@@ -27,7 +27,7 @@ public class RPIPlayer extends Application {
 	private Thread serverThread;
 	
 	/** The lsit view for the movies */
-	private MovieListView movieListView;
+	private VideoListView movieListView;
 	
 	/** The pane for the button controls on the right */
 	private ButtonPane buttonPane;
@@ -54,7 +54,7 @@ public class RPIPlayer extends Application {
 	public void start(Stage stage) {
 		stage.setTitle("RPI Player");
 		
-		movieListView = new MovieListView();	
+		movieListView = new VideoListView();	
 		buttonPane = new ButtonPane(playerModule, movieListView);
 		
 		

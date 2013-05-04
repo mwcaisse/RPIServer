@@ -43,11 +43,11 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent> {
 	private PlayerModule playerModule;
 	
 	/** The list view representing the movies */
-	private MovieListView movieListView;
+	private VideoListView movieListView;
 	
 	/** Creates a new ButtonPane for controlling the movies */
 	
-	public ButtonPane(PlayerModule playerModule, MovieListView movieListView) {
+	public ButtonPane(PlayerModule playerModule, VideoListView movieListView) {
 		this.playerModule = playerModule;		
 		this.movieListView = movieListView;
 		
