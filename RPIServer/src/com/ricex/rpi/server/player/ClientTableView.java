@@ -4,8 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 
+import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.server.Client;
 import com.ricex.rpi.server.ClientChangeListener;
 import com.ricex.rpi.server.ClientConnectionListener;
@@ -40,7 +42,10 @@ public class ClientTableView extends BorderPane implements ClientChangeListener,
 		clientTable.setItems(clients);
 		
 		TableColumn<Client, Long> idColumn = new TableColumn<Client, Long>("Id");
-		TableColumn<Client, String> statusColumn = new TableColumn<Client, String>("Status");
+		TableColumn<Client, RPIStatus> statusColumn = new TableColumn<Client, RPIStatus>("Status");
+		
+		idColumn.setCellValueFactory(new PropertyValueFactory<Client, Long>("id"));
+		statusColumn.setCellValueFactory(new PropertyValueFactory<Client, RPIStatus>("status"));
 		
 		clientTable.getColumns().addAll(idColumn, statusColumn);
 		
