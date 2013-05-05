@@ -1,8 +1,8 @@
 package com.ricex.rpi.client;
 
 import com.ricex.rpi.common.PlayerModule;
-import com.ricex.rpi.common.RPIProperties;
 import com.ricex.rpi.common.RPIStatus;
+import com.ricex.rpi.common.StatusMessage;
 
 /**
  *  The player module for RPIClient
@@ -33,25 +33,25 @@ public class ThreadedPlayerModule implements PlayerModule {
 	/** The status of this player module */
 	private RPIStatus status;
 	
-	private String filePlaying;
+	/** The string representing the currently playing file */
+	private String filePlaying;	
 	
-	/** Gets the singleton instance of this class */
-	public static ThreadedPlayerModule getInstance() {
-		if (_instance == null) {
-			_instance = new ThreadedPlayerModule();
-		}
-		return _instance;
-	}
+	/** The handler for communicating with the server */
+	private ServerHandler handler;
 
-	/** Private contructor to preserve the singleton
-	 * 
-	 */
+	/** Creates a new ThreadedPlayerModule with the given ServerHandler */
 	
-	private ThreadedPlayerModule() {
+	public ThreadedPlayerModule(ServerHandler handler) {
 		baseDir = RPIClientProperties.getInstance().getBaseDir();
 		baseCommand = RPIClientProperties.getInstance().getBaseCommand();
 		filePlaying = "";
 	}
+	
+	protected void updateStatus(RPIStatus newStatus) {
+		status = newStatus;
+		//send the updatd status to the server
+		handler.sendMessage(new StatusMessage(status));
+	}	
 
 	/**
 	 * Plays the given video, using the path from the /mnt/video directory,
@@ -72,7 +72,7 @@ public class ThreadedPlayerModule implements PlayerModule {
 		player.start();
 		
 		//update the status
-		status = new RPIStatus(RPIStatus.PLAYING, filePlaying);
+		updateStatus(new RPIStatus(RPIStatus.PLAYING, filePlaying));
 		
 	}
 	
@@ -85,7 +85,7 @@ public class ThreadedPlayerModule implements PlayerModule {
 			player.writeToProcess("q");
 			player = null;
 			
-			status = new RPIStatus(RPIStatus.IDLE);
+			updateStatus(new RPIStatus(RPIStatus.IDLE));
 		}
 	}
 	
@@ -99,10 +99,10 @@ public class ThreadedPlayerModule implements PlayerModule {
 			
 			//update the status
 			if (status.getStatus() == RPIStatus.PAUSED) {
-				status = new RPIStatus(RPIStatus.PLAYING, filePlaying);
+				updateStatus(new RPIStatus(RPIStatus.PLAYING, filePlaying));
 			}			
 			else {
-				status = new RPIStatus(RPIStatus.PAUSED, filePlaying);
+				updateStatus(new RPIStatus(RPIStatus.PAUSED, filePlaying));
 			}	
 		}
 	}

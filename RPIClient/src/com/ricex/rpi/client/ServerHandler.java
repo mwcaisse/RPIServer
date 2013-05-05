@@ -7,6 +7,7 @@ import java.net.Socket;
 
 import com.ricex.rpi.common.IMessage;
 import com.ricex.rpi.common.MovieMessage;
+import com.ricex.rpi.common.PlayerModule;
 import com.ricex.rpi.common.StatusMessage;
 import com.ricex.rpi.common.StatusRequestMessage;
 import com.ricex.rpi.common.StringMessage;
@@ -31,6 +32,9 @@ public class ServerHandler implements Runnable {
 
 	/** The thread that this class uses to listen for input from the server */
 	private Thread thread;
+	
+	/** The RPIClient that this Handler is in */
+	private RPIClient client;
 
 	/**
 	 * Creates a new ServerHandle with the given socket
@@ -41,8 +45,9 @@ public class ServerHandler implements Runnable {
 	 *             if it cannot create in/out streams
 	 */
 
-	public ServerHandler(Socket socket) throws IOException {
+	public ServerHandler(Socket socket, RPIClient client) throws IOException {
 		this.serverSocket = socket;
+		this.client = client;
 
 		inStream = new ObjectInputStream(socket.getInputStream());
 		outStream = new ObjectOutputStream(socket.getOutputStream());
@@ -57,7 +62,7 @@ public class ServerHandler implements Runnable {
 	 * @return True if successful false otherwise
 	 */
 
-	public boolean sendMessage(IMessage msg) {
+	public synchronized boolean sendMessage(IMessage msg) {
 		try {
 			outStream.writeObject(msg);
 		}
@@ -85,7 +90,7 @@ public class ServerHandler implements Runnable {
 					continue;
 				}
 				IMessage msg = (IMessage) input;
-				processMessage(msg); // process the received message
+				client.processMessage(msg); // process the received message
 			}
 		}
 		catch (ClassNotFoundException | IOException e) {
@@ -95,29 +100,5 @@ public class ServerHandler implements Runnable {
 
 		System.out.println("Disconnecting from server");
 
-	}
-
-	/**
-	 * Processes the message received
-	 * 
-	 * @param message
-	 *            The message that was received from the server
-	 */
-
-	private void processMessage(IMessage message) {
-		if (message instanceof MovieMessage) {
-			System.out.println("We received a movie message from the server");
-			
-			// this is a movie message, lets print it out
-			((MovieMessage)message).execute(ThreadedPlayerModule.getInstance());
-		}
-		else if (message instanceof StatusRequestMessage) {
-			//send a status message to the server
-			IMessage toSend = new StatusMessage(ThreadedPlayerModule.getInstance().getStatus());
-			sendMessage(toSend);
-		}
-		else {
-			System.out.println("Msg received: " + message);
-		}
-	}
+	}	
 }
