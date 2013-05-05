@@ -7,10 +7,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import com.ricex.rpi.common.PlayerModule;
-import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.server.RPIServer;
 import com.ricex.rpi.server.ServerPlayerModule;
-import com.ricex.rpi.server.StatusListener;
 
 /** The gui for the server that will report status of the server, as well
  * 		as allowing the user to control the playing movie
@@ -19,7 +17,7 @@ import com.ricex.rpi.server.StatusListener;
  *
  */
 
-public class RPIPlayer extends Application implements StatusListener {
+public class RPIPlayer extends Application {
 	
 	/** Instance of the server that this GUI will interact with */
 	//TODO: should probally make this an interface later on
@@ -38,7 +36,7 @@ public class RPIPlayer extends Application implements StatusListener {
 	private PlayerModule playerModule;	
 	
 	/** The status label */
-	Label labStatus;
+	private Label labStatus;
 	
 	public RPIPlayer() {
 		server = new RPIServer();
@@ -84,10 +82,5 @@ public class RPIPlayer extends Application implements StatusListener {
 		}
 		
 		return root;
-	}
-
-
-	public void statusChanged(RPIStatus status) {
-		labStatus.setText(status.toString());
 	}
 }

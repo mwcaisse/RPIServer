@@ -1,6 +1,7 @@
 package com.ricex.rpi.server;
 
 import java.net.Socket;
+import java.util.List;
 
 import com.ricex.rpi.common.IMessage;
 import com.ricex.rpi.common.RPIStatus;
@@ -11,9 +12,7 @@ import com.ricex.rpi.common.RPIStatus;
  *
  */
 
-//TODO: Add some type of ID and/or name to the client
-//TODO: Add a way to distinguish between RPI Clients and RemoteClients
-//			most likely just ask at start
+//TODO: Add a name to the client
 //TODO: Possibly turn this into an interface when we have multiple versions of the client
 
 public class Client {
@@ -35,6 +34,9 @@ public class Client {
 	
 	/** Indicates wether this client is still connected or not */
 	private boolean connected = false;
+	
+	/** The list of change listeners registered for this client */
+	private List<ClientChangeListener> changeListeners;
 	
 	public Client (long id, Socket socket) {
 		this.socket = socket;
@@ -78,6 +80,7 @@ public class Client {
 	
 	public void setStatus(RPIStatus status) {
 		this.status = status;
+		notiftyChangeListeners(); //notify listeners that the status has been changed
 	}
 	
 	/** Sets the connected value of this client */
@@ -95,5 +98,27 @@ public class Client {
 	public boolean sendMessage(IMessage message) {
 		System.out.println("Sending message to client: " + message);
 		return handler.sendMessage(message);
+	}
+	
+	/** Adds the given client change listener */
+	
+	public void addChangeListener(ClientChangeListener listener) {
+		changeListeners.add(listener);
+	}
+	
+	/** Removes the given client change listener */
+	
+	public void removeChangeListener(ClientChangeListener listener) {
+		changeListeners.remove(listener);
+	}
+	
+	/** Notifies all of the listeners that a change has been made 
+	 * 
+	 */
+	
+	private void notiftyChangeListeners() {
+		for (ClientChangeListener listener : changeListeners) {
+			listener.clientChanged(this);
+		}
 	}
 }

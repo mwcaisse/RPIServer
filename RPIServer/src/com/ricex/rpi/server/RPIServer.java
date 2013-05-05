@@ -38,6 +38,9 @@ public class RPIServer implements Runnable {
 	/** The previously used client id */
 	private long prevId;
 	
+	/** List of connection listeners for this server */
+	private List<ClientConnectionListener> connectionListeners;
+	
 	public RPIServer() {
 		prevId = 0;
 		//get the ports from the server config 
@@ -69,6 +72,7 @@ public class RPIServer implements Runnable {
 					//create the client, and add to the connected clients
 					Client client = new Client(getNextId(), clientSocket);
 					connectedClients.put(client.getId(), client);
+					notifyConnectionListeners(true, client);
 				}
 				else {
 					//we are at max connections.
@@ -103,7 +107,8 @@ public class RPIServer implements Runnable {
 		for (Client client : oldClients ) {
 			if (!client.isConnected()) {
 				//client is not conencted, remove from the list
-				connectedClients.remove(client.getId());				
+				connectedClients.remove(client.getId());	
+				notifyConnectionListeners(false, client);
 			}
 		}
 
@@ -115,6 +120,35 @@ public class RPIServer implements Runnable {
 	
 	public synchronized List<Client> getConnectedClients() {
 		return new ArrayList<Client>(connectedClients.values());
+	}
+	
+	/** Adds the given client connection listener */
+	
+	public void addConnectionListener(ClientConnectionListener listener) {
+		connectionListeners.add(listener);
+	}
+	
+	/** Removes the given client connection listener */
+	
+	public void removeConnectionListener(ClientConnectionListener listener) {
+		connectionListeners.remove(listener);
+	}	
+	
+	/** Notifies the connection listeners that the given client either connected or disconnected 
+	 * 
+	 * @param connected True of the client connected, false if they disconnected
+	 * @param client The client that disconencted or connected
+	 */
+	
+	private void notifyConnectionListeners(boolean connected, Client client) {
+		for (ClientConnectionListener listener : connectionListeners) {
+			if (connected) {
+				listener.clientConnected(client);
+			}
+			else {
+				listener.clientDisconnected(client);
+			}
+		}
 	}
 
 }
