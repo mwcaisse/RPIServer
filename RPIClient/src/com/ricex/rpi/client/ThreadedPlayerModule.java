@@ -48,8 +48,8 @@ public class ThreadedPlayerModule implements PlayerModule {
 	 */
 	
 	private ThreadedPlayerModule() {
-		baseDir = RPIProperties.getInstance().getClientBaseDir();
-		baseCommand = RPIProperties.getInstance().getBaseCommand();
+		baseDir = RPIClientProperties.getInstance().getBaseDir();
+		baseCommand = RPIClientProperties.getInstance().getBaseCommand();
 		filePlaying = "";
 	}
 

@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ricex.rpi.common.RPIProperties;
-
 /**
  * For now this server will only accept one client, the Raspberry Pi
  * TODO: implement the different servers for the RPI clients and the remote clients
@@ -45,9 +43,9 @@ public class RPIServer implements Runnable {
 	public RPIServer() {
 		prevId = 0;
 		//get the ports from the server config 
-		rpiPort = RPIProperties.getInstance().getRPIPort();
-		remotePort = RPIProperties.getInstance().getRemotePort();
-		maxClients = RPIProperties.getInstance().getMaxServerConnectins();		
+		rpiPort = RPIServerProperties.getInstance().getRPIPort();
+		remotePort = RPIServerProperties.getInstance().getRemotePort();
+		maxClients = RPIServerProperties.getInstance().getMaxConnectins();		
 		connectedClients = new HashMap<Long, Client>();
 		connectionListeners = new ArrayList<ClientConnectionListener>();
 	}
