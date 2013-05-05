@@ -40,8 +40,9 @@ public class Client {
 	private List<ClientChangeListener> changeListeners;
 	
 	public Client (long id, Socket socket) {
+		this.id = id;
 		this.socket = socket;
-		this.handler = new ClientHandler(this);		
+		handler = new ClientHandler(this);		
 		
 		connected = true;
 		

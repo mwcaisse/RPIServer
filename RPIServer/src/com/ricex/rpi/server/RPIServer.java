@@ -29,7 +29,7 @@ public class RPIServer implements Runnable {
 	private final int remotePort;
 	
 	/** The maximum number of clients allowed */
-	private final int maxClients;
+	private final int maxConnections;
 
 	/** Map of currently connected clients */
 	private Map<Long, Client> connectedClients;
@@ -45,7 +45,7 @@ public class RPIServer implements Runnable {
 		//get the ports from the server config 
 		rpiPort = RPIServerProperties.getInstance().getRPIPort();
 		remotePort = RPIServerProperties.getInstance().getRemotePort();
-		maxClients = RPIServerProperties.getInstance().getMaxConnectins();		
+		maxConnections = RPIServerProperties.getInstance().getMaxConnectins();		
 		connectedClients = new HashMap<Long, Client>();
 		connectionListeners = new ArrayList<ClientConnectionListener>();
 	}
@@ -68,21 +68,20 @@ public class RPIServer implements Runnable {
 				System.out.println("User connected to server");
 
 				//check if server is not full
-				if (connectedClients.size() < maxClients) {
+				if (connectedClients.size() < maxConnections) {
 					//create the client, and add to the connected clients
 					Client client = new Client(getNextId(), clientSocket);
 					connectedClients.put(client.getId(), client);
 					notifyConnectionListeners(true, client);
 				}
 				else {
+					System.out.println("Server: No more connections allowed");
 					//we are at max connections.
 					PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
 					out.println("No more connections allowed, sorry. Come back later.");
 					out.close();
 					clientSocket.close();
-				}
-
-		
+				}		
 			}
 
 		}
