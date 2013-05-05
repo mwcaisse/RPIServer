@@ -73,7 +73,7 @@ public class ThreadedPlayerModule implements PlayerModule {
 		player.start();
 		
 		//update the status
-		status = RPIStatus.PLAYING;
+		status = new RPIStatus(RPIStatus.PLAYING, filePlaying);
 		
 	}
 	
@@ -86,7 +86,7 @@ public class ThreadedPlayerModule implements PlayerModule {
 			player.writeToProcess("q");
 			player = null;
 			
-			status = RPIStatus.IDLE;
+			status = new RPIStatus(RPIStatus.IDLE);
 		}
 	}
 	
@@ -99,12 +99,12 @@ public class ThreadedPlayerModule implements PlayerModule {
 			player.writeToProcess("p");
 			
 			//update the status
-			if (status == RPIStatus.PAUSED) {
-				status = RPIStatus.PLAYING;
-			}
+			if (status.getStatus() == RPIStatus.PAUSED) {
+				status = new RPIStatus(RPIStatus.PLAYING, filePlaying);
+			}			
 			else {
-				status = RPIStatus.PAUSED;
-			}
+				status = new RPIStatus(RPIStatus.PAUSED, filePlaying);
+			}	
 		}
 	}
 	

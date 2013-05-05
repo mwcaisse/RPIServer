@@ -87,12 +87,7 @@ public class RPIPlayer extends Application implements StatusListener {
 	}
 
 
-	public void statusChanged(RPIStatus status, String filePlaying) {
-		if (status == RPIStatus.IDLE) {
-			labStatus.setText("Status: " + status);
-		}
-		else {
-			labStatus.setText("Status: " + status + " " + filePlaying);
-		}
+	public void statusChanged(RPIStatus status) {
+		labStatus.setText(status.toString());
 	}
 }

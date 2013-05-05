@@ -8,5 +8,5 @@ public interface StatusListener {
 
 	
 	/** The status changed, to the given status */
-	public void statusChanged(RPIStatus status, String filePlaying);
+	public void statusChanged(RPIStatus status);
 }

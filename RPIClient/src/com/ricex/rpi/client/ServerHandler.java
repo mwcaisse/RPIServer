@@ -113,8 +113,7 @@ public class ServerHandler implements Runnable {
 		}
 		else if (message instanceof StatusRequestMessage) {
 			//send a status message to the server
-			IMessage toSend = new StatusMessage(ThreadedPlayerModule.getInstance().getStatus(), 
-					ThreadedPlayerModule.getInstance().getFilePlaying());
+			IMessage toSend = new StatusMessage(ThreadedPlayerModule.getInstance().getStatus());
 			sendMessage(toSend);
 		}
 		else {
