@@ -25,11 +25,10 @@ public class ThreadedPlayerModule implements PlayerModule {
 	private Player player;
 
 	/** The base directory for the movies */
-	private String baseDir;
+	private final String baseDir;
 	
 	/** The base of the command for running the movies */
-	//TODO: Create property entry for base command
-	private String baseCommand;
+	private final String baseCommand;
 	
 	/** The status of this player module */
 	private RPIStatus status;
@@ -50,7 +49,7 @@ public class ThreadedPlayerModule implements PlayerModule {
 	
 	private ThreadedPlayerModule() {
 		baseDir = RPIProperties.getInstance().getClientBaseDir();
-		baseCommand = "/home/mitchell/play.sh";
+		baseCommand = RPIProperties.getInstance().getBaseCommand();
 		filePlaying = "";
 	}
 

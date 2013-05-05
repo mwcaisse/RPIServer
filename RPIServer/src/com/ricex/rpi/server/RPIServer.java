@@ -20,17 +20,18 @@ import com.ricex.rpi.common.RPIProperties;
  */
 
 public class RPIServer implements Runnable {
-	
-	//TODO: might want to add this to the rpi.conf
-	private static final int MAX_CLIENTS = 1;
 
+	/** The socket for the server*/
 	private ServerSocket socket;
 
 	/** The port that the server for the RPI's will run on */
-	private int rpiPort;
+	private final int rpiPort;
 	
 	/** The port that remote controls will run on */
-	private int remotePort;
+	private final int remotePort;
+	
+	/** The maximum number of clients allowed */
+	private final int maxClients;
 
 	/** Map of currently connected clients */
 	private Map<Long, Client> connectedClients;
@@ -46,7 +47,7 @@ public class RPIServer implements Runnable {
 		//get the ports from the server config 
 		rpiPort = RPIProperties.getInstance().getRPIPort();
 		remotePort = RPIProperties.getInstance().getRemotePort();
-		
+		maxClients = RPIProperties.getInstance().getMaxServerConnectins();		
 		connectedClients = new HashMap<Long, Client>();
 	}
 
@@ -68,7 +69,7 @@ public class RPIServer implements Runnable {
 				System.out.println("User connected to server");
 
 				//check if server is not full
-				if (connectedClients.size() < MAX_CLIENTS) {
+				if (connectedClients.size() < maxClients) {
 					//create the client, and add to the connected clients
 					Client client = new Client(getNextId(), clientSocket);
 					connectedClients.put(client.getId(), client);

@@ -18,13 +18,12 @@ public class VideoListView extends BorderPane {
 	/** The Parser used to read movies from the base directory */
 	private MovieParser movieParser;
 	
-	public VideoListView(Video rootVideo) {
+	public VideoListView() {
 		videoTree = new TreeView<Video>();		
 		//create the movie parser to use      
 		movieParser = new MovieParser(RPIProperties.getInstance().getServerBaseDir());	
 		updateVideos(); // update the videos using the parser
 		setCenter(videoTree);
-
 	}
 	
 	/** Updates the videos in the tree with the given rootVide

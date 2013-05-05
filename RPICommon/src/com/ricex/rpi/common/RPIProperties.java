@@ -19,6 +19,12 @@ public class RPIProperties {
 	private static final String CLIENT_BASE_DIR = "client_base_dir";
 	private static final String SERVER_BASE_DIR = "server_base_dir";
 	
+	/** Key for the base command */
+	private static final String BASE_COMMAND = "base_command";
+	
+	/** Key for maximum number of server connections */
+	private static final String SERVER_MAX_CONNECTIONS = "server_max_connections";
+	
 	private static RPIProperties _instance;
 	
 	public static RPIProperties getInstance() {
@@ -82,5 +88,17 @@ public class RPIProperties {
 	
 	public String getServerBaseDir() {
 		return properties.getProperty(SERVER_BASE_DIR);
+	}
+	
+	/** Returns the base command used on the client */
+	
+	public String getBaseCommand() {
+		return getProperty(BASE_COMMAND);
+	}
+	
+	/** Returns the maximum number of server connections */
+	
+	public int getMaxServerConnectins() {
+		return Integer.parseInt(getProperty(SERVER_MAX_CONNECTIONS));
 	}
 }

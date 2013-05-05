@@ -14,6 +14,7 @@ import com.ricex.rpi.common.RPIStatus;
 
 //TODO: Add a name to the client
 //TODO: Possibly turn this into an interface when we have multiple versions of the client
+//TODO: Possibly add a persistant storage of clients, for use in GUI ClientTableView
 
 public class Client {
 	

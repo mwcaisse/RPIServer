@@ -44,9 +44,7 @@ public class RPIPlayer extends Application {
 		serverThread.setDaemon(true);
 		serverThread.start();	
 		
-		playerModule = new ServerPlayerModule(server);
-		
-		
+		playerModule = new ServerPlayerModule(server);		
 	}
 	
 	public static void main (String[] args) {
@@ -57,7 +55,7 @@ public class RPIPlayer extends Application {
 	public void start(Stage stage) {
 		stage.setTitle("RPI Player");
 		
-		movieListView = new VideoListView(createVideoRoot());	
+		movieListView = new VideoListView();	
 		buttonPane = new ButtonPane(playerModule, movieListView);
 		
 		labStatus = new Label("Status goes here");
@@ -71,16 +69,5 @@ public class RPIPlayer extends Application {
 		stage.setScene(scene);
 		stage.show();
 		stage.centerOnScreen();
-	}
-	
-	
-	private Video createVideoRoot() {
-		Directory root = new Directory("Movies");
-		
-		for (int i=0;i<10;i++) {
-			root.addChild(new Movie("Movie: " + i));
-		}
-		
-		return root;
 	}
 }
