@@ -61,7 +61,8 @@ public class RPIPlayer extends Application {
 		labStatus = new Label("Status goes here");
 		
 		BorderPane borderPane = new BorderPane();
-		borderPane.setCenter(movieListView);		
+		//borderPane.setCenter(movieListView);
+		borderPane.setCenter(new ClientTableView(server));
 		borderPane.setRight(buttonPane);
 		borderPane.setBottom(labStatus);
 		

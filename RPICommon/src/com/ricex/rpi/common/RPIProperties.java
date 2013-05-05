@@ -1,5 +1,6 @@
 package com.ricex.rpi.common;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -42,7 +43,9 @@ public class RPIProperties {
 	private RPIProperties() {
 		properties = new Properties();
 		try {
-			properties.load(getClass().getResourceAsStream("/data/rpi.conf"));
+			FileInputStream fis = new FileInputStream("./rpi.conf");
+			properties.load(fis);
+			fis.close();
 		}
 		catch (IOException e) {
 			System.out.println("Unable to create properties. IOException");

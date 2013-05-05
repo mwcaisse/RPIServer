@@ -49,6 +49,7 @@ public class RPIServer implements Runnable {
 		remotePort = RPIProperties.getInstance().getRemotePort();
 		maxClients = RPIProperties.getInstance().getMaxServerConnectins();		
 		connectedClients = new HashMap<Long, Client>();
+		connectionListeners = new ArrayList<ClientConnectionListener>();
 	}
 
 	public void run() {
