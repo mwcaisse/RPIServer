@@ -5,10 +5,12 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ricex.rpi.common.RPIProperties;
-import com.ricex.rpi.common.RPIStatus;
 
 /**
  * For now this server will only accept one client, the Raspberry Pi
@@ -30,19 +32,19 @@ public class RPIServer implements Runnable {
 	/** The port that remote controls will run on */
 	private int remotePort;
 
-	/** List of currently connected clients */
-	private List<Client> connectedClients;	
+	/** Map of currently connected clients */
+	private Map<Long, Client> connectedClients;
 	
-	/** List of status listeners for the clients */
-	private List<StatusListener> statusListeners;
+	/** The previously used client id */
+	private long prevId;
 	
 	public RPIServer() {
-		
-		//get the ports from the server config */
+		prevId = 0;
+		//get the ports from the server config 
 		rpiPort = RPIProperties.getInstance().getRPIPort();
 		remotePort = RPIProperties.getInstance().getRemotePort();
 		
-		connectedClients = new ArrayList<Client>();
+		connectedClients = new HashMap<Long, Client>();
 	}
 
 	public void run() {
@@ -56,16 +58,17 @@ public class RPIServer implements Runnable {
 				 * before we check for new clients, let update the current list
 				 * of clients
 				 */
-				updateClientList();
+				updateConnectedClients();
 
-				Socket clientSocket = socket.accept();
-				
-				System.out.println("User connected to server!!!");
+				//wait for connections
+				Socket clientSocket = socket.accept();				
+				System.out.println("User connected to server");
 
+				//check if server is not full
 				if (connectedClients.size() < MAX_CLIENTS) {
-					// we only allow one connection at a time,
-					Client client = new Client(clientSocket,this);
-					connectedClients.add(client);
+					//create the client, and add to the connected clients
+					Client client = new Client(getNextId(), clientSocket);
+					connectedClients.put(client.getId(), client);
 				}
 				else {
 					//we are at max connections.
@@ -84,14 +87,23 @@ public class RPIServer implements Runnable {
 			e.printStackTrace();
 		}
 	}
+	
+	/** Returns the next avaiable id */
+	
+	private long getNextId() {
+		return prevId++; // return the id, and then increment counter
+	}
 
-	private void updateClientList() {
-		for (int i = 0; i < connectedClients.size(); i++) {
-			if (!connectedClients.get(i).isConnected()) {
-				// client isnt connected anymore, remove them from the list
-				connectedClients.remove(i);
-				i--; // decrement the loop counter by one
-				System.out.println("A client has disconnected");
+	/** Removes clients that have disconnected from the list of connected clients
+	 * 
+	 */
+	
+	private void updateConnectedClients() {
+		Collection<Client> oldClients = connectedClients.values();
+		for (Client client : oldClients ) {
+			if (!client.isConnected()) {
+				//client is not conencted, remove from the list
+				connectedClients.remove(client.getId());				
 			}
 		}
 
@@ -102,19 +114,7 @@ public class RPIServer implements Runnable {
 	 */
 	
 	public synchronized List<Client> getConnectedClients() {
-		return connectedClients;
-	}
-	
-	/** Registers the given status listener */
-	
-	public void registerStatusListener(StatusListener listener) {
-		statusListeners.add(listener);
-	}
-	
-	public void notifityStatusListeners(RPIStatus status, String filePlaying) {
-		for (StatusListener listener : statusListeners) {
-			listener.statusChanged(status,filePlaying);
-		}
+		return new ArrayList<Client>(connectedClients.values());
 	}
 
 }

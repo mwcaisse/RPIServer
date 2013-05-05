@@ -53,7 +53,6 @@ public class ClientHandler implements Runnable {
 	private void processMessage(IMessage msg) {
 		if (msg instanceof StatusMessage) {
 			StatusMessage smsg = (StatusMessage) msg;
-			client.notifyStatusListeners(smsg.getStatus(), smsg.getFilePlaying());
 		}
 		else {
 			System.out.println("Message received from client: " + msg);
