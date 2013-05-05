@@ -50,6 +50,16 @@ public class ClientHandler implements Runnable {
 		client.setConnected(false);
 	}
 	
+	/** Closes the input and output streams used by this handler
+	 * 
+	 * @throws IOException
+	 */
+	
+	public synchronized void close() throws IOException {
+		outStream.close();
+		inStream.close();
+	}
+	
 	private void processMessage(IMessage msg) {
 		if (msg instanceof StatusMessage) {
 			StatusMessage smsg = (StatusMessage) msg;

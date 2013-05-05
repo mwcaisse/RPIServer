@@ -1,5 +1,6 @@
 package com.ricex.rpi.server;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 
@@ -51,6 +52,17 @@ public class Client {
 		
 		status = new RPIStatus(RPIStatus.IDLE);
 		
+	}
+	
+	/** Closes the clients connection, and cleans up resources */
+	
+	public void close() {
+		try {
+			socket.close();
+			handler.close();
+		}
+		catch (IOException e) {		
+		}
 	}
 	
 	/** Returns the unique id of this client */

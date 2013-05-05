@@ -89,6 +89,9 @@ public class RPIServer implements Runnable {
 			System.out.println("Server error");
 			e.printStackTrace();
 		}
+		finally {
+			//server is closing, lets close all connections
+		}	
 	}
 	
 	/** Returns the next avaiable id */
@@ -111,6 +114,12 @@ public class RPIServer implements Runnable {
 			}
 		}
 
+	}
+	
+	private void disconnectClients() {
+		for (Client client : connectedClients.values()) {
+			client.close();
+		}	
 	}
 	
 	/** Returns the list of connected clients
