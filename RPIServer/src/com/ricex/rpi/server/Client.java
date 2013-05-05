@@ -30,6 +30,9 @@ public class Client {
 	/** The thread that this client is executing in */
 	private Thread clientThread;
 	
+	/** The status of this client */
+	private RPIStatus status;
+	
 	/** Indicates wether this client is still connected or not */
 	private boolean connected = false;
 	
@@ -41,6 +44,8 @@ public class Client {
 		
 		clientThread = new Thread(handler);
 		clientThread.start();
+		
+		status = new RPIStatus(RPIStatus.IDLE);
 		
 	}
 	
@@ -61,6 +66,18 @@ public class Client {
 	
 	public boolean isConnected() {
 		return connected;
+	}
+	
+	/** Returns the status of this client */
+	
+	public RPIStatus getStatus() {
+		return status;
+	}
+	
+	/** Sets the status of this client to the given status */
+	
+	public void setStatus(RPIStatus status) {
+		this.status = status;
 	}
 	
 	/** Sets the connected value of this client */

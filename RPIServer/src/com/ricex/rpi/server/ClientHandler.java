@@ -53,6 +53,7 @@ public class ClientHandler implements Runnable {
 	private void processMessage(IMessage msg) {
 		if (msg instanceof StatusMessage) {
 			StatusMessage smsg = (StatusMessage) msg;
+			client.setStatus(smsg.getStatus());
 		}
 		else {
 			System.out.println("Message received from client: " + msg);
