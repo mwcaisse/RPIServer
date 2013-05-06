@@ -39,7 +39,7 @@ public class RPIClient {
 		serverPort = RPIClientProperties.getInstance().getRPIPort();
 		
 		socket = new Socket(serverIp, serverPort);
-		serverHandler = new ServerHandler(socket, null);
+		serverHandler = new ServerHandler(socket, this);
 		playerModule = new ThreadedPlayerModule(serverHandler);
 		
 		//block on the server handler

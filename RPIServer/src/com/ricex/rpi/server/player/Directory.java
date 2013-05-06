@@ -11,7 +11,7 @@ import javafx.scene.image.ImageView;
 public class Directory implements Video {
 
 	/** Name of this directory */
-	private String name;
+	private final String name;
 	
 	/** List of children */
 	private List<Video> children;

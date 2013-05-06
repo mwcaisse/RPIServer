@@ -16,10 +16,10 @@ import javafx.scene.image.ImageView;
 public class Movie implements Video {
 	
 	/** The name of this movie  */
-	private String name;
+	private final String name;
 	
 	/** The path to this video file */
-	private String filePath;	
+	private final String filePath;	
 	
 	/** The icon for this movie in the tree view */
 	private ImageView icon;
@@ -37,6 +37,7 @@ public class Movie implements Video {
 	
 	public Movie(String name, String filePath) {
 		this.name = name;
+		this.filePath = filePath;
 		icon = new ImageView(iconImage);		
 	}
 

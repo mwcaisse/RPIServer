@@ -24,10 +24,10 @@ public class MovieMessage implements IMessage {
 	}
 	
 	/** The path to the video to be played */
-	private String moviePath;
+	private final String moviePath;
 	
 	/** Weather this movie will be played or stopped */
-	private Command command;
+	private final Command command;
 	
 	public MovieMessage(Command command) {
 		this.command = command;

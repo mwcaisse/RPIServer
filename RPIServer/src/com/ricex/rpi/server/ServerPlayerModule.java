@@ -29,7 +29,6 @@ public class ServerPlayerModule implements PlayerModule {
 	 */
 	
 	public void play(String videoPath) {
-		System.out.println("Server: Playing: " + videoPath);
 		sendMessage(new MovieMessage(videoPath, MovieMessage.Command.PLAY));		
 	}
 	

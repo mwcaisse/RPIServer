@@ -105,7 +105,7 @@ public class RPIServer implements Runnable {
 	 */
 	
 	private void updateConnectedClients() {
-		Collection<Client> oldClients = connectedClients.values();
+		List<Client> oldClients = new ArrayList<Client>(connectedClients.values());
 		for (Client client : oldClients ) {
 			if (!client.isConnected()) {
 				//client is not conencted, remove from the list
