@@ -42,6 +42,7 @@ public class ThreadedPlayerModule implements PlayerModule {
 	/** Creates a new ThreadedPlayerModule with the given ServerHandler */
 	
 	public ThreadedPlayerModule(ServerHandler handler) {
+		this.handler = handler;
 		baseDir = RPIClientProperties.getInstance().getBaseDir();
 		baseCommand = RPIClientProperties.getInstance().getBaseCommand();
 		filePlaying = "";

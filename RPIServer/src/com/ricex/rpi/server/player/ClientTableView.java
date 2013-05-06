@@ -1,5 +1,6 @@
 package com.ricex.rpi.server.player;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -55,13 +56,23 @@ public class ClientTableView extends BorderPane implements ClientChangeListener,
 
 	public void clientConnected(Client client) {
 		clients.add(client);
+		client.addChangeListener(this);
 	}
 
 	public void clientDisconnected(Client client) {
 		clients.remove(client);
+		client.removeChangeListener(this);
 	}
 
 	public void clientChanged(Client client) {
-		//update the given client
+		System.out.println("Client has changed thier status");
+		
+		Platform.runLater(new Runnable() {
+			public void run() {
+				clientTable.getColumns().get(0).setVisible(false);
+				clientTable.getColumns().get(0).setVisible(true);
+			}
+		});
+		
 	}
 }

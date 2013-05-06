@@ -86,6 +86,7 @@ public class RPIClient {
 		}
 		else if (message instanceof StatusRequestMessage) {
 			//send a status message to the server
+			System.out.println("We received a StatusRequestMessage from server, sending status message");
 			IMessage toSend = new StatusMessage(playerModule.getStatus());
 			serverHandler.sendMessage(toSend);
 		}

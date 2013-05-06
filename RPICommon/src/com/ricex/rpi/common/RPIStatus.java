@@ -1,6 +1,8 @@
 package com.ricex.rpi.common;
 
-public class RPIStatus {
+import java.io.Serializable;
+
+public class RPIStatus implements Serializable {
 
 	/** Status constants */
 	public static final int PLAYING = 11587;

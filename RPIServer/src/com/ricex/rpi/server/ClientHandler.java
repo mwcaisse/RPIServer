@@ -39,12 +39,13 @@ public class ClientHandler implements Runnable {
 
 		}
 		catch (IOException e) {
-
+			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
-			
+			e.printStackTrace();
 		}
 
+		System.out.println("ClientHandler, we left server loop");
 		
 		//we are done, notify of disconnect
 		client.setConnected(false);
@@ -64,6 +65,7 @@ public class ClientHandler implements Runnable {
 		if (msg instanceof StatusMessage) {
 			StatusMessage smsg = (StatusMessage) msg;
 			client.setStatus(smsg.getStatus());
+			System.out.println("Received status message from client: " + smsg.getStatus());
 		}
 		else {
 			System.out.println("Message received from client: " + msg);
@@ -77,8 +79,9 @@ public class ClientHandler implements Runnable {
 	 */
 	
 	public synchronized boolean sendMessage(IMessage msg) {
-		try {
+		try {			
 			outStream.writeObject(msg);
+			outStream.flush();
 		}
 		catch (IOException e) {
 			return false;

@@ -2,6 +2,7 @@ package com.ricex.rpi.server;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ricex.rpi.common.IMessage;
@@ -51,6 +52,8 @@ public class Client {
 		clientThread.start();
 		
 		status = new RPIStatus(RPIStatus.IDLE);
+		
+		changeListeners = new ArrayList<ClientChangeListener>();
 		
 	}
 	
