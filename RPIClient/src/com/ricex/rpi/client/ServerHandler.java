@@ -7,10 +7,10 @@ import java.net.Socket;
 
 import com.ricex.rpi.common.IMessage;
 import com.ricex.rpi.common.MovieMessage;
+import com.ricex.rpi.common.NameMessage;
 import com.ricex.rpi.common.PlayerModule;
 import com.ricex.rpi.common.StatusMessage;
 import com.ricex.rpi.common.StatusRequestMessage;
-import com.ricex.rpi.common.StringMessage;
 
 /**
  * Server handler, contols all interact with the server
@@ -33,8 +33,8 @@ public class ServerHandler implements Runnable {
 	/** The thread that this class uses to listen for input from the server */
 	private Thread thread;
 	
-	/** The RPIClient that this Handler is in */
-	private RPIClient client;
+	/** The playermodule that will be used by this handler */
+	private PlayerModule playerModule;
 
 	/**
 	 * Creates a new ServerHandle with the given socket
@@ -45,13 +45,25 @@ public class ServerHandler implements Runnable {
 	 *             if it cannot create in/out streams
 	 */
 
-	public ServerHandler(Socket socket, RPIClient client) throws IOException {
+	public ServerHandler(Socket socket) throws IOException {
 		this.serverSocket = socket;
-		this.client = client;
 
+		playerModule = new ThreadedPlayerModule(this);
+		
 		inStream = new ObjectInputStream(socket.getInputStream());
 		outStream = new ObjectOutputStream(socket.getOutputStream());
-		sendMessage(new StringMessage("Hello server!"));
+		
+		sendName();
+	}
+	
+	/** Sends the name of this client to the server */
+	
+	protected void sendName() {
+		String name = RPIClientProperties.getInstance().getName();
+		// if there is a name set, send it to server
+		if (name != null) {
+			sendMessage(new NameMessage(name));
+		}
 	}
 
 	/**
@@ -92,7 +104,7 @@ public class ServerHandler implements Runnable {
 					continue;
 				}
 				IMessage msg = (IMessage) input;
-				client.processMessage(msg); // process the received message
+				processMessage(msg); // process the received message
 			}
 		}
 		catch (ClassNotFoundException | IOException e) {
@@ -103,4 +115,29 @@ public class ServerHandler implements Runnable {
 		System.out.println("Disconnecting from server");
 
 	}	
+	
+	/**
+	 * Processes the message received
+	 * 
+	 * @param message
+	 *            The message that was received from the server
+	 */
+
+	public synchronized void processMessage(IMessage message) {
+		if (message instanceof MovieMessage) {
+			System.out.println("We received a movie message from the server");
+			
+			// this is a movie message, lets print it out
+			((MovieMessage)message).execute(playerModule);
+		}
+		else if (message instanceof StatusRequestMessage) {
+			//send a status message to the server
+			System.out.println("We received a StatusRequestMessage from server, sending status message");
+			IMessage toSend = new StatusMessage(playerModule.getStatus());
+			sendMessage(toSend);
+		}
+		else {
+			System.out.println("Msg received: " + message);
+		}
+	}
 }

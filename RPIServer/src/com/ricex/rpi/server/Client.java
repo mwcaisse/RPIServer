@@ -23,6 +23,9 @@ public class Client {
 	/** The id of this client */
 	private long id;
 	
+	/** The name of this client */
+	private String name;
+	
 	/** This Clients socket */
 	private Socket socket;
 	
@@ -44,6 +47,7 @@ public class Client {
 	public Client (long id, Socket socket) {
 		this.id = id;
 		this.socket = socket;
+		name = "Unnamed Client " + id;
 		handler = new ClientHandler(this);		
 		
 		connected = true;
@@ -97,7 +101,12 @@ public class Client {
 	
 	public void setStatus(RPIStatus status) {
 		this.status = status;
-		notiftyChangeListeners(); //notify listeners that the status has been changed
+		notifyChangeListeners(); //notify listeners that the status has been changed
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+		notifyChangeListeners();
 	}
 	
 	/** Sets the connected value of this client */
@@ -133,7 +142,7 @@ public class Client {
 	 * 
 	 */
 	
-	private void notiftyChangeListeners() {
+	protected void notifyChangeListeners() {
 		for (ClientChangeListener listener : changeListeners) {
 			listener.clientChanged(this);
 		}

@@ -52,4 +52,15 @@ public abstract class RPIProperties {
 	public String getProperty(String key) {
 		return properties.getProperty(key);
 	}	
+	
+	/** Returns the property with the given key, or the default value if the key is not found
+	 * 
+	 * @param key The key
+	 * @param defaultValue The default Value
+	 * @return
+	 */
+	
+	public String getProperty(String key, String defaultValue) {
+		return properties.getProperty(key, defaultValue);
+	}
 }

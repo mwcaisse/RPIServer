@@ -10,6 +10,9 @@ public class RPIClientProperties extends RPIProperties {
 	/** Key for the server IP */
 	private static final String SERVER_IP = "server_ip";
 	
+	/** Key for the name of this client */
+	private static final String NAME = "name";
+	
 	/** Key for the base dir */
 	private static final String BASE_DIR = "base_dir";
 	
@@ -52,6 +55,10 @@ public class RPIClientProperties extends RPIProperties {
 		return getProperty(BASE_COMMAND);
 	}
 	
+	/** Returns the name of this client, or null if none */
+	public String getName() {
+		return getProperty(NAME, null);
+	}
 
 	
 }

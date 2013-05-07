@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.ricex.rpi.common.IMessage;
+import com.ricex.rpi.common.NameMessage;
 import com.ricex.rpi.common.StatusMessage;
 
 public class ClientHandler implements Runnable {
@@ -66,6 +67,11 @@ public class ClientHandler implements Runnable {
 			StatusMessage smsg = (StatusMessage) msg;
 			client.setStatus(smsg.getStatus());
 			System.out.println("Received status message from client: " + smsg.getStatus());
+		}
+		else if (msg instanceof NameMessage) {
+			NameMessage nmsg = (NameMessage) msg;
+			client.setName(nmsg.getName());
+			System.out.println("Received name message from client: " + nmsg.getName());
 		}
 		else {
 			System.out.println("Message received from client: " + msg);

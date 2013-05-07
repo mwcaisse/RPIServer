@@ -30,17 +30,13 @@ public class RPIClient {
 	
 	/** Port of the server to connect to */
 	private int serverPort;
-	
-	/** The player module used by this client */
-	private PlayerModule playerModule;
 
 	public RPIClient() throws UnknownHostException, IOException {
 		serverIp = RPIClientProperties.getInstance().getServerIp();
 		serverPort = RPIClientProperties.getInstance().getRPIPort();
 		
 		socket = new Socket(serverIp, serverPort);
-		serverHandler = new ServerHandler(socket, this);
-		playerModule = new ThreadedPlayerModule(serverHandler);
+		serverHandler = new ServerHandler(socket);		
 		
 		//block on the server handler
 		serverHandler.run();
@@ -67,31 +63,6 @@ public class RPIClient {
 					System.out.println("Waiting interupted, trying to connect again");
 				}
 			}
-		}
-	}
-	
-	/**
-	 * Processes the message received
-	 * 
-	 * @param message
-	 *            The message that was received from the server
-	 */
-
-	public synchronized void processMessage(IMessage message) {
-		if (message instanceof MovieMessage) {
-			System.out.println("We received a movie message from the server");
-			
-			// this is a movie message, lets print it out
-			((MovieMessage)message).execute(playerModule);
-		}
-		else if (message instanceof StatusRequestMessage) {
-			//send a status message to the server
-			System.out.println("We received a StatusRequestMessage from server, sending status message");
-			IMessage toSend = new StatusMessage(playerModule.getStatus());
-			serverHandler.sendMessage(toSend);
-		}
-		else {
-			System.out.println("Msg received: " + message);
 		}
 	}
 }
