@@ -3,8 +3,8 @@ package com.ricex.rpi.client;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-
-import com.ricex.rpi.common.RPIStatus;
+import java.util.ArrayList;
+import java.util.List;
 
 /** The wrapper around the thread that will run the omx process
  * 
@@ -29,12 +29,15 @@ public class Player implements Runnable {
 	/** The stream into the process */
 	private BufferedWriter out;
 	
-	/** Create the player module. */
+	/** Listeners tha will be notified when this is done playing */
+	private List<PlayerCompleteListener> listeners;
 	
+	/** Create the player module. */	
 	public  Player(String command) {
 		playing = false;
 		this.command = command;
 		movieProcess = null;
+		listeners = new ArrayList<PlayerCompleteListener>();
 	}
 	
 	/** Starts run the movie this is setup to play,
@@ -77,7 +80,15 @@ public class Player implements Runnable {
 				movieProcess.destroy();
 			}
 		}
-		playing = false;
+		finally {
+			playing = false;
+			notifyListeners(); // notify the listeners that we have finished playing
+			
+		}
+		
+		
+	
+		
 	}	
 	
 	public boolean isPlaying() {
@@ -104,5 +115,27 @@ public class Player implements Runnable {
 			return false;
 		}			
 		return true;
+	}
+	
+	/** Adds the given listener */
+	
+	public void addListener(PlayerCompleteListener listener) {
+		listeners.add(listener);
+	}
+	
+	/** Removes the given listener */
+	
+	public void removeListener(PlayerCompleteListener listener) {
+		listeners.remove(listener);
+	}
+	
+	/** Notifies all of the listeners that this has finished playing
+	 * 
+	 */
+	
+	private void notifyListeners() {
+		for (PlayerCompleteListener listener : listeners) {
+			listener.notifyComplete();
+		}
 	}
 }

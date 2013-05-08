@@ -16,7 +16,7 @@ import com.ricex.rpi.common.StatusMessage;
  * 
  */
 
-public class ThreadedPlayerModule implements PlayerModule {
+public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListener {
 
 	/** The singleton instance of this class */
 	private static ThreadedPlayerModule _instance;
@@ -71,6 +71,7 @@ public class ThreadedPlayerModule implements PlayerModule {
 		stop();
 		player = new Player(command);
 		player.start();
+		player.addListener(this);
 		
 		//update the status
 		updateStatus(new RPIStatus(RPIStatus.PLAYING, filePlaying));
@@ -84,8 +85,7 @@ public class ThreadedPlayerModule implements PlayerModule {
 	public void stop() {
 		if (player != null) {
 			player.writeToProcess("q");
-			player = null;
-			
+			player = null;		
 			updateStatus(new RPIStatus(RPIStatus.IDLE));
 		}
 	}
@@ -191,6 +191,16 @@ public class ThreadedPlayerModule implements PlayerModule {
 	
 	public String getFilePlaying() {
 		return filePlaying;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	
+	public void notifyComplete() {
+		//the player reported that it is done playing
+		player = null;		
+		updateStatus(new RPIStatus(RPIStatus.IDLE));
 	}
 
 

@@ -103,7 +103,6 @@ public class ServerPlayerModule implements PlayerModule {
 	private void sendMessage(IMessage message) {
 		for (Client client : server.getConnectedClients()) {
 			client.sendMessage(message);
-			client.sendMessage(new StatusRequestMessage());
 		}	
 	}
 
