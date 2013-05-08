@@ -39,6 +39,12 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent> {
 	/** Button for seeking to the right 600 secconds */
 	private Button butSeekRightFast;
 	
+	/** Button to advance to the next chapter */
+	private Button butNextChapter;
+	
+	/** Button to go back to the last chapter */
+	private Button butLastChapter;
+	
 	/** The player module interface to complete the given actions */
 	private PlayerModule playerModule;
 	
@@ -58,7 +64,9 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent> {
 		butSeekLeft = new Button("<");
 		butSeekLeftFast = new Button("<<");
 		butSeekRight = new Button(">");
-		butSeekRightFast = new Button(">>");		
+		butSeekRightFast = new Button(">>");
+		butNextChapter = new Button(">>|");
+		butLastChapter = new Button("|<<");
 		
 		//set the width
 		butPlay.setPrefWidth(75);
@@ -68,6 +76,8 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent> {
 		butSeekLeftFast.setPrefWidth(75);
 		butSeekRight.setPrefWidth(75);
 		butSeekRightFast.setPrefWidth(75);
+		butNextChapter.setPrefWidth(75);
+		butLastChapter.setPrefWidth(75);
 		
 		//add the listeners
 		butPlay.setOnAction(this);
@@ -77,6 +87,8 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent> {
 		butSeekLeftFast.setOnAction(this);
 		butSeekRight.setOnAction(this);
 		butSeekRightFast.setOnAction(this);
+		butNextChapter.setOnAction(this);
+		butLastChapter.setOnAction(this);
 		
 		setPrefSize(100, 10);
 		setPadding(new Insets(15, 12, 15, 12));
@@ -88,7 +100,9 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent> {
 		getChildren().add(butSeekLeft);
 		getChildren().add(butSeekLeftFast);
 		getChildren().add(butSeekRight);
-		getChildren().add(butSeekRightFast);		
+		getChildren().add(butSeekRightFast);	
+		getChildren().add(butNextChapter);
+		getChildren().add(butLastChapter);
 		
 	}
 
@@ -116,6 +130,12 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent> {
 		}
 		else if (source.equals(butSeekRightFast)) {
 			playerModule.seekForwardFast();
+		}
+		else if (source.equals(butNextChapter)) {
+			playerModule.nextChapter();
+		}
+		else if (source.equals(butLastChapter)) {
+			playerModule.previousChapter();
 		}
 		
 	}

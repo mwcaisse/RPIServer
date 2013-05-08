@@ -104,6 +104,14 @@ public class Client {
 		notifyChangeListeners(); //notify listeners that the status has been changed
 	}
 	
+	/** Returns the name of this client */
+	
+	public String getName() {
+		return name;
+	}
+	
+	/** Sets the name of the client to the given string */
+	
 	public void setName(String name) {
 		this.name = name;
 		notifyChangeListeners();

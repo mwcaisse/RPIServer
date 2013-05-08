@@ -43,9 +43,11 @@ public class ClientTableView extends BorderPane implements ClientChangeListener,
 		clientTable.setItems(clients);
 		
 		TableColumn<Client, Long> idColumn = new TableColumn<Client, Long>("Id");
+		TableColumn<Client, String> nameColumn = new TableColumn<Client, String>("Name");
 		TableColumn<Client, RPIStatus> statusColumn = new TableColumn<Client, RPIStatus>("Status");
 		
 		idColumn.setCellValueFactory(new PropertyValueFactory<Client, Long>("id"));
+		nameColumn.setCellValueFactory(new PropertyValueFactory<Client, String>("name"));
 		statusColumn.setCellValueFactory(new PropertyValueFactory<Client, RPIStatus>("status"));
 		
 		clientTable.getColumns().addAll(idColumn, statusColumn);
