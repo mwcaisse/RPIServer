@@ -50,6 +50,11 @@ public class ClientTableView extends BorderPane implements ClientChangeListener,
 		nameColumn.setCellValueFactory(new PropertyValueFactory<Client, String>("name"));
 		statusColumn.setCellValueFactory(new PropertyValueFactory<Client, RPIStatus>("status"));
 		
+		//set the widths.
+		idColumn.prefWidthProperty().bind(clientTable.widthProperty().multiply(0.10)); // 10%
+		nameColumn.prefWidthProperty().bind(clientTable.widthProperty().multiply(0.45));
+		statusColumn.prefWidthProperty().bind(clientTable.widthProperty().multiply(0.45));
+		
 		clientTable.getColumns().addAll(idColumn, nameColumn, statusColumn);
 		
 		setCenter(clientTable);
