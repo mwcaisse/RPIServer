@@ -152,7 +152,8 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	public void seekForwardSlow() {
 		//RIGHT ARROW
 		if (player != null && player.isPlaying()) {
-			player.writeToProcess(KEY_RIGHT);
+			//player.writeToProcess(KEY_RIGHT);
+			player.writeToProcess("7");
 		}
 	}
 	
@@ -161,7 +162,8 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	public void seekForwardFast() {
 		//UP ARROW
 		if (player != null && player.isPlaying()) {
-			player.writeToProcess(KEY_UP);
+			//player.writeToProcess(KEY_UP);
+			player.writeToProcess("8");
 		}
 	}
 	
@@ -170,7 +172,8 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	public void seekBackwardSlow() { 
 		//LEFT ARROW
 		if (player != null && player.isPlaying()) {
-			player.writeToProcess(KEY_LEFT);
+			//player.writeToProcess(KEY_LEFT);
+			player.writeToProcess("6");
 		}		
 	}
 	
@@ -179,7 +182,8 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	public void seekBackwardFast() {
 		//DOWN ARROW
 		if (player != null && player.isPlaying()) {
-			player.writeToProcess(KEY_DOWN);
+			//player.writeToProcess(KEY_DOWN);
+			player.writeToProcess("9");
 		}
 	}
 

@@ -140,27 +140,7 @@ public class Player implements Runnable {
 			return false;
 		}			
 		return true;
-	}
-	
-	public void writeToProcessTest() {
-		if (!isPlaying()) {
-			return;
-		}
-		
-		try {	
-			System.out.println("WE OUTPUTTING SHIT MOTHERFUCKER");
-			movieProcess.getOutputStream().write(KeyEvent.VK_UP);
-			movieProcess.getOutputStream().write('\u5b41');
-			movieProcess.getOutputStream().write(0x5b41);			
-			//maybe i hsould have flushed. shit
-			movieProcess.getOutputStream().flush();
-		
-		}
-		catch (IOException e) {
-	
-		}
-	}
-	
+	}	
 	
 	/** Adds the given listener */
 	
