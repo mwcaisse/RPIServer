@@ -117,6 +117,31 @@ public class Player implements Runnable {
 		return true;
 	}
 	
+	
+	/** Writes the given char to the process then flushes the stream
+	 * 
+	 * @param chr The char to write
+	 * @return true of false depending on the sucess of the write.
+	 */
+	
+	public synchronized boolean writeToProcess(char chr) {
+		if (!isPlaying()) {
+			return false; // there is nothing playing, we cant send commands
+		}
+		//the video is playing we can send the commands 
+		try {
+			out.write(chr);
+			out.flush();			
+
+		}
+		catch (IOException e) {
+			System.out.println("Error writing to process");
+			return false;
+		}			
+		return true;
+	}
+	
+	
 	/** Adds the given listener */
 	
 	public void addListener(PlayerCompleteListener listener) {

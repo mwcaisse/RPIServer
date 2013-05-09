@@ -48,7 +48,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 		filePlaying = "";
 	}
 	
-	protected void updateStatus(RPIStatus newStatus) {
+	protected synchronized void updateStatus(RPIStatus newStatus) {
 		status = newStatus;
 		//send the updatd status to the server
 		handler.sendMessage(new StatusMessage(status));
@@ -142,17 +142,17 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	
 	/** Constants for the key codes for seeking */
 	
-	private final char KEY_LEFT = 0x5b44;
-	private final char KEY_RIGHT = 0x5b43;
-	private final char KEY_UP = 0x5b41;
-	private final char KEY_DOWN = 0x5b42;
+	private final char KEY_LEFT = (char)0x5b44;
+	private final char KEY_RIGHT = (char)0x5b43;
+	private final char KEY_UP = (char)0x5b41;
+	private final char KEY_DOWN = (char)0x5b42;
 	
 	/** Seek forward 30 seconds */
 	
 	public void seekForwardSlow() {
 		//RIGHT ARROW
 		if (player != null && player.isPlaying()) {
-			player.writeToProcess(KEY_RIGHT + "");
+			player.writeToProcess(KEY_RIGHT);
 		}
 	}
 	
@@ -161,7 +161,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	public void seekForwardFast() {
 		//UP ARROW
 		if (player != null && player.isPlaying()) {
-			player.writeToProcess(KEY_UP + "");
+			player.writeToProcess(KEY_UP);
 		}
 	}
 	
@@ -170,7 +170,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	public void seekBackwardSlow() { 
 		//LEFT ARROW
 		if (player != null && player.isPlaying()) {
-			player.writeToProcess(KEY_LEFT + "");
+			player.writeToProcess(KEY_LEFT);
 		}		
 	}
 	
@@ -179,7 +179,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	public void seekBackwardFast() {
 		//DOWN ARROW
 		if (player != null && player.isPlaying()) {
-			player.writeToProcess(KEY_DOWN + "");
+			player.writeToProcess(KEY_DOWN);
 		}
 	}
 
@@ -197,7 +197,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	 * {@inheritDoc}
 	 */
 	
-	public void notifyComplete() {
+	public synchronized void notifyComplete() {
 		//the player reported that it is done playing
 		player = null;		
 		updateStatus(new RPIStatus(RPIStatus.IDLE));
