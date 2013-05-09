@@ -142,10 +142,10 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	
 	/** Constants for the key codes for seeking */
 	
-	private final char KEY_LEFT = (char)0x5b44;
-	private final char KEY_RIGHT = (char)0x5b43;
-	private final char KEY_UP = (char)0x5b41;
-	private final char KEY_DOWN = (char)0x5b42;
+	private final int KEY_LEFT = 0x5b44;
+	private final int KEY_RIGHT = 0x5b43;
+	private final int KEY_UP = 0x5b41;
+	private final int KEY_DOWN = 0x5b42;
 	
 	/** Seek forward 30 seconds */
 	

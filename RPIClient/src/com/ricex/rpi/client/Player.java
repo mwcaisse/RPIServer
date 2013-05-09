@@ -1,5 +1,6 @@
 package com.ricex.rpi.client;
 
+import java.awt.event.KeyEvent;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -118,19 +119,19 @@ public class Player implements Runnable {
 	}
 	
 	
-	/** Writes the given char to the process then flushes the stream
+	/** Writes the given int to the process then flushes the stream
 	 * 
-	 * @param chr The char to write
+	 * @param val The int to write
 	 * @return true of false depending on the sucess of the write.
 	 */
 	
-	public synchronized boolean writeToProcess(char chr) {
+	public synchronized boolean writeToProcess(int val) {
 		if (!isPlaying()) {
 			return false; // there is nothing playing, we cant send commands
 		}
 		//the video is playing we can send the commands 
 		try {
-			out.write(chr);
+			out.write(val);
 			out.flush();			
 
 		}
@@ -139,6 +140,25 @@ public class Player implements Runnable {
 			return false;
 		}			
 		return true;
+	}
+	
+	public void writeToProcessTest() {
+		if (!isPlaying()) {
+			return;
+		}
+		
+		try {	
+			System.out.println("WE OUTPUTTING SHIT MOTHERFUCKER");
+			movieProcess.getOutputStream().write(KeyEvent.VK_UP);
+			movieProcess.getOutputStream().write('\u5b41');
+			movieProcess.getOutputStream().write(0x5b41);			
+			//maybe i hsould have flushed. shit
+			movieProcess.getOutputStream().flush();
+		
+		}
+		catch (IOException e) {
+	
+		}
 	}
 	
 	
