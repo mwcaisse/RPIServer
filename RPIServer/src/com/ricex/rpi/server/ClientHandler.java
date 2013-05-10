@@ -5,34 +5,41 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.ricex.rpi.common.IMessage;
-import com.ricex.rpi.common.NameMessage;
-import com.ricex.rpi.common.StatusMessage;
 
-public class ClientHandler implements Runnable {
 
-	/** The client that this handler operations on */
-	private RPIClient rPIClient;
+public abstract class ClientHandler implements Runnable {
 
-	/** Stream to read data from the client */
+	/** The client that this handler is for */
+	final protected Client client;
+	
+	/** The input stream of this handler */
 	private ObjectInputStream inStream;
 	
-	/** Stream to write data to the client */
+	/** The output stream of this handler */
 	private ObjectOutputStream outStream;
-
-	public ClientHandler(RPIClient rPIClient) {
-		this.rPIClient = rPIClient;
-		
+	
+	/** Creates a new ClientHandler to handle the given client */
+	
+	public ClientHandler(Client client) {
+		this.client = client;
+		createOutputStream();
+	}
+	
+	/** Creates the output stream for this handler 
+	 * 
+	 */	
+	private void createOutputStream() {
 		try {
-			outStream = new ObjectOutputStream(rPIClient.getSocket().getOutputStream());
+			outStream = new ObjectOutputStream(client.getSocket().getOutputStream());
 		}
 		catch (IOException e) {
 			System.out.println("Error creating output stream");
-		}
+		}	
 	}
-
+	
 	public void run() {
 		try {
-			inStream = new ObjectInputStream(rPIClient.getSocket().getInputStream());
+			inStream = new ObjectInputStream(client.getSocket().getInputStream());
 			Object inputObject;
 			while ( (inputObject = inStream.readObject()) != null) {
 				processMessage((IMessage) inputObject);
@@ -49,34 +56,21 @@ public class ClientHandler implements Runnable {
 		System.out.println("ClientHandler, we left server loop");
 		
 		//we are done, notify of disconnect
-		rPIClient.setConnected(false);
+		//rPIClient.setConnected(false);
 	}
 	
-	/** Closes the input and output streams used by this handler
+	/** Processes the given message after it has been received from the server
 	 * 
-	 * @throws IOException
+	 * @param message The message to be processed
 	 */
+	
+	protected abstract void processMessage(IMessage message);
 	
 	public synchronized void close() throws IOException {
 		outStream.close();
 		inStream.close();
 	}
 	
-	private void processMessage(IMessage msg) {
-		if (msg instanceof StatusMessage) {
-			StatusMessage smsg = (StatusMessage) msg;
-			rPIClient.setStatus(smsg.getStatus());
-			System.out.println("Received status message from client: " + smsg.getStatus());
-		}
-		else if (msg instanceof NameMessage) {
-			NameMessage nmsg = (NameMessage) msg;
-			rPIClient.setName(nmsg.getName());
-			System.out.println("Received name message from client: " + nmsg.getName());
-		}
-		else {
-			System.out.println("Message received from client: " + msg);
-		}
-	}
 	
 	/** Sends the given message to the client
 	 * 
@@ -94,4 +88,5 @@ public class ClientHandler implements Runnable {
 		}
 		return true;
 	}
+	
 }

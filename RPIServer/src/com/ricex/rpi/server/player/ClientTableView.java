@@ -9,9 +9,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 
 import com.ricex.rpi.common.RPIStatus;
-import com.ricex.rpi.server.RPIClient;
 import com.ricex.rpi.server.ClientChangeListener;
 import com.ricex.rpi.server.ClientConnectionListener;
+import com.ricex.rpi.server.RPIClient;
 import com.ricex.rpi.server.RPIServer;
 
 
@@ -21,13 +21,13 @@ import com.ricex.rpi.server.RPIServer;
  *
  */
 
-public class ClientTableView extends BorderPane implements ClientChangeListener, ClientConnectionListener {
+public class ClientTableView extends BorderPane implements ClientChangeListener<RPIClient>, ClientConnectionListener {
 
 	/** Instance of the running server to fetch information about the clients */
 	private RPIServer server;
 	
 	/** List of the clients currently being displayed */	
-	private ObservableList<RPIClient> rPIClients;
+	private ObservableList<RPIClient> rpiClients;
 	
 	/** The table view for displaying the clients */
 	private TableView<RPIClient> clientTable;
@@ -39,8 +39,8 @@ public class ClientTableView extends BorderPane implements ClientChangeListener,
 		server.addConnectionListener(this);
 		
 		clientTable = new TableView<RPIClient>();
-		rPIClients = FXCollections.observableArrayList(server.getConnectedClients());
-		clientTable.setItems(rPIClients);
+		rpiClients = FXCollections.observableArrayList(server.getConnectedClients());
+		clientTable.setItems(rpiClients);
 		
 		TableColumn<RPIClient, Long> idColumn = new TableColumn<RPIClient, Long>("Id");
 		TableColumn<RPIClient, String> nameColumn = new TableColumn<RPIClient, String>("Name");
@@ -61,17 +61,17 @@ public class ClientTableView extends BorderPane implements ClientChangeListener,
 	}
 
 
-	public void clientConnected(RPIClient rPIClient) {
-		rPIClients.add(rPIClient);
-		rPIClient.addChangeListener(this);
+	public void clientConnected(RPIClient rpiClient) {
+		rpiClients.add(rpiClient);
+		rpiClient.addChangeListener(this);
 	}
 
-	public void clientDisconnected(RPIClient rPIClient) {
-		rPIClients.remove(rPIClient);
-		rPIClient.removeChangeListener(this);
+	public void clientDisconnected(RPIClient rpiClient) {
+		rpiClients.remove(rpiClient);
+		rpiClient.removeChangeListener(this);
 	}
 
-	public void clientChanged(RPIClient rPIClient) {
+	public void clientChanged(RPIClient rpiClient) {
 		System.out.println("Client has changed thier status");
 		
 		Platform.runLater(new Runnable() {
