@@ -32,7 +32,7 @@ public class RPIServer implements Runnable {
 	private final int maxConnections;
 
 	/** Map of currently connected clients */
-	private Map<Long, Client> connectedClients;
+	private Map<Long, RPIClient> connectedClients;
 	
 	/** The previously used client id */
 	private long prevId;
@@ -46,7 +46,7 @@ public class RPIServer implements Runnable {
 		rpiPort = RPIServerProperties.getInstance().getRPIPort();
 		remotePort = RPIServerProperties.getInstance().getRemotePort();
 		maxConnections = RPIServerProperties.getInstance().getMaxConnectins();		
-		connectedClients = new HashMap<Long, Client>();
+		connectedClients = new HashMap<Long, RPIClient>();
 		connectionListeners = new ArrayList<ClientConnectionListener>();
 	}
 
@@ -70,9 +70,9 @@ public class RPIServer implements Runnable {
 				//check if server is not full
 				if (connectedClients.size() < maxConnections) {
 					//create the client, and add to the connected clients
-					Client client = new Client(getNextId(), clientSocket);
-					connectedClients.put(client.getId(), client);
-					notifyConnectionListeners(true, client);
+					RPIClient rPIClient = new RPIClient(getNextId(), clientSocket);
+					connectedClients.put(rPIClient.getId(), rPIClient);
+					notifyConnectionListeners(true, rPIClient);
 				}
 				else {
 					System.out.println("Server: No more connections allowed");
@@ -105,20 +105,20 @@ public class RPIServer implements Runnable {
 	 */
 	
 	private void updateConnectedClients() {
-		List<Client> oldClients = new ArrayList<Client>(connectedClients.values());
-		for (Client client : oldClients ) {
-			if (!client.isConnected()) {
+		List<RPIClient> oldClients = new ArrayList<RPIClient>(connectedClients.values());
+		for (RPIClient rPIClient : oldClients ) {
+			if (!rPIClient.isConnected()) {
 				//client is not conencted, remove from the list
-				connectedClients.remove(client.getId());	
-				notifyConnectionListeners(false, client);
+				connectedClients.remove(rPIClient.getId());	
+				notifyConnectionListeners(false, rPIClient);
 			}
 		}
 
 	}
 	
 	private void disconnectClients() {
-		for (Client client : connectedClients.values()) {
-			client.close();
+		for (RPIClient rPIClient : connectedClients.values()) {
+			rPIClient.close();
 		}	
 	}
 	
@@ -126,8 +126,8 @@ public class RPIServer implements Runnable {
 	 * 
 	 */
 	
-	public synchronized List<Client> getConnectedClients() {
-		return new ArrayList<Client>(connectedClients.values());
+	public synchronized List<RPIClient> getConnectedClients() {
+		return new ArrayList<RPIClient>(connectedClients.values());
 	}
 	
 	/** Adds the given client connection listener */
@@ -145,16 +145,16 @@ public class RPIServer implements Runnable {
 	/** Notifies the connection listeners that the given client either connected or disconnected 
 	 * 
 	 * @param connected True of the client connected, false if they disconnected
-	 * @param client The client that disconencted or connected
+	 * @param rPIClient The client that disconencted or connected
 	 */
 	
-	private void notifyConnectionListeners(boolean connected, Client client) {
+	private void notifyConnectionListeners(boolean connected, RPIClient rPIClient) {
 		for (ClientConnectionListener listener : connectionListeners) {
 			if (connected) {
-				listener.clientConnected(client);
+				listener.clientConnected(rPIClient);
 			}
 			else {
-				listener.clientDisconnected(client);
+				listener.clientDisconnected(rPIClient);
 			}
 		}
 	}

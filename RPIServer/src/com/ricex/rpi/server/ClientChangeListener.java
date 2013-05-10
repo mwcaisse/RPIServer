@@ -5,7 +5,7 @@ public interface ClientChangeListener {
 	
 	/** Notifies the listener that a chage has been made in the client,
 	 * ussualy a status change
-	 * @param client The client the change occured on
+	 * @param rPIClient The client the change occured on
 	 */
-	public void clientChanged(Client client);
+	public void clientChanged(RPIClient rPIClient);
 }

@@ -9,7 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 
 import com.ricex.rpi.common.RPIStatus;
-import com.ricex.rpi.server.Client;
+import com.ricex.rpi.server.RPIClient;
 import com.ricex.rpi.server.ClientChangeListener;
 import com.ricex.rpi.server.ClientConnectionListener;
 import com.ricex.rpi.server.RPIServer;
@@ -27,10 +27,10 @@ public class ClientTableView extends BorderPane implements ClientChangeListener,
 	private RPIServer server;
 	
 	/** List of the clients currently being displayed */	
-	private ObservableList<Client> clients;
+	private ObservableList<RPIClient> rPIClients;
 	
 	/** The table view for displaying the clients */
-	private TableView<Client> clientTable;
+	private TableView<RPIClient> clientTable;
 	
 	
 	public ClientTableView(RPIServer server) {
@@ -38,17 +38,17 @@ public class ClientTableView extends BorderPane implements ClientChangeListener,
 		
 		server.addConnectionListener(this);
 		
-		clientTable = new TableView<Client>();
-		clients = FXCollections.observableArrayList(server.getConnectedClients());
-		clientTable.setItems(clients);
+		clientTable = new TableView<RPIClient>();
+		rPIClients = FXCollections.observableArrayList(server.getConnectedClients());
+		clientTable.setItems(rPIClients);
 		
-		TableColumn<Client, Long> idColumn = new TableColumn<Client, Long>("Id");
-		TableColumn<Client, String> nameColumn = new TableColumn<Client, String>("Name");
-		TableColumn<Client, RPIStatus> statusColumn = new TableColumn<Client, RPIStatus>("Status");
+		TableColumn<RPIClient, Long> idColumn = new TableColumn<RPIClient, Long>("Id");
+		TableColumn<RPIClient, String> nameColumn = new TableColumn<RPIClient, String>("Name");
+		TableColumn<RPIClient, RPIStatus> statusColumn = new TableColumn<RPIClient, RPIStatus>("Status");
 		
-		idColumn.setCellValueFactory(new PropertyValueFactory<Client, Long>("id"));
-		nameColumn.setCellValueFactory(new PropertyValueFactory<Client, String>("name"));
-		statusColumn.setCellValueFactory(new PropertyValueFactory<Client, RPIStatus>("status"));
+		idColumn.setCellValueFactory(new PropertyValueFactory<RPIClient, Long>("id"));
+		nameColumn.setCellValueFactory(new PropertyValueFactory<RPIClient, String>("name"));
+		statusColumn.setCellValueFactory(new PropertyValueFactory<RPIClient, RPIStatus>("status"));
 		
 		//set the widths.
 		idColumn.prefWidthProperty().bind(clientTable.widthProperty().multiply(0.10)); // 10%
@@ -61,17 +61,17 @@ public class ClientTableView extends BorderPane implements ClientChangeListener,
 	}
 
 
-	public void clientConnected(Client client) {
-		clients.add(client);
-		client.addChangeListener(this);
+	public void clientConnected(RPIClient rPIClient) {
+		rPIClients.add(rPIClient);
+		rPIClient.addChangeListener(this);
 	}
 
-	public void clientDisconnected(Client client) {
-		clients.remove(client);
-		client.removeChangeListener(this);
+	public void clientDisconnected(RPIClient rPIClient) {
+		rPIClients.remove(rPIClient);
+		rPIClient.removeChangeListener(this);
 	}
 
-	public void clientChanged(Client client) {
+	public void clientChanged(RPIClient rPIClient) {
 		System.out.println("Client has changed thier status");
 		
 		Platform.runLater(new Runnable() {

@@ -101,8 +101,8 @@ public class ServerPlayerModule implements PlayerModule {
 	 */
 	
 	private void sendMessage(IMessage message) {
-		for (Client client : server.getConnectedClients()) {
-			client.sendMessage(message);
+		for (RPIClient rPIClient : server.getConnectedClients()) {
+			rPIClient.sendMessage(message);
 		}	
 	}
 

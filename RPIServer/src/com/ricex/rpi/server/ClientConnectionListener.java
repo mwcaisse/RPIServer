@@ -9,8 +9,8 @@ package com.ricex.rpi.server;
 public interface ClientConnectionListener {
 
 	/** The given client has connected to the server */
-	public void clientConnected(Client client);
+	public void clientConnected(RPIClient rPIClient);
 	
 	/** The given client has disconnected from the server */
-	public void clientDisconnected(Client client);
+	public void clientDisconnected(RPIClient rPIClient);
 }

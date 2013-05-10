@@ -11,7 +11,7 @@ import com.ricex.rpi.common.StatusMessage;
 public class ClientHandler implements Runnable {
 
 	/** The client that this handler operations on */
-	private Client client;
+	private RPIClient rPIClient;
 
 	/** Stream to read data from the client */
 	private ObjectInputStream inStream;
@@ -19,11 +19,11 @@ public class ClientHandler implements Runnable {
 	/** Stream to write data to the client */
 	private ObjectOutputStream outStream;
 
-	public ClientHandler(Client client) {
-		this.client = client;
+	public ClientHandler(RPIClient rPIClient) {
+		this.rPIClient = rPIClient;
 		
 		try {
-			outStream = new ObjectOutputStream(client.getSocket().getOutputStream());
+			outStream = new ObjectOutputStream(rPIClient.getSocket().getOutputStream());
 		}
 		catch (IOException e) {
 			System.out.println("Error creating output stream");
@@ -32,7 +32,7 @@ public class ClientHandler implements Runnable {
 
 	public void run() {
 		try {
-			inStream = new ObjectInputStream(client.getSocket().getInputStream());
+			inStream = new ObjectInputStream(rPIClient.getSocket().getInputStream());
 			Object inputObject;
 			while ( (inputObject = inStream.readObject()) != null) {
 				processMessage((IMessage) inputObject);
@@ -49,7 +49,7 @@ public class ClientHandler implements Runnable {
 		System.out.println("ClientHandler, we left server loop");
 		
 		//we are done, notify of disconnect
-		client.setConnected(false);
+		rPIClient.setConnected(false);
 	}
 	
 	/** Closes the input and output streams used by this handler
@@ -65,12 +65,12 @@ public class ClientHandler implements Runnable {
 	private void processMessage(IMessage msg) {
 		if (msg instanceof StatusMessage) {
 			StatusMessage smsg = (StatusMessage) msg;
-			client.setStatus(smsg.getStatus());
+			rPIClient.setStatus(smsg.getStatus());
 			System.out.println("Received status message from client: " + smsg.getStatus());
 		}
 		else if (msg instanceof NameMessage) {
 			NameMessage nmsg = (NameMessage) msg;
-			client.setName(nmsg.getName());
+			rPIClient.setName(nmsg.getName());
 			System.out.println("Received name message from client: " + nmsg.getName());
 		}
 		else {
