@@ -9,6 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 
 import com.ricex.rpi.common.RPIStatus;
+import com.ricex.rpi.server.Client;
 import com.ricex.rpi.server.ClientChangeListener;
 import com.ricex.rpi.server.ClientConnectionListener;
 import com.ricex.rpi.server.RPIClient;
@@ -21,7 +22,7 @@ import com.ricex.rpi.server.RPIServer;
  *
  */
 
-public class ClientTableView extends BorderPane implements ClientChangeListener<RPIClient>, ClientConnectionListener {
+public class ClientTableView extends BorderPane implements ClientChangeListener<RPIClient>, ClientConnectionListener<RPIClient> {
 
 	/** Instance of the running server to fetch information about the clients */
 	private RPIServer server;

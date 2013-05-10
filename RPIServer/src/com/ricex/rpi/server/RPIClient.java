@@ -2,8 +2,6 @@ package com.ricex.rpi.server;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.ricex.rpi.common.IMessage;
 import com.ricex.rpi.common.RPIStatus;
@@ -32,15 +30,10 @@ public class RPIClient extends Client {
 	/** The status of this client */
 	private RPIStatus status;
 	
-	/** Indicates wether this client is still connected or not */
-	private boolean connected = false;
-	
 	public RPIClient (long id, Socket socket) {
 		super(id, socket);
 		name = "Unnamed Client " + id;
-		handler = new RPIClientHandler(this);		
-		
-		connected = true;
+		handler = new RPIClientHandler(this);
 		
 		clientThread = new Thread(handler);
 		clientThread.start();
@@ -58,12 +51,6 @@ public class RPIClient extends Client {
 		}
 		catch (IOException e) {		
 		}
-	}
-	
-	/** Returns if the client is currently connected or not */
-	
-	public boolean isConnected() {
-		return connected;
 	}
 	
 	/** Returns the status of this client */
