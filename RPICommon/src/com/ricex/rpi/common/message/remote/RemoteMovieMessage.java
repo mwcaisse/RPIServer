@@ -1,4 +1,7 @@
-package com.ricex.rpi.common.message;
+package com.ricex.rpi.common.message.remote;
+
+import com.ricex.rpi.common.message.MovieMessage;
+import com.ricex.rpi.common.message.MovieMessage.Command;
 
 /** A movie message send by the remote, that includes the ID of the client to send the message
  * to
@@ -21,6 +24,12 @@ public class RemoteMovieMessage extends MovieMessage {
 	public RemoteMovieMessage(String moviePath, Command command, long clientId) {
 		super(moviePath, command);
 		this.clientId = clientId;
+	}
+	
+	/** Returns the id of the client to send the message to */
+	
+	public long getClientId() {
+		return clientId;
 	}
 
 }

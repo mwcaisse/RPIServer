@@ -123,7 +123,7 @@ public abstract class Server<T extends Client> implements Runnable {
 
 	}
 
-	private void disconnectClients() {
+	private synchronized void disconnectClients() {
 		for (T client : connectedClients.values()) {
 			client.close();
 		}
@@ -136,6 +136,16 @@ public abstract class Server<T extends Client> implements Runnable {
 
 	public synchronized List<T> getConnectedClients() {
 		return new ArrayList<T>(connectedClients.values());
+	}
+	
+	/** Gets a client by thier id
+	 * 
+	 * @param id The id of the client
+	 * @return The client with the given id, or null if it doesnt exist
+	 */
+	
+	public synchronized T getClient(long id) {
+		return connectedClients.get(id);		
 	}
 
 	/** Adds the given client connection listener */
@@ -184,14 +194,14 @@ public abstract class Server<T extends Client> implements Runnable {
 	 * 
 	 * @param client The client to disconnect
 	 */
-	public void disconnectClient(Client client) {
+	public synchronized void disconnectClient(Client client) {
 		client.setConnected(false);
 		updateConnectedClients();
 	}
 	
 	/** Ssends the given message to all connected clients */
 	
-	public void sendToAllClients(IMessage message) {
+	public synchronized void sendToAllClients(IMessage message) {
 		for (Client client : connectedClients.values()) {
 			client.sendMessage(message);
 		}
