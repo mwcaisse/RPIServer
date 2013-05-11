@@ -3,6 +3,10 @@ package com.ricex.rpi.server.player;
 import java.io.File;
 import java.io.FileFilter;
 
+import com.ricex.rpi.common.video.Directory;
+import com.ricex.rpi.common.video.Movie;
+import com.ricex.rpi.common.video.Video;
+
 /**
  * Parses the movies from the given base folder
  * 

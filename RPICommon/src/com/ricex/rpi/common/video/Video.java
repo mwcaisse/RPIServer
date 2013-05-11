@@ -1,8 +1,6 @@
-package com.ricex.rpi.server.player;
+package com.ricex.rpi.common.video;
 
 import java.util.List;
-
-import javafx.scene.Node;
 
 /** Interface representing a video, to be displayed
  * 
@@ -18,9 +16,6 @@ public interface Video {
 	/** Returns a list of children in this sub interface */
 	
 	public List<Video> getChildren();
-	
-	/** Returns the icon to use when displaying this in the tree */
-	public Node getIcon();
 	
 	/** Returns whether or not this Video is a directory */
 	public boolean isDirectory();

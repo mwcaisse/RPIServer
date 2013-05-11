@@ -2,13 +2,19 @@ package com.ricex.rpi.server.player;
 
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
+import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.server.RPIServerProperties;
 
 
 public class VideoListView extends BorderPane {
 
+	private static Image movieIconImage = new Image(VideoListView.class.getResourceAsStream("/data/icons/movie.png"));
+	private static Image directoryIconImage = new Image(VideoListView.class.getResourceAsStream("/data/icons/directory.png"));
+	
 	/** The tree view for displaying the videos */
 	private TreeView<Video> videoTree;
 	
@@ -75,7 +81,7 @@ public class VideoListView extends BorderPane {
 	 */
 	
 	private TreeItem<Video> parseDirectory(Video v) {
-		TreeItem<Video> dirNode = new TreeItem<Video>(v, v.getIcon());		
+		TreeItem<Video> dirNode = new TreeItem<Video>(v, new ImageView(directoryIconImage));		
 		for (Video child: v.getChildren()) {
 			if (child.isDirectory()) {
 				dirNode.getChildren().add(parseDirectory(child));
@@ -95,7 +101,7 @@ public class VideoListView extends BorderPane {
 	 */
 	
 	private TreeItem<Video> parseMovie(Video v) {
-		return new TreeItem<Video>(v, v.getIcon());
+		return new TreeItem<Video>(v, new ImageView(movieIconImage));
 	}
 	
 	
