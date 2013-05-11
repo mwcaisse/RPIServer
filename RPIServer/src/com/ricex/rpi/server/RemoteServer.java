@@ -2,8 +2,8 @@ package com.ricex.rpi.server;
 
 import java.net.Socket;
 
-import com.ricex.rpi.common.message.ClientListMessage;
-import com.ricex.rpi.common.message.IMessage;
+import com.ricex.rpi.common.message.remote.ClientListMessage;
+import com.ricex.rpi.common.message.remote.ClientUpdateMessage;
 import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
 import com.ricex.rpi.server.client.RemoteClient;
@@ -51,12 +51,12 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 
 	@Override
 	public void clientConnected(RPIClient client) {
-		sendToAllClients(constructClientListMessage());
+		sendToAllClients(new ClientUpdateMessage(client.getId(), client.getName(), true));
 	}
 
 	@Override
 	public void clientDisconnected(RPIClient client) {
-		sendToAllClients(constructClientListMessage());
+		sendToAllClients(new ClientUpdateMessage(client.getId(), client.getName(), false));
 	}
 	
 	/** Creates a client list message */
