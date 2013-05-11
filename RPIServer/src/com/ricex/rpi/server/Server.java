@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,10 @@ public abstract class Server<T extends Client> implements Runnable {
 		this.port = port;
 		this.maxConnections = maxConnections;
 		this.name = name;
+		
+		connectedClients = new HashMap<Long, T>();
+		prevId = 0;
+		connectionListeners = new ArrayList<ClientConnectionListener<T>>();
 	}
 
 	public void run() {
