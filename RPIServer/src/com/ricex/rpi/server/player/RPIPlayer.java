@@ -62,8 +62,8 @@ public class RPIPlayer extends Application {
 	/** Initialize two servers, and start thier threads */
 	
 	private void initServers() {
-		rpiServer = new RPIServer();
-		remoteServer = new RemoteServer();
+		rpiServer = RPIServer.getInstance();
+		remoteServer = RemoteServer.getInstance();
 		
 		rpiServerThread = new Thread(rpiServer);
 		remoteServerThread = new Thread(remoteServer);

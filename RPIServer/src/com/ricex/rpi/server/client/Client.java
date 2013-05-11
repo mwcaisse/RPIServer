@@ -92,7 +92,7 @@ public abstract class Client {
 		this.connected = connected;
 		if (!connected) {
 			//notify the server that we disconnected;
-			server.clientDisconnected(this);
+			server.disconnectClient(this);
 		}	
 	}
 	

@@ -2,6 +2,10 @@ package com.ricex.rpi.server;
 
 import java.net.Socket;
 
+import com.ricex.rpi.common.message.ClientListMessage;
+import com.ricex.rpi.common.message.IMessage;
+import com.ricex.rpi.server.client.ClientConnectionListener;
+import com.ricex.rpi.server.client.RPIClient;
 import com.ricex.rpi.server.client.RemoteClient;
 
 /** The server that listens for connections from RPIRemotes, and creates threads to respond to them
@@ -10,10 +14,25 @@ import com.ricex.rpi.server.client.RemoteClient;
  *
  */
 
-public class RemoteServer extends Server<RemoteClient> {
+public class RemoteServer extends Server<RemoteClient> implements ClientConnectionListener<RPIClient> {
 
-	public RemoteServer() {
+	/** The singleton instance of this server */
+	private static RemoteServer _instance;
+	
+	/** Returns the singleton instance */
+	
+	public static RemoteServer getInstance() {
+		if (_instance == null) {
+			_instance = new RemoteServer();
+		}
+		return _instance;
+	}
+	
+	/** Creates a new Remote Server */
+	
+	private RemoteServer() {
 		super(RPIServerProperties.getInstance().getRemotePort(), RPIServerProperties.getInstance().getMaxConnectins(), "RemoteServer");
+		RPIServer.getInstance().addConnectionListener(this);
 	}
 
 	/**
@@ -22,6 +41,34 @@ public class RemoteServer extends Server<RemoteClient> {
 	
 	@Override
 	protected RemoteClient createClient(Socket socket) {
-		return new RemoteClient(this, getNextId(), socket);
+		RemoteClient client = new RemoteClient(this, getNextId(), socket);		
+
+		//send the list of rpi clients to the remote client
+		client.sendMessage(constructClientListMessage());
+		
+		return client;
 	}
+
+	@Override
+	public void clientConnected(RPIClient client) {
+		sendToAllClients(constructClientListMessage());
+	}
+
+	@Override
+	public void clientDisconnected(RPIClient client) {
+		sendToAllClients(constructClientListMessage());
+	}
+	
+	/** Creates a client list message */
+	
+	private ClientListMessage constructClientListMessage() {
+		ClientListMessage clientMessage = new ClientListMessage();
+		for (RPIClient c : RPIServer.getInstance().getConnectedClients()) {
+			clientMessage.addClient(c.getId(), c.getName());
+		}
+		return clientMessage;
+	}
+	                                                        
+	                                                       
+
 }

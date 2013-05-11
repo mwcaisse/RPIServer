@@ -13,10 +13,20 @@ import com.ricex.rpi.server.client.RPIClient;
 
 public class RPIServer extends Server<RPIClient> {
 
-
-	/** Creates a new RPIServer with the data from the RPIServerProperties */
+	/** The Singleton instance */
+	private static RPIServer _instance;
 	
-	public RPIServer() {
+	/** Returns the singleton instance */
+	public static RPIServer getInstance() {
+		if (_instance == null) {
+			_instance = new RPIServer();
+		}
+		return _instance;
+	}
+	                                       
+
+	/** Creates a new RPIServer with the data from the RPIServerProperties */	
+	private RPIServer() {
 		super( RPIServerProperties.getInstance().getRPIPort(), RPIServerProperties.getInstance().getMaxConnectins(), "RPIServer");
 	}
 

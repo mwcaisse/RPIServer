@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.server.client.Client;
 import com.ricex.rpi.server.client.ClientConnectionListener;
 
@@ -178,9 +179,21 @@ public abstract class Server<T extends Client> implements Runnable {
 	
 	protected abstract T createClient(Socket socket);
 	
-	/** Notifies the server that the given client has disconnected */
 	
-	public void clientDisconnected(Client client) {
+	/** Disconencts the given client from the server
+	 * 
+	 * @param client The client to disconnect
+	 */
+	public void disconnectClient(Client client) {
+		client.setConnected(false);
 		updateConnectedClients();
+	}
+	
+	/** Ssends the given message to all connected clients */
+	
+	public void sendToAllClients(IMessage message) {
+		for (Client client : connectedClients.values()) {
+			client.sendMessage(message);
+		}
 	}
 }
