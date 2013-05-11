@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import com.ricex.rpi.server.RPIServer;
+import com.ricex.rpi.server.RemoteServer;
 import com.ricex.rpi.server.ServerPlayerModule;
 
 /** The gui for the server that will report status of the server, as well
@@ -23,10 +24,16 @@ import com.ricex.rpi.server.ServerPlayerModule;
 public class RPIPlayer extends Application {
 	
 	/** Instance of the server that this GUI will interact with */
-	private RPIServer server;
+	private RPIServer rpiServer;
 	
-	/** The thread that the sever is running in */
-	private Thread serverThread;
+	/** The server for the remotes */
+	private RemoteServer remoteServer;
+	
+	/** The thread that the rpi server will run in */
+	private Thread rpiServerThread;
+	
+	/** The thread that the remote server will run in */
+	private Thread remoteServerThread;
 	
 	/** The list view for the movies */
 	private VideoListView movieListView;
@@ -46,13 +53,26 @@ public class RPIPlayer extends Application {
 	/** The tab pane for the different views */
 	private TabPane tabPane;
 	
-	public RPIPlayer() {
-		server = new RPIServer();
-		serverThread = new Thread(server);
-		serverThread.setDaemon(true);
-		serverThread.start();	
+	public RPIPlayer() {	
+		initServers();
 		
-		playerModule = new ServerPlayerModule(server.getConnectedClients());		
+		playerModule = new ServerPlayerModule(rpiServer.getConnectedClients());		
+	}
+
+	/** Initialize two servers, and start thier threads */
+	
+	private void initServers() {
+		rpiServer = new RPIServer();
+		remoteServer = new RemoteServer();
+		
+		rpiServerThread = new Thread(rpiServer);
+		remoteServerThread = new Thread(remoteServer);
+		
+		rpiServerThread.setDaemon(true);
+		remoteServerThread.setDaemon(true);
+		
+		rpiServerThread.start();
+		remoteServerThread.start();
 	}
 	
 	public static void main (String[] args) {
@@ -64,8 +84,8 @@ public class RPIPlayer extends Application {
 		stage.setTitle("RPI Player");
 		
 		movieListView = new VideoListView();	
-		clientTableView = new ClientTableView(server);
-		buttonPane = new ButtonPane(server, playerModule, movieListView);
+		clientTableView = new ClientTableView(rpiServer);
+		buttonPane = new ButtonPane(rpiServer, playerModule, movieListView);
 		
 		labStatus = new Label("Status goes here");
 		

@@ -92,7 +92,10 @@ public abstract class Server<T extends Client> implements Runnable {
 			e.printStackTrace();
 		}
 		finally {
+			//TODO: Rework the launcher, so theese threads will exit gracefully
 			// server is closing, lets close all connections
+			disconnectClients();
+			System.out.println(name + " Server Stopped");
 		}
 	}
 
