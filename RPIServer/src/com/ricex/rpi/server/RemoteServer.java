@@ -6,15 +6,9 @@ package com.ricex.rpi.server;
  *
  */
 
-public class RemoteServer implements Runnable {
+public class RemoteServer {
 
 	public RemoteServer() {
 		
-	}
-	                       
-	                     
-	
-	public void run() {
-
 	}
 }

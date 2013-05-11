@@ -1,4 +1,4 @@
-package com.ricex.rpi.common;
+package com.ricex.rpi.common.message;
 
 /** Message for requesting a directory listing from the server 
  * 

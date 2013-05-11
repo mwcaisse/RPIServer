@@ -2,7 +2,7 @@ package com.ricex.rpi.client;
 
 import com.ricex.rpi.common.PlayerModule;
 import com.ricex.rpi.common.RPIStatus;
-import com.ricex.rpi.common.StatusMessage;
+import com.ricex.rpi.common.message.StatusMessage;
 
 /**
  *  The player module for RPIClient

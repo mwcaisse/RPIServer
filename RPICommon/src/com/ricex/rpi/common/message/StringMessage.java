@@ -1,4 +1,4 @@
-package com.ricex.rpi.common;
+package com.ricex.rpi.common.message;
 
 
 public class StringMessage implements IMessage {

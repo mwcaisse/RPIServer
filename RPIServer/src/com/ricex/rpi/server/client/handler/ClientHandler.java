@@ -4,14 +4,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import com.ricex.rpi.common.IMessage;
+import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.server.client.Client;
 
 
-public abstract class ClientHandler implements Runnable {
+public abstract class ClientHandler<T extends Client> implements Runnable {
 
 	/** The client that this handler is for */
-	final protected Client client;
+	final protected T client;
 	
 	/** The input stream of this handler */
 	private ObjectInputStream inStream;
@@ -21,7 +21,7 @@ public abstract class ClientHandler implements Runnable {
 	
 	/** Creates a new ClientHandler to handle the given client */
 	
-	public ClientHandler(Client client) {
+	public ClientHandler(T client) {
 		this.client = client;
 		createOutputStream();
 	}

@@ -23,7 +23,6 @@ import com.ricex.rpi.server.ServerPlayerModule;
 public class RPIPlayer extends Application {
 	
 	/** Instance of the server that this GUI will interact with */
-	//TODO: should probally make this an interface later on
 	private RPIServer server;
 	
 	/** The thread that the sever is running in */

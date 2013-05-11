@@ -3,10 +3,10 @@ package com.ricex.rpi.server;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ricex.rpi.common.IMessage;
-import com.ricex.rpi.common.MovieMessage;
 import com.ricex.rpi.common.PlayerModule;
 import com.ricex.rpi.common.RPIStatus;
+import com.ricex.rpi.common.message.IMessage;
+import com.ricex.rpi.common.message.MovieMessage;
 import com.ricex.rpi.server.client.Client;
 import com.ricex.rpi.server.client.RPIClient;
 

@@ -1,4 +1,6 @@
-package com.ricex.rpi.common;
+package com.ricex.rpi.common.message;
+
+import com.ricex.rpi.common.PlayerModule;
 
 
 

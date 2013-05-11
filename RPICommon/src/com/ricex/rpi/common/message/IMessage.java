@@ -1,4 +1,4 @@
-package com.ricex.rpi.common;
+package com.ricex.rpi.common.message;
 
 import java.io.Serializable;
 

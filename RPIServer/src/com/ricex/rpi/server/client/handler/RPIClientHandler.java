@@ -1,25 +1,19 @@
 package com.ricex.rpi.server.client.handler;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
-import com.ricex.rpi.common.IMessage;
-import com.ricex.rpi.common.NameMessage;
-import com.ricex.rpi.common.StatusMessage;
+import com.ricex.rpi.common.message.IMessage;
+import com.ricex.rpi.common.message.NameMessage;
+import com.ricex.rpi.common.message.StatusMessage;
 import com.ricex.rpi.server.client.RPIClient;
 
-public class RPIClientHandler extends ClientHandler {
-
-	/** The client that this handler operations on */
-	private RPIClient rpiClient;
+public class RPIClientHandler extends ClientHandler<RPIClient> {
 	
 	/** Creates a new RPIClientHandler with the given client
 	 * 
 	 * @param rpiClient
 	 */
-	public RPIClientHandler(RPIClient rpiClient) {
-		super(rpiClient);
-		this.rpiClient = rpiClient;
+	public RPIClientHandler(RPIClient client) {
+		super(client);
+
 	}
 	
 	/** {@inheritDoc}
@@ -28,12 +22,12 @@ public class RPIClientHandler extends ClientHandler {
 	protected void processMessage(IMessage msg) {
 		if (msg instanceof StatusMessage) {
 			StatusMessage smsg = (StatusMessage) msg;
-			rpiClient.setStatus(smsg.getStatus());
+			client.setStatus(smsg.getStatus());
 			System.out.println("Received status message from client: " + smsg.getStatus());
 		}
 		else if (msg instanceof NameMessage) {
 			NameMessage nmsg = (NameMessage) msg;
-			rpiClient.setName(nmsg.getName());
+			client.setName(nmsg.getName());
 			System.out.println("Received name message from client: " + nmsg.getName());
 		}
 		else {

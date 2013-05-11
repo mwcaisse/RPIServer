@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.ricex.rpi.common.IMessage;
-import com.ricex.rpi.common.MovieMessage;
 import com.ricex.rpi.common.PlayerModule;
-import com.ricex.rpi.common.StatusMessage;
-import com.ricex.rpi.common.StatusRequestMessage;
+import com.ricex.rpi.common.message.IMessage;
+import com.ricex.rpi.common.message.MovieMessage;
+import com.ricex.rpi.common.message.StatusMessage;
+import com.ricex.rpi.common.message.StatusRequestMessage;
 
 /**
  * RPI client that connects to the server

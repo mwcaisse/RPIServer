@@ -5,12 +5,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import com.ricex.rpi.common.IMessage;
-import com.ricex.rpi.common.MovieMessage;
-import com.ricex.rpi.common.NameMessage;
 import com.ricex.rpi.common.PlayerModule;
-import com.ricex.rpi.common.StatusMessage;
-import com.ricex.rpi.common.StatusRequestMessage;
+import com.ricex.rpi.common.message.IMessage;
+import com.ricex.rpi.common.message.MovieMessage;
+import com.ricex.rpi.common.message.NameMessage;
+import com.ricex.rpi.common.message.StatusMessage;
+import com.ricex.rpi.common.message.StatusRequestMessage;
 
 /**
  * Server handler, contols all interact with the server

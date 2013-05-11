@@ -1,5 +1,6 @@
 package com.ricex.rpi.common.video;
 
+import java.io.Serializable;
 import java.util.List;
 
 /** Interface representing a video, to be displayed
@@ -8,7 +9,7 @@ import java.util.List;
  *
  */
 
-public interface Video {
+public interface Video extends Serializable {
 
 	/** Returns the path to the video file */
 	public String getVideoFile(); 
