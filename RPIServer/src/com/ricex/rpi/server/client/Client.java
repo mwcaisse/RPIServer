@@ -1,9 +1,10 @@
-package com.ricex.rpi.server;
+package com.ricex.rpi.server.client;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * A client that connects to the given server interface
@@ -20,9 +21,6 @@ public abstract class Client {
 	/** The socket that the client connected on */
 	final protected Socket socket;
 
-	/** The list of change listeners registered for this client */
-	private List<ClientChangeListener> changeListeners;
-
 	/** Indicates wether this client is still connected or not */
 	protected boolean connected = false;
 
@@ -37,8 +35,7 @@ public abstract class Client {
 
 	public Client(long id, Socket socket) {
 		this.id = id;
-		this.socket = socket;
-		changeListeners = new ArrayList<ClientChangeListener>();
+		this.socket = socket;	
 		connected = true;
 	}
 
@@ -72,27 +69,8 @@ public abstract class Client {
 		return connected;
 	}
 
-	/** Adds the given client change listener */
+	/** Notifies all of the listeners that a change has been made */
+	protected abstract void notifyChangeListeners();
 
-	public void addChangeListener(ClientChangeListener listener) {
-		changeListeners.add(listener);
-	}
-
-	/** Removes the given client change listener */
-
-	public void removeChangeListener(ClientChangeListener listener) {
-		changeListeners.remove(listener);
-	}
-
-	/**
-	 * Notifies all of the listeners that a change has been made
-	 * 
-	 */
-
-	protected void notifyChangeListeners() {
-		for (ClientChangeListener listener : changeListeners) {
-			listener.clientChanged(this);
-		}
-	}
 
 }

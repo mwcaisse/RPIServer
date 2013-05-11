@@ -1,10 +1,13 @@
-package com.ricex.rpi.server;
+package com.ricex.rpi.server.client;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.ricex.rpi.common.IMessage;
 import com.ricex.rpi.common.RPIStatus;
+import com.ricex.rpi.server.client.handler.RPIClientHandler;
 
 /** A client that is connected to the server
  * 
@@ -30,6 +33,9 @@ public class RPIClient extends Client {
 	/** The status of this client */
 	private RPIStatus status;
 	
+	/** The list of change listeners registered for this client */
+	private List<ClientChangeListener<RPIClient>> changeListeners;
+	
 	public RPIClient (long id, Socket socket) {
 		super(id, socket);
 		name = "Unnamed Client " + id;
@@ -38,7 +44,9 @@ public class RPIClient extends Client {
 		clientThread = new Thread(handler);
 		clientThread.start();
 		
-		status = new RPIStatus(RPIStatus.IDLE);		
+		status = new RPIStatus(RPIStatus.IDLE);
+		
+		changeListeners = new ArrayList<ClientChangeListener<RPIClient>>();
 		
 	}
 	
@@ -95,4 +103,24 @@ public class RPIClient extends Client {
 		System.out.println("Sending message to client: " + message);
 		return handler.sendMessage(message);
 	}	
+	
+	/** Adds the given change listener */
+	public void addChangeListener(ClientChangeListener<RPIClient> listener) {
+		changeListeners.add(listener);
+	}
+	
+	/** Removes the given change listener */	
+	public void removeChangeListener(ClientChangeListener<RPIClient> listener) {
+		changeListeners.remove(listener);
+	}
+	
+	/** 
+	 *  {@inheritDoc}
+	 */
+	@Override
+	protected void notifyChangeListeners() {
+		for (ClientChangeListener<RPIClient> listener : changeListeners) {
+			listener.clientChanged(this);
+		}
+	}
 }

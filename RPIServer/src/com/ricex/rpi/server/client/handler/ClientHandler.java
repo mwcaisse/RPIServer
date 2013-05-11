@@ -1,10 +1,11 @@
-package com.ricex.rpi.server;
+package com.ricex.rpi.server.client.handler;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.ricex.rpi.common.IMessage;
+import com.ricex.rpi.server.client.Client;
 
 
 public abstract class ClientHandler implements Runnable {

@@ -9,11 +9,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 
 import com.ricex.rpi.common.RPIStatus;
-import com.ricex.rpi.server.Client;
-import com.ricex.rpi.server.ClientChangeListener;
-import com.ricex.rpi.server.ClientConnectionListener;
-import com.ricex.rpi.server.RPIClient;
 import com.ricex.rpi.server.RPIServer;
+import com.ricex.rpi.server.client.Client;
+import com.ricex.rpi.server.client.ClientChangeListener;
+import com.ricex.rpi.server.client.ClientConnectionListener;
+import com.ricex.rpi.server.client.RPIClient;
 
 
 /**The view for displaying a table of the known clients, and thier status + id and possibly name

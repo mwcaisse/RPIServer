@@ -2,6 +2,8 @@ package com.ricex.rpi.server;
 
 import java.net.Socket;
 
+import com.ricex.rpi.server.client.RPIClient;
+
 
 /** The server that listens and deals with connections from RPI clients, aka 
  * raspberry pis

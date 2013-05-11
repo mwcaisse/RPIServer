@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.ricex.rpi.server.client.Client;
+import com.ricex.rpi.server.client.ClientConnectionListener;
+
 /**
  * A server module
  * 

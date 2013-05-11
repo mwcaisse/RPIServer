@@ -5,6 +5,7 @@ import com.ricex.rpi.common.MovieMessage;
 import com.ricex.rpi.common.PlayerModule;
 import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.common.StatusRequestMessage;
+import com.ricex.rpi.server.client.RPIClient;
 
 /** Temporary server player module to test out the functionality of the GUi and sever 
  * 

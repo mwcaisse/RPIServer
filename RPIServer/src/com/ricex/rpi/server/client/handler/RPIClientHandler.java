@@ -1,4 +1,4 @@
-package com.ricex.rpi.server;
+package com.ricex.rpi.server.client.handler;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import com.ricex.rpi.common.IMessage;
 import com.ricex.rpi.common.NameMessage;
 import com.ricex.rpi.common.StatusMessage;
+import com.ricex.rpi.server.client.RPIClient;
 
 public class RPIClientHandler extends ClientHandler {
 

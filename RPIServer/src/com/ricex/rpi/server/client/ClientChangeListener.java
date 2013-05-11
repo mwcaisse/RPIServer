@@ -1,4 +1,5 @@
-package com.ricex.rpi.server;
+package com.ricex.rpi.server.client;
+
 
 
 public interface ClientChangeListener<T extends Client> {

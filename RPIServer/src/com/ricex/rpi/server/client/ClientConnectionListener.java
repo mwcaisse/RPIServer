@@ -1,4 +1,5 @@
-package com.ricex.rpi.server;
+package com.ricex.rpi.server.client;
+
 
 /** Interface for listening in changes to a client 
  * 
