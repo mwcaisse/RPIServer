@@ -64,6 +64,8 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent>, Clien
 		this.playerModule = playerModule;		
 		this.movieView = movieView;
 		
+		server.addConnectionListener(this);
+		
 		//create the buttons
 		butPlay = new Button("Play");
 		butPause = new Button("Pause");
