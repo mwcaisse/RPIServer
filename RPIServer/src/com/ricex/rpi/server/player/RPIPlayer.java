@@ -8,7 +8,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import com.ricex.rpi.common.PlayerModule;
 import com.ricex.rpi.server.RPIServer;
 import com.ricex.rpi.server.ServerPlayerModule;
 
@@ -40,7 +39,7 @@ public class RPIPlayer extends Application {
 	private ButtonPane buttonPane;
 	
 	/** The player module for this GUI */
-	private PlayerModule playerModule;	
+	private ServerPlayerModule playerModule;	
 	
 	/** The status label */
 	private Label labStatus;
@@ -54,7 +53,7 @@ public class RPIPlayer extends Application {
 		serverThread.setDaemon(true);
 		serverThread.start();	
 		
-		playerModule = new ServerPlayerModule(server);		
+		playerModule = new ServerPlayerModule(server.getConnectedClients());		
 	}
 	
 	public static void main (String[] args) {
@@ -67,7 +66,7 @@ public class RPIPlayer extends Application {
 		
 		movieListView = new VideoListView();	
 		clientTableView = new ClientTableView(server);
-		buttonPane = new ButtonPane(playerModule, movieListView);
+		buttonPane = new ButtonPane(server, playerModule, movieListView);
 		
 		labStatus = new Label("Status goes here");
 		

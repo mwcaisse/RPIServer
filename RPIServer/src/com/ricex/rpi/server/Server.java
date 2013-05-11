@@ -169,4 +169,10 @@ public abstract class Server<T extends Client> implements Runnable {
 	 */
 	
 	protected abstract T createClient(Socket socket);
+	
+	/** Notifies the server that the given client has disconnected */
+	
+	public void clientDisconnected(Client client) {
+		updateConnectedClients();
+	}
 }

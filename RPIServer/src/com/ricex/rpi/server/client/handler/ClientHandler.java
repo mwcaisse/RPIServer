@@ -56,8 +56,7 @@ public abstract class ClientHandler implements Runnable {
 
 		System.out.println("ClientHandler, we left server loop");
 		
-		//we are done, notify of disconnect
-		//rPIClient.setConnected(false);
+		client.setConnected(false);
 	}
 	
 	/** Processes the given message after it has been received from the server

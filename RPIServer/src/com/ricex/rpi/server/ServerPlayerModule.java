@@ -1,26 +1,35 @@
 package com.ricex.rpi.server;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ricex.rpi.common.IMessage;
 import com.ricex.rpi.common.MovieMessage;
 import com.ricex.rpi.common.PlayerModule;
 import com.ricex.rpi.common.RPIStatus;
-import com.ricex.rpi.common.StatusRequestMessage;
+import com.ricex.rpi.server.client.Client;
 import com.ricex.rpi.server.client.RPIClient;
 
-/** Temporary server player module to test out the functionality of the GUi and sever 
+/** Interface between the GUI and the Server
  * 
  * @author Mitchell
  *
  */
 
-public class ServerPlayerModule implements PlayerModule {
+public class ServerPlayerModule {
 
+	/** The list of clients to send the commands to */
+	private List<RPIClient> clients;
 	
-	/** The server that this will work with */
-	private RPIServer server;
+	/** Creates a new ServerPlayerModule with no clients */
 	
-	public ServerPlayerModule(RPIServer server ) {
-		this.server = server;
+	public ServerPlayerModule() {
+		this(new ArrayList<RPIClient>());
+	}
+	
+	/** Creates a new ServerPlayerModule with the given clients */
+	public ServerPlayerModule(List<RPIClient> clients) {
+		this.clients = clients;
 	}
 	                                            
 
@@ -102,19 +111,20 @@ public class ServerPlayerModule implements PlayerModule {
 	 */
 	
 	private void sendMessage(IMessage message) {
-		for (RPIClient rPIClient : server.getConnectedClients()) {
-			rPIClient.sendMessage(message);
-		}	
+		for (RPIClient client: clients) {
+			client.sendMessage(message);
+		}
 	}
 
-	/** Unsupported operation */
-	public RPIStatus getStatus() {
-		throw new UnsupportedOperationException();
-	}
-
-	/** Unsupported operation */
-	public String getFilePlaying() {
-		throw new UnsupportedOperationException();
+	/** Adds the given client to the list to send commands to */
+	
+	public void addClient(RPIClient client) {
+		clients.add(client);
+	}	
+	
+	/** Removes the given client from the list to send commands to */
+	public void removeClient(RPIClient client) {
+		clients.remove(client);
 	}
 
 }

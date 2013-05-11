@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.ricex.rpi.common.IMessage;
 import com.ricex.rpi.common.RPIStatus;
+import com.ricex.rpi.server.Server;
 import com.ricex.rpi.server.client.handler.RPIClientHandler;
 
 /** A client that is connected to the server
@@ -36,8 +37,8 @@ public class RPIClient extends Client {
 	/** The list of change listeners registered for this client */
 	private List<ClientChangeListener<RPIClient>> changeListeners;
 	
-	public RPIClient (long id, Socket socket) {
-		super(id, socket);
+	public RPIClient (Server<RPIClient> server, long id, Socket socket) {
+		super(server, id, socket);
 		name = "Unnamed Client " + id;
 		handler = new RPIClientHandler(this);
 		
@@ -89,7 +90,7 @@ public class RPIClient extends Client {
 	
 	/** Sets the connected value of this client */
 	
-	protected void setConnected(boolean connected) {
+	public void setConnected(boolean connected) {
 		this.connected = connected;
 	}
 	

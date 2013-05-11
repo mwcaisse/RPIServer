@@ -2,8 +2,8 @@ package com.ricex.rpi.server.client;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+
+import com.ricex.rpi.server.Server;
 
 
 /**
@@ -23,6 +23,9 @@ public abstract class Client {
 
 	/** Indicates wether this client is still connected or not */
 	protected boolean connected = false;
+	
+	/** The server this client is conencted to */
+	private Server<?> server;
 
 	/**
 	 * Creates a new client with the given id and socket
@@ -33,7 +36,8 @@ public abstract class Client {
 	 *            The socket through which the client connected
 	 */
 
-	public Client(long id, Socket socket) {
+	public Client(Server<?> server, long id, Socket socket) {
+		this.server = server;
 		this.id = id;
 		this.socket = socket;	
 		connected = true;
@@ -68,9 +72,17 @@ public abstract class Client {
 	public boolean isConnected() {
 		return connected;
 	}
+	
+	/** Sets whether this client is connected or not */
+	public void setConnected(boolean connected) {
+		this.connected = connected;
+		if (!connected) {
+			//notify the server that we disconnected;
+			server.clientDisconnected(this);
+		}	
+	}
 
 	/** Notifies all of the listeners that a change has been made */
 	protected abstract void notifyChangeListeners();
-
 
 }

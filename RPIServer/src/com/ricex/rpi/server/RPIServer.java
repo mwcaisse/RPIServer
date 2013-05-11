@@ -26,7 +26,7 @@ public class RPIServer extends Server<RPIClient> {
 	
 	@Override
 	protected RPIClient createClient(Socket socket) {
-		return new RPIClient(getNextId(), socket);
+		return new RPIClient(this, getNextId(), socket);
 	}
 
 }

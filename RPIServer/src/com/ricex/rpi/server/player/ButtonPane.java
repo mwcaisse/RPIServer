@@ -6,7 +6,10 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
-import com.ricex.rpi.common.PlayerModule;
+import com.ricex.rpi.server.Server;
+import com.ricex.rpi.server.ServerPlayerModule;
+import com.ricex.rpi.server.client.ClientConnectionListener;
+import com.ricex.rpi.server.client.RPIClient;
 
 /** Will probally need to change this in future, but temporary for now
  * 
@@ -16,7 +19,7 @@ import com.ricex.rpi.common.PlayerModule;
  *
  */
 
-public class ButtonPane extends VBox implements EventHandler<ActionEvent> {
+public class ButtonPane extends VBox implements EventHandler<ActionEvent>, ClientConnectionListener<RPIClient> {
 	
 	/** Button to start playing the selected movie in the list view */
 	private Button butPlay;	
@@ -46,14 +49,18 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent> {
 	private Button butLastChapter;
 	
 	/** The player module interface to complete the given actions */
-	private PlayerModule playerModule;
+	private ServerPlayerModule playerModule;
 	
 	/** The list view representing the movies */
 	private VideoListView movieView;
 	
+	/** The RPI server that is running */
+	private Server<RPIClient> server;
+	
 	/** Creates a new ButtonPane for controlling the movies */
 	
-	public ButtonPane(PlayerModule playerModule, VideoListView movieView) {
+	public ButtonPane(Server<RPIClient> server, ServerPlayerModule playerModule, VideoListView movieView) {
+		this.server = server;
 		this.playerModule = playerModule;		
 		this.movieView = movieView;
 		
@@ -138,5 +145,15 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent> {
 			playerModule.previousChapter();
 		}
 		
+	}
+
+	@Override
+	public void clientConnected(RPIClient client) {
+		playerModule.addClient(client);
+	}
+
+	@Override
+	public void clientDisconnected(RPIClient client) {
+		playerModule.removeClient(client);
 	}
 }
