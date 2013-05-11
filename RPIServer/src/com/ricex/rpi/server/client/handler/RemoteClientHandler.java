@@ -30,7 +30,8 @@ public class RemoteClientHandler extends ClientHandler<RemoteClient> {
 		}	
 		else if (message instanceof RemoteMovieMessage) {
 			RemoteMovieMessage rmsg = (RemoteMovieMessage) message;
-			RPIClient client = RPIServer.getInstance().getClient(rmsg.g
+			RPIClient client = RPIServer.getInstance().getClient(rmsg.getClientId());
+			client.sendMessage(rmsg);
 		}
 	}
 
