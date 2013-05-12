@@ -21,10 +21,12 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int directory=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
+        public static final int movie=0x7f020002;
     }
     public static final class id {
-        public static final int action_settings=0x7f08000c;
+        public static final int action_settings=0x7f08000e;
         public static final int but_next_chapter=0x7f080008;
         public static final int but_pause=0x7f080002;
         public static final int but_play=0x7f080001;
@@ -36,13 +38,16 @@ public final class R {
         public static final int fragment_container=0x7f080000;
         public static final int movies_buttons=0x7f080009;
         public static final int movies_list=0x7f08000a;
-        public static final int players_list=0x7f08000b;
+        public static final int movies_text=0x7f08000c;
+        public static final int movies_thumbnail=0x7f08000b;
+        public static final int players_list=0x7f08000d;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int controls_layout=0x7f030001;
         public static final int movies_layout=0x7f030002;
-        public static final int players_layout=0x7f030003;
+        public static final int movies_list_item=0x7f030003;
+        public static final int players_layout=0x7f030004;
     }
     public static final class menu {
         public static final int main=0x7f070000;

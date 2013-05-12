@@ -27,8 +27,8 @@ public class MainActivity extends Activity {
 		Tab playersTab = actionBar.newTab().setText("Players");
 		
 		moviesTab.setTabListener(new TestTabListener(new MoviesListFragment()));
-		controlTab.setTabListener(new TestTabListener(new Fragment()));
-		playersTab.setTabListener(new TestTabListener(new Fragment()));
+		controlTab.setTabListener(new TestTabListener(new ControlsFragment()));
+		playersTab.setTabListener(new TestTabListener(new PlayersListFragment()));
 		
 		actionBar.addTab(moviesTab);
 		actionBar.addTab(controlTab);

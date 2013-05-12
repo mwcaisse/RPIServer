@@ -37,7 +37,7 @@ public class MoviesListFragment extends Fragment {
 			data.add("RPI Movie " + i);
 		}
 		
-		moviesListView.setAdapter(new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, data));	
+		moviesListView.setAdapter(new ArrayAdapter<String>(view.getContext(), R.layout.movies_list_item, R.id.movies_text, data));	
 		
 		return view;
 		
