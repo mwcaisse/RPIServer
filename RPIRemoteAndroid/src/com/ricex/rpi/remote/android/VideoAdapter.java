@@ -93,12 +93,14 @@ public class VideoAdapter  extends BaseAdapter {
 			TextView textView = (TextView) convertView.findViewById(R.id.movies_text);
 			
 			//Set the icon of the video appropriatly 
+			
 			if (video.isDirectory()) {
 				icon.setImageResource(R.drawable.directory);
 			}
 			else {
 				icon.setImageResource(R.drawable.movie);
 			}
+			
 			
 			textView.setText(video.getName());
 			
