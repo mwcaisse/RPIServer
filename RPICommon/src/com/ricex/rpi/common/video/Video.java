@@ -21,4 +21,7 @@ public interface Video extends Serializable {
 	/** Returns whether or not this Video is a directory */
 	public boolean isDirectory();
 	
+	/** Returns the name of the video */
+	public String getName();
+	
 }

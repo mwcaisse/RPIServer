@@ -1,16 +1,16 @@
 package com.ricex.rpi.remote.android;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+
+import com.ricex.rpi.common.video.Directory;
+import com.ricex.rpi.common.video.Movie;
 
 /** The fragment for displaying the movies list
  * 
@@ -32,14 +32,26 @@ public class MoviesListFragment extends Fragment {
 		
 		moviesListView = (ListView) view.findViewById(R.id.movies_list);
 		
-		List<String> data = new ArrayList<String>();
-		for (int i=0;i<15;i++) {
-			data.add("RPI Movie " + i);
-		}
-		
-		moviesListView.setAdapter(new ArrayAdapter<String>(view.getContext(), R.layout.movies_list_item, R.id.movies_text, data));	
+		VideoAdapter adapter = generateVideoAdapter(view.getContext());
+
+		moviesListView.setAdapter(adapter);	
 		
 		return view;
 		
+	}
+	
+	private VideoAdapter generateVideoAdapter(Context context) {
+		VideoAdapter adapter = new VideoAdapter(context);
+		
+		for (int i=0;i<10;i++) {
+			if (i % 2 == 0) {
+				adapter.addItem(new Movie("Movie: " + i/2, ""));
+			}
+			if (i % 2 == 0) {
+				adapter.addItem(new Directory("Directory: " + (i/2+ 1)));
+			}
+		}
+		
+		return adapter;
 	}
 }

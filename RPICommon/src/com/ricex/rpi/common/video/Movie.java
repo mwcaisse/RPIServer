@@ -49,4 +49,8 @@ public class Movie implements Video {
 	public boolean isDirectory() {
 		return false;
 	}
+	
+	public String getName() {
+		return name;
+	}
 }
