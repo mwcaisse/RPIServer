@@ -26,15 +26,13 @@ public class MainActivity extends Activity {
 		Tab controlTab = actionBar.newTab().setText("Controls");
 		Tab playersTab = actionBar.newTab().setText("Players");
 		
-		moviesTab.setTabListener(new TestTabListener(new MoviesListFragment()));
-		controlTab.setTabListener(new TestTabListener(new ControlsFragment()));
-		playersTab.setTabListener(new TestTabListener(new PlayersListFragment()));
+		moviesTab.setTabListener(new NavigationTabListener(new MoviesListFragment()));
+		controlTab.setTabListener(new NavigationTabListener(new ControlsFragment()));
+		playersTab.setTabListener(new NavigationTabListener(new PlayersListFragment()));
 		
 		actionBar.addTab(moviesTab);
 		actionBar.addTab(controlTab);
 		actionBar.addTab(playersTab);	
-		
-		
 		
 	}
 
@@ -45,12 +43,12 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
-	private class TestTabListener implements TabListener {
+	private class NavigationTabListener implements TabListener {
 
 		/** The fragment to switch to when this tab is selected */
 		private Fragment fragment;
 		
-		private TestTabListener(Fragment fragment) {
+		private NavigationTabListener(Fragment fragment) {
 			this.fragment = fragment;
 		}
 		

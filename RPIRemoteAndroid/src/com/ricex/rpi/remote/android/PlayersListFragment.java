@@ -38,7 +38,7 @@ public class PlayersListFragment extends Fragment {
 			data.add("RPI Player " + i);
 		}
 		
-		playerListView.setAdapter(new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, data));	
+		playerListView.setAdapter(new ArrayAdapter<String>(view.getContext(), R.layout.players_list_item, R.id.player_checkbox, data));	
 		
 		return view;
 		
