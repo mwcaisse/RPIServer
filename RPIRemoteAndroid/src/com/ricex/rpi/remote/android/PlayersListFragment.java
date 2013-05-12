@@ -12,32 +12,33 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-/** The fragment for displaying the movies list
+/** The fragment for displaying the list view of the RPI Players
  * 
  * @author Mitchell
  *
  */
 
-public class MoviesListFragment extends Fragment {
-
-	/** The list view that will display the movies in the current directory */
-	private ListView moviesListView;
+public class PlayersListFragment extends Fragment {
 	
-	/** The linear layout that will display the navigation buttons */
-	private LinearLayout moviesDirectoryView;
+	/** The list view that will display the movies in the current directory */
+	private ListView playerListView;
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
-		View view = inflater.inflate(R.layout.movies_layout, container, false);
+		View view = inflater.inflate(R.layout.players_layout, container, false);
 		
-		moviesListView = (ListView) view.findViewById(R.id.movies_list);
+		playerListView = (ListView) view.findViewById(R.id.players_list);
 		
 		List<String> data = new ArrayList<String>();
 		for (int i=0;i<15;i++) {
-			data.add("RPI Movie " + i);
+			data.add("RPI Player " + i);
 		}
 		
-		moviesListView.setAdapter(new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, data));	
+		playerListView.setAdapter(new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, data));	
 		
 		return view;
 		

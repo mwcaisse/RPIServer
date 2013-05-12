@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <Button
+        android:id="@+id/but_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/but_play"
+         />
+    
+    <Button
+        android:id="@+id/but_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/but_pause"
+         />
+    
+    <Button
+        android:id="@+id/but_seek_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/but_seek_left"
+         />
+    
+    <Button
+        android:id="@+id/but_seek_left_fast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/but_seek_left_fast"
+         />
+    
+	<Button
+        android:id="@+id/but_seek_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/but_seek_right"
+         />
+      
+	<Button
+        android:id="@+id/but_seek_right_fast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/but_seek_right_fast"
+         />
+	
+	<Button
+        android:id="@+id/but_previous_chapter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/but_previous_chapter"
+         />
+	
+	<Button
+        android:id="@+id/but_next_chapter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/but_next_chapter"
+         />   
+    
+
+</LinearLayout>

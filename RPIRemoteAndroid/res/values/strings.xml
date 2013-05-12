@@ -4,5 +4,14 @@
     <string name="app_name">RaspberryPi Remote</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="but_play">Play</string>
+    <string name="but_pause">Pause</string>
+    <string name="but_stop">Stop</string>
+    <string name="but_seek_left">&lt;</string>
+    <string name="but_seek_left_fast">&lt;&lt;</string>
+    <string name="but_seek_right">&gt;</string>
+    <string name="but_seek_right_fast">&gt;&gt;</string>
+    <string name="but_previous_chapter">|&lt;&lt;</string>
+    <string name="but_next_chapter">&gt;&gt;|</string>
 
 </resources>
