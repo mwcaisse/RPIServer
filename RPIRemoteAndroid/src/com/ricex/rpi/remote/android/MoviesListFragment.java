@@ -1,17 +1,21 @@
 package com.ricex.rpi.remote.android;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.ricex.rpi.common.video.Directory;
 import com.ricex.rpi.common.video.Movie;
+import com.ricex.rpi.common.video.Video;
 
 /** The fragment for displaying the movies list
  * 
@@ -19,7 +23,7 @@ import com.ricex.rpi.common.video.Movie;
  *
  */
 
-public class MoviesListFragment extends Fragment {
+public class MoviesListFragment extends Fragment implements OnItemClickListener{
 
 	/** The list view that will display the movies in the current directory */
 	private ListView moviesListView;
@@ -45,6 +49,7 @@ public class MoviesListFragment extends Fragment {
 		
 		//moviesListView.setAdapter(new ArrayAdapter<String>(view.getContext(),android.R.layout.simple_list_item_1, items));
 		moviesListView.setAdapter(adapter);
+		moviesListView.setOnItemClickListener(this);
 		
 		return view;
 		
@@ -64,4 +69,21 @@ public class MoviesListFragment extends Fragment {
 		
 		return adapter;
 	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		Video item = (Video)parent.getAdapter().getItem(position);
+		if (item.isDirectory()) {
+			
+		}
+		else {
+			MovieDetailFragment fragment = new MovieDetailFragment();
+			fragment.setMovie((Movie) item);
+			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			ft.replace(R.id.fragment_container, fragment);
+			ft.addToBackStack(null);
+			ft.commit();
+		}
+	}
+
 }

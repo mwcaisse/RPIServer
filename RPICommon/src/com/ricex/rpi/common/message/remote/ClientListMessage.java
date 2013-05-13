@@ -1,9 +1,9 @@
 package com.ricex.rpi.common.message.remote;
 
-import java.rmi.Remote;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.common.message.IMessage;
 
 
@@ -37,8 +37,8 @@ public class ClientListMessage implements IMessage {
 	 * @param name The clients name
 	 */
 	
-	public void addClient(long id, String name) {
-		clients.add(new RemoteClient(id, name));
+	public void addClient(long id, String name, RPIStatus status) {
+		clients.add(new RemoteClient(id, name, status));
 	}
 	
 	/** Returns the list of clients */	

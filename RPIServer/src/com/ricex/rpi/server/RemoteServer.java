@@ -64,7 +64,7 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 	private ClientListMessage constructClientListMessage() {
 		ClientListMessage clientMessage = new ClientListMessage();
 		for (RPIClient c : RPIServer.getInstance().getConnectedClients()) {
-			clientMessage.addClient(c.getId(), c.getName());
+			clientMessage.addClient(c.getId(), c.getName(), c.getStatus());
 		}
 		return clientMessage;
 	}
