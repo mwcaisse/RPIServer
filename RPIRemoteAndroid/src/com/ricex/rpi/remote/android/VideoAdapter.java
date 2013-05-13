@@ -106,7 +106,7 @@ public class VideoAdapter  extends BaseAdapter {
 			
 		}
 		
-		return null;
+		return convertView;
 	}
 
 	private Context getContext() {

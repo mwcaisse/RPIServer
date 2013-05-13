@@ -37,7 +37,14 @@ public class MoviesListFragment extends Fragment {
 
 		Log.i("RPI", "Adapter: " + adapter);
 		
-		moviesListView.setAdapter(adapter);	
+		/*
+		List<String> items = new ArrayList<String>();
+		items.add("HJ");
+		items.add("SD");
+		*/
+		
+		//moviesListView.setAdapter(new ArrayAdapter<String>(view.getContext(),android.R.layout.simple_list_item_1, items));
+		moviesListView.setAdapter(adapter);
 		
 		return view;
 		
