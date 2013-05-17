@@ -13,5 +13,8 @@
     <string name="but_seek_right_fast">&gt;&gt;</string>
     <string name="but_previous_chapter">|&lt;&lt;</string>
     <string name="but_next_chapter">&gt;&gt;|</string>
+    <string name="server_title">Server</string>
+    <string name="server_status">Status: </string>
+    <string name="server_address">Address</string>
 
 </resources>

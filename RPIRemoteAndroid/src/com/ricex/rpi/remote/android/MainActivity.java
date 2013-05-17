@@ -25,14 +25,17 @@ public class MainActivity extends Activity {
 		Tab moviesTab = actionBar.newTab().setText("Movies");
 		Tab controlTab = actionBar.newTab().setText("Controls");
 		Tab playersTab = actionBar.newTab().setText("Players");
+		Tab serverTab = actionBar.newTab().setText("Server");
 		
 		moviesTab.setTabListener(new NavigationTabListener(new MoviesListFragment()));
 		controlTab.setTabListener(new NavigationTabListener(new ControlsFragment()));
 		playersTab.setTabListener(new NavigationTabListener(new PlayersListFragment()));
+		serverTab.setTabListener(new NavigationTabListener(new ServerFragment()));
 		
 		actionBar.addTab(moviesTab);
 		actionBar.addTab(controlTab);
 		actionBar.addTab(playersTab);	
+		actionBar.addTab(serverTab);
 		
 	}
 

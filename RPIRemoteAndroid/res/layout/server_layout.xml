@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+     
+    <TextView
+        android:id="@+id/server_status"
+        android:textIsSelectable="false"
+       	android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/server_status"
+        android:textSize="18sp"
+    />
+    
+     <EditText
+        android:id="@+id/server_address"
+       	android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="@string/server_address"
+    />    
+    
+    <Button 
+        android:id="@+id/server_button_connect"
+        android:text="Connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />  
+    
+    <Button 
+        android:id="@+id/server_button_save"
+        android:text="Update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />    
+
+</LinearLayout>
