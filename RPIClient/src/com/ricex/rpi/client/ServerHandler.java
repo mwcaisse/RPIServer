@@ -29,9 +29,6 @@ public class ServerHandler implements Runnable {
 
 	/** Output stream to write to the server */
 	private ObjectOutputStream outStream;
-
-	/** The thread that this class uses to listen for input from the server */
-	private Thread thread;
 	
 	/** The playermodule that will be used by this handler */
 	private PlayerModule playerModule;
