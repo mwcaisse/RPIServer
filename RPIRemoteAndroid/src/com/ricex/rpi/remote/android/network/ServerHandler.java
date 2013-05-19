@@ -25,6 +25,9 @@ public class ServerHandler implements Runnable {
 	
 	/** The stream out to the server */
 	private ObjectOutputStream outStream;	
+	
+	/** Boolean whether to cointinue running or not */
+	private boolean running;
 
 	
 	/** Creates a new server handle to listen on the given socket
@@ -68,7 +71,7 @@ public class ServerHandler implements Runnable {
 		Object input;
 		
 		try {
-			while ( (input = inStream.readObject()) != null) {
+			while (running && (input = inStream.readObject()) != null) {
 				if (!(input instanceof IMessage)) {
 					Log.e("RPIServerHandler", "Received unsupported message from the server");
 				}
@@ -83,7 +86,18 @@ public class ServerHandler implements Runnable {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-			
+		
+		try {
+			inStream.close();
+			outStream.close();
+		}
+		catch (IOException e) {
+			Log.e("RPIServerHandler", "Error closing input and output stream", e);
+		}			
+	}
+	
+	public void close() {
+		running = false;
 	}
 	
 	/** Processes a message that has been received from the server
