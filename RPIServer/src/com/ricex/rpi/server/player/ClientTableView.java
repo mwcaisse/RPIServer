@@ -34,6 +34,7 @@ public class ClientTableView extends BorderPane implements ClientChangeListener<
 	private TableView<RPIClient> clientTable;
 	
 	
+	@SuppressWarnings("unchecked")
 	public ClientTableView(RPIServer server) {
 		this.server = server;
 		

@@ -89,11 +89,13 @@ public abstract class Client {
 	
 	/** Sets whether this client is connected or not */
 	public void setConnected(boolean connected) {
-		this.connected = connected;
-		if (!connected) {
-			//notify the server that we disconnected;
-			server.disconnectClient(this);
-		}	
+		this.connected = connected;	
+	}
+	
+	/** Disconnects this client from the server */
+	
+	public void disconnectClient() {
+		server.disconnectClient(this);	
 	}
 	
 	/** Sends a message to this client

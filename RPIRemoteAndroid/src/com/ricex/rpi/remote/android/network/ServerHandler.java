@@ -40,7 +40,7 @@ public class ServerHandler implements Runnable {
 		this.socket = socket;
 		
 		inStream = new ObjectInputStream(socket.getInputStream());
-		outStream = new ObjectOutputStream(socket.getOutputStream());
+		outStream = new ObjectOutputStream(socket.getOutputStream());		
 	}
 	
 	

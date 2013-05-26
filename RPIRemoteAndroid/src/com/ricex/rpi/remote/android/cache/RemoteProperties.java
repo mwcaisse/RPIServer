@@ -23,7 +23,7 @@ public class RemoteProperties {
 	/** Private constructor, to keep this class singleton */
 	private RemoteProperties() {
 		//TODO: Implement a config/properties file for theese properties
-		serverAddress = "192.168.1.161";
+		serverAddress = "192.168.1.160";
 		serverPort = 6520;
 	}
 
