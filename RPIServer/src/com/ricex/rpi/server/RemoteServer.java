@@ -4,9 +4,11 @@ import java.net.Socket;
 
 import com.ricex.rpi.common.message.remote.ClientListMessage;
 import com.ricex.rpi.common.message.remote.ClientUpdateMessage;
+import com.ricex.rpi.common.message.remote.DirectoryListingMessage;
 import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
 import com.ricex.rpi.server.client.RemoteClient;
+import com.ricex.rpi.server.player.MovieParser;
 
 /** The server that listens for connections from RPIRemotes, and creates threads to respond to them
  * 
@@ -45,6 +47,10 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 
 		//send the list of rpi clients to the remote client
 		client.sendMessage(constructClientListMessage());
+		
+		//send the directory listing to the clint
+		MovieParser mp = new MovieParser(RPIServerProperties.getInstance().getBaseDir());
+		client.sendMessage(new DirectoryListingMessage(mp.parseVideos()));
 		
 		return client;
 	}

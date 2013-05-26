@@ -16,6 +16,8 @@ import android.widget.ListView;
 import com.ricex.rpi.common.video.Directory;
 import com.ricex.rpi.common.video.Movie;
 import com.ricex.rpi.common.video.Video;
+import com.ricex.rpi.remote.android.cache.DirectoryCache;
+import com.ricex.rpi.remote.android.cache.DirectoryChangeListener;
 
 /** The fragment for displaying the movies list
  * 
@@ -23,7 +25,7 @@ import com.ricex.rpi.common.video.Video;
  *
  */
 
-public class MoviesListFragment extends Fragment implements OnItemClickListener{
+public class MoviesListFragment extends Fragment implements OnItemClickListener, DirectoryChangeListener {
 
 	/** The list view that will display the movies in the current directory */
 	private ListView moviesListView;
@@ -31,29 +33,47 @@ public class MoviesListFragment extends Fragment implements OnItemClickListener{
 	/** The linear layout that will display the navigation buttons */
 	private LinearLayout moviesDirectoryView;
 	
+	/** The context for this view */
+	private Context context;
+	
+	/** Creates a new movie list view and registers this as a listener in the DirectoryCache
+	 */
+	
+	public MoviesListFragment() {
+		moviesListView = null;		
+		DirectoryCache.getInstance().addListener(this);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
 		View view = inflater.inflate(R.layout.movies_layout, container, false);
+		context = view.getContext();
 		
 		moviesListView = (ListView) view.findViewById(R.id.movies_list);
 		
-		VideoAdapter adapter = generateVideoAdapter(view.getContext());
+		//VideoAdapter adapter = generateVideoAdapter(view.getContext());
+		VideoAdapter adapter = new VideoAdapter(context, DirectoryCache.getInstance().getRootDirectory().getChildren());
 
 		Log.i("RPI", "Adapter: " + adapter);
-		
-		/*
-		List<String> items = new ArrayList<String>();
-		items.add("HJ");
-		items.add("SD");
-		*/
-		
-		//moviesListView.setAdapter(new ArrayAdapter<String>(view.getContext(),android.R.layout.simple_list_item_1, items));
+
 		moviesListView.setAdapter(adapter);
 		moviesListView.setOnItemClickListener(this);
 		
 		return view;
 		
 	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+	}
+	
+	/** Generates a temporary video adapter for testing purposes
+	 */
 	
 	private VideoAdapter generateVideoAdapter(Context context) {
 		VideoAdapter adapter = new VideoAdapter(context);
@@ -70,6 +90,10 @@ public class MoviesListFragment extends Fragment implements OnItemClickListener{
 		return adapter;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Video item = (Video)parent.getAdapter().getItem(position);
@@ -84,6 +108,19 @@ public class MoviesListFragment extends Fragment implements OnItemClickListener{
 			ft.addToBackStack(null);
 			ft.commit();
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	
+	@Override
+	public void rootDirectoryChanged(Video rootDirectory) {
+		if (moviesListView != null) {
+			VideoAdapter adapter = new VideoAdapter(context, rootDirectory.getChildren());
+			moviesListView.setAdapter(adapter);
+		}
+		
 	}
 
 }

@@ -56,7 +56,7 @@ public class ServerFragment extends Fragment implements OnClickListener {
 		butConnect.setOnClickListener(this);
 		
 		textServerAddress.setText(RemoteProperties.getInstance().getServerAddress());	
-		textServerPort.setText(RemoteProperties.getInstance().getServerPort());
+		textServerPort.setText(RemoteProperties.getInstance().getServerPort() + "");
 		
 		return view;
 		

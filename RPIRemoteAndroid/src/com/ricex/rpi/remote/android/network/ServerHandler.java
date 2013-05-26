@@ -8,6 +8,8 @@ import java.net.Socket;
 import android.util.Log;
 
 import com.ricex.rpi.common.message.IMessage;
+import com.ricex.rpi.common.message.remote.ClientListMessage;
+import com.ricex.rpi.common.message.remote.DirectoryListingMessage;
 
 
 /** Runs in the background and listens for messages received from the server
@@ -106,6 +108,11 @@ public class ServerHandler implements Runnable {
 	 */
 	
 	protected synchronized void processMessage(IMessage message) {
-		
+		if (message instanceof ClientListMessage) {
+			
+		}
+		else if (message instanceof DirectoryListingMessage) {
+			
+		}
 	}
 }
