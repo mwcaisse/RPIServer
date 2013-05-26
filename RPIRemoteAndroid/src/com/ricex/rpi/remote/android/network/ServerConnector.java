@@ -12,10 +12,9 @@ import com.ricex.rpi.remote.android.cache.RemoteProperties;
 
 public class ServerConnector {
 
-	
 	/** The instance of the server connector */
 	private static ServerConnector _instance;
-	
+
 	public static ServerConnector getInstance() {
 		if (_instance == null) {
 			_instance = new ServerConnector();
@@ -23,75 +22,96 @@ public class ServerConnector {
 		return _instance;
 	}
 	
-	/** The socket used to connect to the server */
-	private Socket socket;
-	
-	/** The server handler to use to conenct to the server */
-	private ServerHandler serverHandler;
-	
-	/** The thread in which the server handler runs in */
-	private Thread serverHandlerThread;
-	
 	/** Whether or not we are conencted to the server */
 	private boolean connected;
 	
+	/** The server thread that will be used to conenct to the server */
+	private ServerThread serverThread;
+
 	/** Creates a new instance of server connector */
-	private ServerConnector() {	
+	private ServerConnector() {
 		connected = false;
+		serverThread = new ServerThread();
 	}
-	
-	/** Connects to the server
-	 * 
-	 * @return True if connected, false if it failed
+
+	/**
+	 * Connects to the server
 	 */
-	public boolean connect() {
+	public void connect() {
 		if (connected) {
-			return true; // we are already connected
-		}
-		
-		try {
-			//create the connection to the server
-			socket = new Socket(RemoteProperties.getInstance().getServerAddress(), RemoteProperties.getInstance().getServerPort());
-			
-			//create the handler for the server
-			serverHandler = new ServerHandler(socket);
-			
-			//create the thread the server handler will run in
-			serverHandlerThread = new Thread(serverHandler);
-			serverHandlerThread.start();
-			
-		}
-		catch (UnknownHostException e) {
-			Log.e("RPIServerConnector", "Error connecting to Server", e);
-			return false;
-		}
-		catch (IOException e) {
-			Log.e("RPIServerConnector", "Error connecting to Server", e);
-			return false;
-		}
-		connected = true;
-		return false;
-	}
-	
-	/** Disconnects from the server
-	 * 
-	 * @return True if sucessful or already disconnectd, false if cannot disconnect
-	 */ 
-	public boolean disconnect() {
-		
-		serverHandler.close();
-		try {
-			socket.close();
-		}
-		catch (IOException e) {
-			Log.e("RPIServerConnector", "Error disconecting from server", e);
+			return; // if we are already connected, no need to re-connect
 		}		
 		
-		return true;
+		// connect to the server ina different thread
+		Thread connectThread = new Thread(serverThread);
+		connectThread.start();
 	}
-	
+
+	/**
+	 * Disconnects from the server
+	 */
+	public void disconnect() {
+		serverThread.disconnect();
+	}
+
 	/** Returns whether or not we are currently connected to the server */
 	public boolean isConnected() {
 		return connected;
+	}
+
+	/** Class representing the thread that the server will run in */
+	private class ServerThread implements Runnable {
+		
+		/** The socket used to connect to the server */
+		private Socket socket;
+
+		/** The server handler to use to conenct to the server */
+		private ServerHandler serverHandler;
+
+		/** The thread in which the server handler runs in */
+		private Thread serverHandlerThread;
+		
+		/** Creates a new server thread */
+		private ServerThread() {
+			
+		}
+
+		public void run() {
+			try {				
+				RemoteProperties properties = RemoteProperties.getInstance();
+				// create the connection to the server
+				socket = new Socket(properties.getServerAddress(), properties.getServerPort());
+
+				// create the handler for the server
+				serverHandler = new ServerHandler(socket);
+
+				// create the thread the server handler will run in
+				serverHandlerThread = new Thread(serverHandler);
+				serverHandlerThread.start();				
+				connected = true;
+				Log.i("RPIServerConnector", "We are now connected to the server");
+			}
+			catch (UnknownHostException e) {
+				Log.e("RPIServerConnector", "Error connecting to Server", e);
+				connected = false;
+			}
+			catch (IOException e) {
+				Log.e("RPIServerConnector", "Error connecting to Server", e);
+				connected = false;
+			}
+		}
+		
+		/** Disconnects from the server */
+		public void disconnect() {
+			serverHandler.close();
+			try {
+				socket.close();
+			}
+			catch (IOException e) {
+				Log.e("RPIServerConnector", "Error disconecting from server", e);
+			}	
+			connected = false;
+		}
+
 	}
 }

@@ -26,7 +26,7 @@ public final class R {
         public static final int movie=0x7f020002;
     }
     public static final class id {
-        public static final int action_settings=0x7f080019;
+        public static final int action_settings=0x7f08001a;
         public static final int but_next_chapter=0x7f080008;
         public static final int but_pause=0x7f080002;
         public static final int but_play=0x7f080001;
@@ -49,8 +49,9 @@ public final class R {
         public static final int player_detail_title=0x7f080010;
         public static final int players_list=0x7f080013;
         public static final int server_address=0x7f080016;
-        public static final int server_button_connect=0x7f080017;
-        public static final int server_button_save=0x7f080018;
+        public static final int server_button_connect=0x7f080018;
+        public static final int server_button_save=0x7f080019;
+        public static final int server_port=0x7f080017;
         public static final int server_status=0x7f080015;
     }
     public static final class layout {
@@ -81,6 +82,7 @@ public final class R {
         public static final int but_stop=0x7f050005;
         public static final int hello_world=0x7f050002;
         public static final int server_address=0x7f05000e;
+        public static final int server_port=0x7f05000f;
         public static final int server_status=0x7f05000d;
         public static final int server_title=0x7f05000c;
     }

@@ -23,6 +23,9 @@ public class ServerFragment extends Fragment implements OnClickListener {
 	/** Text field for the server address */
 	private EditText textServerAddress;
 	
+	/** Text field for the server port */
+	private EditText textServerPort;
+	
 	/** Text field for the status of the server */
 	private TextView textServerStatus;
 	
@@ -45,13 +48,15 @@ public class ServerFragment extends Fragment implements OnClickListener {
 		butConnect = (Button) view.findViewById(R.id.server_button_connect);
 		
 		textServerAddress = (EditText) view.findViewById(R.id.server_address);
+		textServerPort = (EditText) view.findViewById(R.id.server_port);
 		
 		textServerStatus = (TextView) view.findViewById(R.id.server_status);
 		
 		butUpdate.setOnClickListener(this);
 		butConnect.setOnClickListener(this);
 		
-		textServerAddress.setText(RemoteProperties.getInstance().getServerAddress());			
+		textServerAddress.setText(RemoteProperties.getInstance().getServerAddress());	
+		textServerPort.setText(RemoteProperties.getInstance().getServerPort());
 		
 		return view;
 		
@@ -77,6 +82,7 @@ public class ServerFragment extends Fragment implements OnClickListener {
 		
 		if (v.equals(butUpdate)) {
 			String serverAddress = textServerAddress.getText().toString();
+			int serverPort = Integer.parseInt(textServerPort.getText().toString());
 			RemoteProperties.getInstance().setServerAddress(serverAddress);
 		}
 		else if (v.equals(butConnect)) {

@@ -16,5 +16,6 @@
     <string name="server_title">Server</string>
     <string name="server_status">Status: </string>
     <string name="server_address">Address</string>
+    <string name="server_port">Port</string>
 
 </resources>
