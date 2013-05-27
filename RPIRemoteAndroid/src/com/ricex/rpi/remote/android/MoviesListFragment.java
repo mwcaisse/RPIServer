@@ -98,7 +98,9 @@ public class MoviesListFragment extends Fragment implements OnItemClickListener,
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Video item = (Video)parent.getAdapter().getItem(position);
 		if (item.isDirectory()) {
-			
+			Directory dir = (Directory) item;
+			VideoAdapter adapter = new VideoAdapter(context, dir.getChildren());
+			moviesListView.setAdapter(adapter);
 		}
 		else {
 			MovieDetailFragment fragment = new MovieDetailFragment();

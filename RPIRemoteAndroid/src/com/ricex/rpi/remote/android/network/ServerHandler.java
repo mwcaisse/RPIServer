@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.common.message.remote.ClientListMessage;
+import com.ricex.rpi.common.message.remote.ClientUpdateMessage;
 import com.ricex.rpi.common.message.remote.DirectoryListingMessage;
 import com.ricex.rpi.remote.android.cache.ClientCache;
 import com.ricex.rpi.remote.android.cache.DirectoryCache;
@@ -125,6 +126,15 @@ public class ServerHandler implements Runnable {
 			ClientListMessage msg = (ClientListMessage) message;
 			//put the clients into the client cache
 			ClientCache.getInstance().setClients(msg.getClients());
+		}
+		else if (message instanceof ClientUpdateMessage) {
+			ClientUpdateMessage msg = (ClientUpdateMessage) message;
+			if (msg.isConnected()) {
+				//the client in the message has just connected
+			}
+			else {
+				//the client in the message has disconnected
+			}
 		}
 		else if (message instanceof DirectoryListingMessage) {
 			DirectoryListingMessage msg = (DirectoryListingMessage) message;

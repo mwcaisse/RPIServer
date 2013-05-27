@@ -3,6 +3,7 @@ package com.ricex.rpi.remote.android.cache;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.common.message.remote.RemoteClient;
 
 /** Maintains a list of all the RPI clients currently connected to the server
@@ -68,5 +69,4 @@ public class ClientCache {
 		}
 		return activeClients;
 	}
-
 }

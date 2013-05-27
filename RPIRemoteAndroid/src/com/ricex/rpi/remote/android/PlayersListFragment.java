@@ -1,8 +1,5 @@
 package com.ricex.rpi.remote.android;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -13,8 +10,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.common.message.remote.RemoteClient;
+import com.ricex.rpi.remote.android.cache.ClientCache;
 
 /** The fragment for displaying the list view of the RPI Players
  * 
@@ -27,14 +24,8 @@ public class PlayersListFragment extends Fragment implements OnItemClickListener
 	/** The list view that will display the movies in the current directory */
 	private ListView playerListView;
 	
-	/** The data being shown in this list */
-	private List<RemoteClient> data;
-	
 	public PlayersListFragment() {
-		data = new ArrayList<RemoteClient>();
-		for (int i=0;i<15;i++) {
-			data.add( new RemoteClient(i, "RPI Player " + (i + 1), new RPIStatus(RPIStatus.IDLE)));
-		}	
+
 	}
 	
 	/**
@@ -48,9 +39,8 @@ public class PlayersListFragment extends Fragment implements OnItemClickListener
 		playerListView = (ListView) view.findViewById(R.id.players_list);
 		
 		
-		
 		//playerListView.setAdapter(new ArrayAdapter<RemoteClient>(view.getContext(), R.layout.players_list_item, R.id.player_checkbox, data));
-		playerListView.setAdapter(new ClientAdapter(view.getContext(), data));
+		playerListView.setAdapter(new ClientAdapter(view.getContext(), ClientCache.getInstance().getClients()));
 		playerListView.setOnItemClickListener(this);
 		
 		return view;

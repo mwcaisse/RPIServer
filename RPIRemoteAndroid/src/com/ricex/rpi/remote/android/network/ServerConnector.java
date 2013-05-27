@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 
 import android.util.Log;
 
+import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.remote.android.cache.RemoteProperties;
 
 /** Connents to the server */
@@ -57,6 +58,10 @@ public class ServerConnector {
 	/** Returns whether or not we are currently connected to the server */
 	public boolean isConnected() {
 		return connected;
+	}
+	
+	public boolean sendMessage(IMessage message) {
+		return serverThread.sendMessage(message);
 	}
 
 	/** Class representing the thread that the server will run in */
@@ -118,6 +123,13 @@ public class ServerConnector {
 				Log.e("RPIServerConnector", "Error disconecting from server", e);
 			}	
 			connected = false;
+		}
+		
+		public boolean sendMessage(IMessage message) {
+			if (connected) {
+				return serverHandler.sendMessage(message);
+			}
+			return false;
 		}
 
 	}

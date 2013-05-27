@@ -25,7 +25,6 @@ public class ClientUpdateMessage implements IMessage {
 		this.name = name;
 		this.connected = connected; 
 	}
-
 	
 	/**
 	 * @return the id
