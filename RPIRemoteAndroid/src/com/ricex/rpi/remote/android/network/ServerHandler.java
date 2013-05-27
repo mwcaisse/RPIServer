@@ -10,6 +10,8 @@ import android.util.Log;
 import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.common.message.remote.ClientListMessage;
 import com.ricex.rpi.common.message.remote.DirectoryListingMessage;
+import com.ricex.rpi.remote.android.cache.ClientCache;
+import com.ricex.rpi.remote.android.cache.DirectoryCache;
 
 
 /** Runs in the background and listens for messages received from the server
@@ -38,9 +40,12 @@ public class ServerHandler implements Runnable {
 	 */
 	public ServerHandler(Socket socket) throws IOException {
 		this.socket = socket;
+		running = true;
 		
 		inStream = new ObjectInputStream(socket.getInputStream());
 		outStream = new ObjectOutputStream(socket.getOutputStream());		
+		
+		Log.i("ServerHandler", "We have created the in and out streams");
 	}
 	
 	
@@ -70,23 +75,28 @@ public class ServerHandler implements Runnable {
 	public void run() {
 		//listn for messages from the server
 		
+		Log.i("RPIServerHandler", "We are starting the server handler thread");
+		
 		Object input;
 		
-		try {
-			while (running && (input = inStream.readObject()) != null) {
+		while (running) {
+			try {
+				input = inStream.readObject();
+				
+				//we have the message lets do something with it
 				if (!(input instanceof IMessage)) {
 					Log.e("RPIServerHandler", "Received unsupported message from the server");
 				}
 				else {
-					processMessage( (IMessage) input);
+					processMessage((IMessage) input);
 				}
+			}	
+			catch (ClassNotFoundException e) {
+				Log.e("RPIServerHandler", "Received a message of an unknown class type", e);
 			}
-		}
-		catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
+			catch (IOException e) {
+				Log.e("RPIServerHandler", "IOException when recieving message from server", e);
+			}
 		}
 		
 		try {
@@ -95,7 +105,9 @@ public class ServerHandler implements Runnable {
 		}
 		catch (IOException e) {
 			Log.e("RPIServerHandler", "Error closing input and output stream", e);
-		}			
+		}	
+		
+		Log.i("RPIServerHandler", "Server Handler thread has completed");
 	}
 	
 	public void close() {
@@ -108,11 +120,16 @@ public class ServerHandler implements Runnable {
 	 */
 	
 	protected synchronized void processMessage(IMessage message) {
+		Log.i("ServerHandler", "Message received from server! " + message);
 		if (message instanceof ClientListMessage) {
-			
+			ClientListMessage msg = (ClientListMessage) message;
+			//put the clients into the client cache
+			ClientCache.getInstance().setClients(msg.getClients());
 		}
 		else if (message instanceof DirectoryListingMessage) {
-			
+			DirectoryListingMessage msg = (DirectoryListingMessage) message;
+			//put the root directory into the dir cache
+			DirectoryCache.getInstance().setRootDirectory(msg.getRootDirectory());
 		}
 	}
 }

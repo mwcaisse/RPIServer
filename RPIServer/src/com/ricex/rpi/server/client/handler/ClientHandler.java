@@ -58,6 +58,7 @@ public abstract class ClientHandler<T extends Client> implements Runnable {
 			catch (EOFException e) {
 				System.out.println("The stream has ended");
 				e.printStackTrace();
+				break;
 			}
 			catch (IOException e) {
 				e.printStackTrace();

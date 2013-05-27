@@ -71,16 +71,23 @@ public class ServerConnector {
 		/** The thread in which the server handler runs in */
 		private Thread serverHandlerThread;
 		
+		/** The address of the server to connect to */
+		private String serverAddress;
+		
+		/** The port of the server to connect to */
+		private int serverPort;
+		
 		/** Creates a new server thread */
 		private ServerThread() {
-			
+			serverAddress = RemoteProperties.getInstance().getServerAddress();
+			serverPort = RemoteProperties.getInstance().getServerPort();
 		}
 
 		public void run() {
-			try {				
-				RemoteProperties properties = RemoteProperties.getInstance();
+			try {			
+
 				// create the connection to the server
-				socket = new Socket(properties.getServerAddress(), properties.getServerPort());
+				socket = new Socket(serverAddress, serverPort);
 
 				// create the handler for the server
 				serverHandler = new ServerHandler(socket);

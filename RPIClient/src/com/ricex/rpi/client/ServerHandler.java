@@ -104,8 +104,11 @@ public class ServerHandler implements Runnable {
 				processMessage(msg); // process the received message
 			}
 		}
-		catch (ClassNotFoundException | IOException e) {
+		catch (ClassNotFoundException e) {
 			System.out.println("Received invalid class");
+			e.printStackTrace();
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 
