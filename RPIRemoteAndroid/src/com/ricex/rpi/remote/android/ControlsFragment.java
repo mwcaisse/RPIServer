@@ -73,22 +73,22 @@ public class ControlsFragment extends Fragment implements OnClickListener {
 				message = new RemoteMovieMessage(MovieMessage.Command.PAUSE, client.getId());
 			}
 			else if (v.equals(butSeekLeft)) {
-				message = new RemoteMovieMessage(MovieMessage.Command.SEEK_FORWARD_SLOW, client.getId());
-			}
-			else if (v.equals(butSeekLeftFast)) {
-				message = new RemoteMovieMessage(MovieMessage.Command.SEEK_FORWARD_FAST, client.getId());
-			}
-			else if (v.equals(butSeekRight)) {
 				message = new RemoteMovieMessage(MovieMessage.Command.SEEK_BACKWARD_SLOW, client.getId());
 			}
-			else if (v.equals(butSeekRightFast)) {
+			else if (v.equals(butSeekLeftFast)) {
 				message = new RemoteMovieMessage(MovieMessage.Command.SEEK_BACKWARD_FAST, client.getId());
 			}
+			else if (v.equals(butSeekRight)) {
+				message = new RemoteMovieMessage(MovieMessage.Command.SEEK_FORWARD_SLOW, client.getId());
+			}
+			else if (v.equals(butSeekRightFast)) {
+				message = new RemoteMovieMessage(MovieMessage.Command.SEEK_FORWARD_FAST, client.getId());
+			}
 			else if (v.equals(butPreviousChapter)) {
-				message = new RemoteMovieMessage(MovieMessage.Command.NEXT_CHAPER, client.getId());
+				message = new RemoteMovieMessage(MovieMessage.Command.PREVIOUS_CHAPTER, client.getId());
 			}
 			else if (v.equals(butNextChapter)) {
-				message = new RemoteMovieMessage(MovieMessage.Command.PREVIOUS_CHAPTER, client.getId());
+				message = new RemoteMovieMessage(MovieMessage.Command.NEXT_CHAPER, client.getId());
 			}
 			ServerConnector.getInstance().sendMessage(message);
 		}	
