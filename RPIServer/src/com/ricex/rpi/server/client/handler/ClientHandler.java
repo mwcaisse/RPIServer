@@ -1,5 +1,6 @@
 package com.ricex.rpi.server.client.handler;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -39,23 +40,34 @@ public abstract class ClientHandler<T extends Client> implements Runnable {
 	}
 	
 	public void run() {
+		//create the input stream
 		try {
 			inStream = new ObjectInputStream(client.getSocket().getInputStream());
-			Object inputObject;
-			while ( (inputObject = inStream.readObject()) != null) {
-				processMessage((IMessage) inputObject);
-			}
-
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Error opening the inputstream for the client, leaving run thread");
+			return;
 		}
-		catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		System.out.println("ClientHandler, we left server loop");
 		
+		//only listen for messages while the client is connected
+		while (client.isConnected()) {
+			try {
+				Object inputObject = inStream.readObject();
+				processMessage((IMessage) inputObject);
+			}
+			catch (EOFException e) {
+				System.out.println("The stream has ended");
+				e.printStackTrace();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+			catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}	
+
+		System.out.println("ClientHandler, we left server loop");		
 		client.setConnected(false);
 	}
 	

@@ -20,6 +20,11 @@ import com.ricex.rpi.server.client.ClientConnectionListener;
  * 
  */
 
+/*TODO: Change the framework used to send and receive data, possibly move to gson?, in order to make it more compatible with
+    	other languages.
+*/
+
+
 public abstract class Server<T extends Client> implements Runnable {
 
 	/** The name of the server to use when printing out details */
@@ -56,20 +61,29 @@ public abstract class Server<T extends Client> implements Runnable {
 	public void run() {
 		try {
 			socket = new ServerSocket(port);
+			
+		}
+		catch (IOException e) {
+			System.out.println("Error starting the server");
+			e.printStackTrace();
+			return;
+		}
 
-			System.out.println(name + " Server Started");
-			// listen for conenctions to the server
-			while (true) {
+		System.out.println(name + " Server Started");
+		// listen for conenctions to the server
+		//TODO: Add a way for the server loop to exit
+		while (true) {			
+			try {
 				/*
 				 * before we check for new clients, let update the current list
 				 * of clients
 				 */
 				updateConnectedClients();
-
+	
 				// wait for connections
 				Socket clientSocket = socket.accept();
 				System.out.println("User connected to " + name + " server");
-
+	
 				// check if server is not full
 				if (connectedClients.size() < maxConnections) {
 					// create the client, and add to the connected clients
@@ -86,18 +100,15 @@ public abstract class Server<T extends Client> implements Runnable {
 					clientSocket.close();
 				}
 			}
-
+			catch (IOException e) {
+				System.out.println(name + " Server error");
+				e.printStackTrace();
+			}		
 		}
-		catch (IOException e) {
-			System.out.println(name + " Server error");
-			e.printStackTrace();
-		}
-		finally {
-			//TODO: Rework the launcher, so theese threads will exit gracefully
-			// server is closing, lets close all connections
-			disconnectClients();
-			System.out.println(name + " Server Stopped");
-		}
+		/*
+		 *  disconnectClients();
+		 *	System.out.println(name + " Server Stopped");
+		 */
 	}
 
 	/** Returns the next avaiable id */
