@@ -1,5 +1,6 @@
 package com.ricex.rpi.remote.android.network;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -94,6 +95,10 @@ public class ServerHandler implements Runnable {
 			}	
 			catch (ClassNotFoundException e) {
 				Log.e("RPIServerHandler", "Received a message of an unknown class type", e);
+			}
+			catch (EOFException e) {
+				//stream has been disconnected, exit from loop
+				break;
 			}
 			catch (IOException e) {
 				Log.e("RPIServerHandler", "IOException when recieving message from server", e);
