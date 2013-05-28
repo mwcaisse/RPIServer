@@ -25,43 +25,47 @@ public class ServerHandler implements Runnable {
 
 	/** The socket throught which this client is connected to the server */
 	private Socket socket;
-	
+
 	/** The stream in from the server */
 	private ObjectInputStream inStream;
-	
+
 	/** The stream out to the server */
-	private ObjectOutputStream outStream;	
-	
+	private ObjectOutputStream outStream;
+
 	/** Boolean whether to cointinue running or not */
 	private boolean running;
 
-	
+	/** The server connection listener to notify when we disconnect from the server */
+	private ServerConnectionListener connectionListener;
+
+
 	/** Creates a new server handle to listen on the given socket
 	 * 
 	 * @param socket The socket representing the connection to the server
 	 */
-	public ServerHandler(Socket socket) throws IOException {
+	public ServerHandler(Socket socket, ServerConnectionListener connectionListener) throws IOException {
 		this.socket = socket;
+		this.connectionListener = connectionListener;
 		running = true;
-		
+
 		inStream = new ObjectInputStream(socket.getInputStream());
-		outStream = new ObjectOutputStream(socket.getOutputStream());		
-		
+		outStream = new ObjectOutputStream(socket.getOutputStream());
+
 		Log.i("ServerHandler", "We have created the in and out streams");
 	}
-	
-	
+
+
 	/** Sends the given message to the server
 	 * 
 	 * @param message The message to send
 	 * @return True if sucessful false otherwise
 	 */
-	
+
 	public synchronized boolean sendMessage(IMessage message) {
 		Log.i("RPIServerHandler", "Sending message to server: " + message);
 		try {
 			outStream.writeObject(message);
-			outStream.flush();			
+			outStream.flush();
 		}
 		catch (IOException e) {
 			Log.e("RPIServerHandler","Failed to send message to server.", e);
@@ -69,22 +73,23 @@ public class ServerHandler implements Runnable {
 		}
 		return true;
 	}
-	
+
 	/** Runs the handler, listeners for messages from the server, and processes the message that
 	 * it received
 	 */
-	
+
+	@Override
 	public void run() {
 		//listn for messages from the server
-		
+
 		Log.i("RPIServerHandler", "We are starting the server handler thread");
-		
+
 		Object input;
-		
+
 		while (running) {
 			try {
 				input = inStream.readObject();
-				
+
 				//we have the message lets do something with it
 				if (!(input instanceof IMessage)) {
 					Log.e("RPIServerHandler", "Received unsupported message from the server");
@@ -92,7 +97,7 @@ public class ServerHandler implements Runnable {
 				else {
 					processMessage((IMessage) input);
 				}
-			}	
+			}
 			catch (ClassNotFoundException e) {
 				Log.e("RPIServerHandler", "Received a message of an unknown class type", e);
 			}
@@ -104,27 +109,32 @@ public class ServerHandler implements Runnable {
 				Log.e("RPIServerHandler", "IOException when recieving message from server", e);
 			}
 		}
-		
+
 		try {
 			inStream.close();
 			outStream.close();
 		}
 		catch (IOException e) {
 			Log.e("RPIServerHandler", "Error closing input and output stream", e);
-		}	
-		
+		}
+		finally {
+			//we have left the server loop, and we are disconnected from the server
+			//notify our listener
+			connectionListener.serverConnectionChanged(false);
+		}
+
 		Log.i("RPIServerHandler", "Server Handler thread has completed");
 	}
-	
+
 	public void close() {
 		running = false;
 	}
-	
+
 	/** Processes a message that has been received from the server
 	 * 
-	 * @param message The message received from the server 
+	 * @param message The message received from the server
 	 */
-	
+
 	protected synchronized void processMessage(IMessage message) {
 		Log.i("ServerHandler", "Message received from server! " + message);
 		if (message instanceof ClientListMessage) {
