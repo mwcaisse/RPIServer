@@ -16,7 +16,7 @@ public class RemoteClient implements Serializable {
 	private final String name;
 	
 	/** The status of the given client */
-	private final RPIStatus status;
+	private RPIStatus status;
 	
 	/** Whether or not this client is enabled */
 	private boolean enabled;
@@ -42,6 +42,11 @@ public class RemoteClient implements Serializable {
 	/** Returns the status of this client */
 	public RPIStatus getStatus() {
 		return status;
+	}
+	
+	/** Sets the status of this client to the given status */
+	public void setStatus(RPIStatus status) {
+		this.status = status;
 	}
 	
 	/** Returns whether or not this client is enabled */

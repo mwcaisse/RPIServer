@@ -3,8 +3,10 @@ package com.ricex.rpi.server;
 import java.net.Socket;
 
 import com.ricex.rpi.common.message.remote.ClientListMessage;
+import com.ricex.rpi.common.message.remote.ClientStatusUpdateMessage;
 import com.ricex.rpi.common.message.remote.ClientUpdateMessage;
 import com.ricex.rpi.common.message.remote.DirectoryListingMessage;
+import com.ricex.rpi.server.client.ClientChangeListener;
 import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
 import com.ricex.rpi.server.client.RemoteClient;
@@ -16,7 +18,7 @@ import com.ricex.rpi.server.player.MovieParser;
  *
  */
 
-public class RemoteServer extends Server<RemoteClient> implements ClientConnectionListener<RPIClient> {
+public class RemoteServer extends Server<RemoteClient> implements ClientConnectionListener<RPIClient>, ClientChangeListener<RPIClient> {
 
 	/** The singleton instance of this server */
 	private static RemoteServer _instance;
@@ -55,11 +57,15 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 		return client;
 	}
 
+	/** Notifies all remote clients when an RPIClietn connects */
+	
 	@Override
 	public void clientConnected(RPIClient client) {
 		sendToAllClients(new ClientUpdateMessage(client.getId(), client.getName(), true));
 	}
 
+	/** Notifies all remote clients when an RPIClient disconencts */
+	
 	@Override
 	public void clientDisconnected(RPIClient client) {
 		sendToAllClients(new ClientUpdateMessage(client.getId(), client.getName(), false));
@@ -73,6 +79,15 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 			clientMessage.addClient(c.getId(), c.getName(), c.getStatus());
 		}
 		return clientMessage;
+	}
+
+	/** Notifies all connected remote clients when a RPIClient changes its status
+	 * 
+	 */
+	
+	@Override
+	public void clientChanged(RPIClient client) {
+		sendToAllClients(new ClientStatusUpdateMessage(client.getId(), client.getStatus()));
 	}
 	                                                        
 	                                                       

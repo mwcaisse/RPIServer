@@ -8,10 +8,13 @@ import java.net.Socket;
 
 import android.util.Log;
 
+import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.common.message.remote.ClientListMessage;
+import com.ricex.rpi.common.message.remote.ClientStatusUpdateMessage;
 import com.ricex.rpi.common.message.remote.ClientUpdateMessage;
 import com.ricex.rpi.common.message.remote.DirectoryListingMessage;
+import com.ricex.rpi.common.message.remote.RemoteClient;
 import com.ricex.rpi.remote.android.cache.ClientCache;
 import com.ricex.rpi.remote.android.cache.DirectoryCache;
 
@@ -134,12 +137,19 @@ public class ServerHandler implements Runnable {
 		}
 		else if (message instanceof ClientUpdateMessage) {
 			ClientUpdateMessage msg = (ClientUpdateMessage) message;
+			RemoteClient client = new RemoteClient(msg.getId(), msg.getName(), new RPIStatus(RPIStatus.IDLE));
 			if (msg.isConnected()) {
-				//the client in the message has just connected
+				
 			}
 			else {
 				//the client in the message has disconnected
 			}
+		}
+		else if (message instanceof ClientStatusUpdateMessage) {
+			ClientStatusUpdateMessage msg = (ClientStatusUpdateMessage) message;
+			RemoteClient client = ClientCache.getInstance().getClient(msg.getId());
+			client.setStatus(msg.getStatus()); //update the status of the client
+			
 		}
 		else if (message instanceof DirectoryListingMessage) {
 			DirectoryListingMessage msg = (DirectoryListingMessage) message;

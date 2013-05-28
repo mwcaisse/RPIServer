@@ -1,5 +1,6 @@
 package com.ricex.rpi.common.message.remote;
 
+import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.common.message.IMessage;
 
 
@@ -13,6 +14,9 @@ public class ClientUpdateMessage implements IMessage {
 
 	/** Whether or not the client connected or disconnected */
 	private boolean connected;
+	
+	/** The current status of the client */
+	private RPIStatus status;
 	
 	/** Creates a new ClientUpdateMessage 
 	 * 
@@ -48,7 +52,5 @@ public class ClientUpdateMessage implements IMessage {
 	public boolean isConnected() {
 		return connected;
 	}
-	
-	
 	
 }
