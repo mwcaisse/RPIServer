@@ -62,6 +62,7 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 	@Override
 	public void clientConnected(RPIClient client) {
 		sendToAllClients(new ClientUpdateMessage(client.getId(), client.getName(), true));
+		client.addChangeListener(this);
 	}
 
 	/** Notifies all remote clients when an RPIClient disconencts */
@@ -69,6 +70,7 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 	@Override
 	public void clientDisconnected(RPIClient client) {
 		sendToAllClients(new ClientUpdateMessage(client.getId(), client.getName(), false));
+		client.removeChangeListener(this);
 	}
 	
 	/** Creates a client list message */

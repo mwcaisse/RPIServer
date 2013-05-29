@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
+import android.widget.TextView;
 
 import com.ricex.rpi.common.message.remote.RemoteClient;
 
@@ -92,9 +93,11 @@ public class ClientAdapter  extends BaseAdapter {
 		
 		if (client != null) {	
 			CheckedTextView checkedText = (CheckedTextView) convertView.findViewById(R.id.player_checkbox);
+			TextView statusText = (TextView) convertView.findViewById(R.id.player_status);
 			
 			checkedText.setText(client.getName());
 			checkedText.setChecked(client.isEnabled());	
+			statusText.setText(client.getStatus().toString());
 			
 		}
 		

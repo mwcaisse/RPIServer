@@ -159,6 +159,8 @@ public class ServerHandler implements Runnable {
 			ClientStatusUpdateMessage msg = (ClientStatusUpdateMessage) message;
 			RemoteClient client = ClientCache.getInstance().getClient(msg.getId());
 			client.setStatus(msg.getStatus()); //update the status of the client
+			Log.i("ServerHandler", "We have received a ClientStatusUpdateMessage MSGStatus: " + msg.getStatus() + 
+					" ClientStatus: " + client.getStatus());
 			
 		}
 		else if (message instanceof DirectoryListingMessage) {
