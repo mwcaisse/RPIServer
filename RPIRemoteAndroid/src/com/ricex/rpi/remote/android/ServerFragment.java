@@ -2,6 +2,7 @@ package com.ricex.rpi.remote.android;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -100,7 +101,12 @@ public class ServerFragment extends Fragment implements OnClickListener, ServerC
 	}
 
 	@Override
-	public void serverConnectionChanged(boolean connected) {
-		updateViewElements(connected);
+	public void serverConnectionChanged(final boolean connected) {
+		getActivity().runOnUiThread(new Runnable() {
+			public void run() {
+				updateViewElements(connected);
+			}
+		});		
+
 	}
 }
