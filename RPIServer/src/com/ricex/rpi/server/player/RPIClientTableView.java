@@ -22,7 +22,7 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class ClientTableView extends BorderPane implements ClientChangeListener<RPIClient>, ClientConnectionListener<RPIClient> {
+public class RPIClientTableView extends BorderPane implements ClientChangeListener<RPIClient>, ClientConnectionListener<RPIClient> {
 
 	/** Instance of the running server to fetch information about the clients */
 	private RPIServer server;
@@ -35,7 +35,7 @@ public class ClientTableView extends BorderPane implements ClientChangeListener<
 	
 	
 	@SuppressWarnings("unchecked")
-	public ClientTableView(RPIServer server) {
+	public RPIClientTableView(RPIServer server) {
 		this.server = server;
 		
 		server.addConnectionListener(this);
