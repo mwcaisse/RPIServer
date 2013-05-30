@@ -28,22 +28,9 @@ public class RPIClient extends Client {
 	private List<ClientChangeListener<RPIClient>> changeListeners;
 	
 	public RPIClient (Server<RPIClient> server, long id, Socket socket) {
-		super(server, id, socket);
-		
-		name = "Unnamed Client " + id;		
+		super(server, id, socket);	
 		status = new RPIStatus(RPIStatus.IDLE);		
 		changeListeners = new ArrayList<ClientChangeListener<RPIClient>>();		
-	}
-	
-	/** Closes the clients connection, and cleans up resources */
-	
-	public void close() {
-		try {
-			super.close();
-			handler.close();
-		}
-		catch (IOException e) {		
-		}
 	}
 	
 	/** Returns the status of this client */
@@ -59,24 +46,16 @@ public class RPIClient extends Client {
 		notifyChangeListeners(); //notify listeners that the status has been changed
 	}
 	
-	/** Returns the name of this client */
+	/**
+	 * {@inheritDoc}
+	 */
 	
-	public String getName() {
-		return name;
-	}
-	
-	/** Sets the name of the client to the given string */
-	
+	@Override
 	public void setName(String name) {
-		this.name = name;
+		super.setName(name);
 		notifyChangeListeners();
 	}
 	
-	/** Sets the connected value of this client */
-	
-	public void setConnected(boolean connected) {
-		this.connected = connected;
-	}		
 	
 	/** Adds the given change listener */
 	public void addChangeListener(ClientChangeListener<RPIClient> listener) {

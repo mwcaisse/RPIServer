@@ -25,6 +25,8 @@ public abstract class Client {
 	/** The socket that the client connected on */
 	final protected Socket socket;
 
+	/** The name of this client */
+	protected String name;
 	/** Indicates wether this client is still connected or not */
 	protected boolean connected = false;
 	
@@ -51,6 +53,7 @@ public abstract class Client {
 		this.id = id;
 		this.socket = socket;	
 		connected = true;
+		name = "Unnamed Client " + id;	
 		
 		handler = createClientHandler();
 		clientThread = new Thread(handler);
@@ -62,6 +65,7 @@ public abstract class Client {
 	public void close() {
 		try {
 			socket.close();
+			handler.close();
 		}
 		catch (IOException e) {
 		}
@@ -79,6 +83,18 @@ public abstract class Client {
 
 	public Socket getSocket() {
 		return socket;
+	}
+	
+	/** Returns the name of this client */
+	
+	public String getName() {
+		return name;
+	}
+	
+	/** Sets the name of the client to the given string */
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/** Returns if the client is currently connected or not */
