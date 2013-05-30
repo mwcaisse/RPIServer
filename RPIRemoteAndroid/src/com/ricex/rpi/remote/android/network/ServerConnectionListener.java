@@ -13,5 +13,12 @@ public interface ServerConnectionListener {
 	 */
 
 	public void serverConnectionChanged(boolean connected);
-
+	
+	/** Called when there is an error connecting to the server
+	 * 
+	 * @param e The exception that was thrown
+	 */
+	
+	public void errorConnecting(Exception e);
+	
 }

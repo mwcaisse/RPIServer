@@ -1,8 +1,8 @@
 package com.ricex.rpi.remote.android;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ricex.rpi.remote.android.cache.RemoteProperties;
 import com.ricex.rpi.remote.android.network.ServerConnectionListener;
@@ -95,6 +96,7 @@ public class ServerFragment extends Fragment implements OnClickListener, ServerC
 			}
 			else {
 				serverConnector.connect();
+				textServerStatus.setText("Status: Connecting...");
 			}
 		}
 
@@ -108,5 +110,20 @@ public class ServerFragment extends Fragment implements OnClickListener, ServerC
 			}
 		});		
 
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	
+	@Override
+	public void errorConnecting(final Exception e) {
+		final Context context = getActivity();
+		getActivity().runOnUiThread(new Runnable() {
+			public void run() {
+				Toast.makeText(context, "Error connecting to server: " + e.getMessage(), Toast.LENGTH_LONG).show();
+				textServerStatus.setText("Status: Disconnected");
+			}
+		});
 	}
 }

@@ -107,6 +107,17 @@ public class ServerConnector {
 			listener.serverConnectionChanged(connected);
 		}
 	}
+	
+	/** Notifies all of the listeners of the error that occured when connecting
+	 * 
+	 * @param connected Whether we are connected to the server or not
+	 */
+
+	private void notifyListenersError(Exception error) {
+		for (ServerConnectionListener listener : listeners) {
+			listener.errorConnecting(error);
+		}
+	}
 
 	/** Sets the connection status of the server */
 
@@ -134,15 +145,18 @@ public class ServerConnector {
 		private int serverPort;
 
 		/** Creates a new server thread */
-		private ServerThread() {
-			serverAddress = RemoteProperties.getInstance().getServerAddress();
-			serverPort = RemoteProperties.getInstance().getServerPort();
+		private ServerThread() {			
 		}
 
 		@Override
 		public void run() {
 			try {
 
+				serverAddress = RemoteProperties.getInstance().getServerAddress();
+				serverPort = RemoteProperties.getInstance().getServerPort();
+				
+				Log.i("RPIServerConnector", "Connecting to server at " + serverAddress + ":" + serverPort);
+				
 				// create the connection to the server
 				socket = new Socket(serverAddress, serverPort);
 
@@ -157,11 +171,11 @@ public class ServerConnector {
 			}
 			catch (UnknownHostException e) {
 				Log.e("RPIServerConnector", "Error connecting to Server", e);
-				setConnected(false);
+				notifyListenersError(e);
 			}
 			catch (IOException e) {
 				Log.e("RPIServerConnector", "Error connecting to Server", e);
-				setConnected(false);
+				notifyListenersError(e);
 			}
 		}
 
@@ -189,11 +203,21 @@ public class ServerConnector {
 
 		/** Used by serverHandler to notify us that we have been disconnected from the server
 		 * 
+		 * This is called by serverHandler
+		 * 
 		 */
 		@Override
 		public void serverConnectionChanged(boolean connected) {
-			setConnected(connected);
+			setConnected(false);
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
+		
+		@Override
+		public void errorConnecting(Exception e) {
+			
+		}
 	}
 }
