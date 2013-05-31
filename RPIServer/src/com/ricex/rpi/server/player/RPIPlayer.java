@@ -41,6 +41,9 @@ public class RPIPlayer extends Application {
 	/** The list view for the clients */
 	private ClientTableView clientTableView;
 	
+	/** The view for the playlists */
+	private PlaylistView playlistView;
+	
 	/** The pane for the button controls on the right */
 	private ButtonPane buttonPane;
 	
@@ -86,6 +89,7 @@ public class RPIPlayer extends Application {
 		movieListView = new VideoListView();	
 		clientTableView = new ClientTableView(rpiServer);
 		buttonPane = new ButtonPane(rpiServer, playerModule, movieListView);
+		playlistView = new PlaylistView();
 		
 		labStatus = new Label("Status goes here");
 		
@@ -102,10 +106,14 @@ public class RPIPlayer extends Application {
 		
 		Tab tabClientView = new Tab("Clients");
 		tabClientView.setContent(clientTableView);
+		
+		Tab tabPlaylistView = new Tab("Playlists");
+		tabPlaylistView.setContent(playlistView);
 	
 		
 		tabPane.getTabs().add(tabMovieView);
 		tabPane.getTabs().add(tabClientView);
+		tabPane.getTabs().add(tabPlaylistView);
 		
 		Scene scene = new Scene(tabPane, 800, 600);
 		stage.setScene(scene);
