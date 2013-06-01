@@ -2,9 +2,9 @@ package com.ricex.rpi.server.player;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 
 import com.ricex.rpi.server.Server;
 import com.ricex.rpi.server.ServerPlayerModule;
@@ -19,7 +19,7 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class ButtonPane extends VBox implements EventHandler<ActionEvent>, ClientConnectionListener<RPIClient> {
+public class ButtonPane extends HBox implements EventHandler<ActionEvent>, ClientConnectionListener<RPIClient> {
 	
 	/** Button to start playing the selected movie in the list view */
 	private Button butPlay;	
@@ -57,6 +57,9 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent>, Clien
 	/** The RPI server that is running */
 	private Server<RPIClient> server;
 	
+	/** The width of the buttons */
+	private final int BUTTON_WIDTH = 55;
+	
 	/** Creates a new ButtonPane for controlling the movies */
 	
 	public ButtonPane(Server<RPIClient> server, ServerPlayerModule playerModule, VideoListView movieView) {
@@ -78,15 +81,18 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent>, Clien
 		butLastChapter = new Button("|<<");
 		
 		//set the width
-		butPlay.setPrefWidth(75);
-		butPause.setPrefWidth(75);
-		butStop.setPrefWidth(75);
-		butSeekLeft.setPrefWidth(75);
-		butSeekLeftFast.setPrefWidth(75);
-		butSeekRight.setPrefWidth(75);
-		butSeekRightFast.setPrefWidth(75);
-		butNextChapter.setPrefWidth(75);
-		butLastChapter.setPrefWidth(75);
+	
+		butPlay.setPrefWidth(BUTTON_WIDTH);
+		butPause.setPrefWidth(BUTTON_WIDTH);
+		butStop.setPrefWidth(BUTTON_WIDTH);
+		butSeekLeft.setPrefWidth(BUTTON_WIDTH);
+		butSeekLeftFast.setPrefWidth(BUTTON_WIDTH);
+		butSeekRight.setPrefWidth(BUTTON_WIDTH);
+		butSeekRightFast.setPrefWidth(BUTTON_WIDTH);
+		butNextChapter.setPrefWidth(BUTTON_WIDTH);
+		butLastChapter.setPrefWidth(BUTTON_WIDTH);
+				
+
 		
 		//add the listeners
 		butPlay.setOnAction(this);
@@ -99,9 +105,10 @@ public class ButtonPane extends VBox implements EventHandler<ActionEvent>, Clien
 		butNextChapter.setOnAction(this);
 		butLastChapter.setOnAction(this);
 		
-		setPrefSize(100, 10);
-		setPadding(new Insets(15, 12, 15, 12));
-		setSpacing(10); // spacing between the children
+		setPrefSize(100, 30);
+		//setPadding(new Insets(15, 12, 15, 12));
+		setSpacing(5); // spacing between the children
+		setAlignment(Pos.CENTER);
 		
 		getChildren().add(butPlay);
 		getChildren().add(butPause);

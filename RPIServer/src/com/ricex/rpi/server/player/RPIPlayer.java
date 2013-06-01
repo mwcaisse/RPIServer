@@ -91,18 +91,13 @@ public class RPIPlayer extends Application {
 		buttonPane = new ButtonPane(rpiServer, playerModule, movieListView);
 		playlistView = new PlaylistView();
 		
-		labStatus = new Label("Status goes here");
 		
-		BorderPane borderPane = new BorderPane();
-		borderPane.setCenter(movieListView);
-		borderPane.setRight(buttonPane);
-		borderPane.setBottom(labStatus);
 		
 		tabPane = new TabPane();
 		tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 		
 		Tab tabMovieView = new Tab("Movies");
-		tabMovieView.setContent(borderPane);
+		tabMovieView.setContent(movieListView);
 		
 		Tab tabClientView = new Tab("Clients");
 		tabClientView.setContent(clientTableView);
@@ -115,7 +110,11 @@ public class RPIPlayer extends Application {
 		tabPane.getTabs().add(tabClientView);
 		tabPane.getTabs().add(tabPlaylistView);
 		
-		Scene scene = new Scene(tabPane, 800, 600);
+		BorderPane borderPane = new BorderPane();
+		borderPane.setCenter(tabPane);
+		borderPane.setBottom(buttonPane);
+		
+		Scene scene = new Scene(borderPane, 800, 600);
 		stage.setScene(scene);
 		stage.show();
 		stage.centerOnScreen();
