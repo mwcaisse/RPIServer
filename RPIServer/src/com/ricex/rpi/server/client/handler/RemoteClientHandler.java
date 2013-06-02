@@ -1,6 +1,7 @@
 package com.ricex.rpi.server.client.handler;
 
 import com.ricex.rpi.common.message.IMessage;
+import com.ricex.rpi.common.message.QuitMessage;
 import com.ricex.rpi.common.message.remote.DirectoryListingMessage;
 import com.ricex.rpi.common.message.remote.DirectoryListingRequestMessage;
 import com.ricex.rpi.common.message.remote.RemoteMovieMessage;
@@ -32,6 +33,9 @@ public class RemoteClientHandler extends ClientHandler<RemoteClient> {
 			RemoteMovieMessage rmsg = (RemoteMovieMessage) message;
 			RPIClient client = RPIServer.getInstance().getClient(rmsg.getClientId());
 			client.sendMessage(rmsg);
+		}
+		else if (message instanceof QuitMessage) {
+			client.setConnected(false); // client is disconnecting
 		}
 	}
 
