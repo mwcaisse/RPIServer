@@ -23,12 +23,6 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	
 	/** The player that this class uses */
 	private Player player;
-
-	/** The base directory for the movies */
-	private final String baseDir;
-	
-	/** The base of the command for running the movies */
-	private final String baseCommand;
 	
 	/** The status of this player module */
 	private RPIStatus status;
@@ -43,9 +37,10 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	
 	public ThreadedPlayerModule(ServerHandler handler) {
 		this.handler = handler;
-		baseDir = RPIClientProperties.getInstance().getBaseDir();
-		baseCommand = RPIClientProperties.getInstance().getBaseCommand();
 		filePlaying = "";
+		
+		player = new Player();
+		player.addListener(this);
 	}
 	
 	protected synchronized void updateStatus(RPIStatus newStatus) {
@@ -64,14 +59,12 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	public void play(String videoPath) {
 		filePlaying = videoPath;
 		System.out.println("We are starting the video: " + videoPath);
-		String command = baseCommand + " " + baseDir + videoPath.trim();
 	
 		//create and run the thread
 		//stop the currently running video before we decide to start a new one
 		stop();
-		player = new Player(command);
-		player.start();
-		player.addListener(this);
+		player.setMovieFile(videoPath);
+		player.start();		
 		
 		//update the status
 		updateStatus(new RPIStatus(RPIStatus.PLAYING, filePlaying));
@@ -83,11 +76,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	 */
 	
 	public void stop() {
-		if (player != null) {
-			player.writeToProcess("q");
-			player = null;		
-			updateStatus(new RPIStatus(RPIStatus.IDLE));
-		}
+		player.stop();	
 	}
 	
 	/** Pause / resumes the currently playing video
@@ -95,7 +84,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	 */
 	
 	public void pause() {
-		if (player != null && player.isPlaying()) {
+		if (player.isPlaying()) {
 			player.writeToProcess("p");
 			
 			//update the status
@@ -111,7 +100,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	/** Seeks the video to the next chapter */
 	
 	public void nextChapter() {
-		if (player != null && player.isPlaying()) {
+		if (player.isPlaying()) {
 			player.writeToProcess("o");
 		}
 	}
@@ -119,7 +108,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	/** Seeks the video to the previous chapter */
 	
 	public void previousChapter() {
-		if (player != null && player.isPlaying()) {
+		if (player.isPlaying()) {
 			player.writeToProcess("i");
 		}
 	}
@@ -127,7 +116,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	/** Turns the volume up */
 	
 	public void volumeUp() {
-		if (player != null && player.isPlaying()) {
+		if (player.isPlaying()) {
 			player.writeToProcess("+");
 		}
 	}
@@ -135,7 +124,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	/** Turns the volume down */
 	
 	public void volumeDown() {
-		if (player != null && player.isPlaying()) {
+		if (player.isPlaying()) {
 			player.writeToProcess("-");
 		}
 	}
@@ -151,7 +140,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	
 	public void seekForwardSlow() {
 		//RIGHT ARROW
-		if (player != null && player.isPlaying()) {
+		if (player.isPlaying()) {
 			//player.writeToProcess(KEY_RIGHT);
 			player.writeToProcess("7");
 		}
@@ -161,7 +150,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	
 	public void seekForwardFast() {
 		//UP ARROW
-		if (player != null && player.isPlaying()) {
+		if (player.isPlaying()) {
 			//player.writeToProcess(KEY_UP);
 			player.writeToProcess("8");
 		}
@@ -171,7 +160,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	
 	public void seekBackwardSlow() { 
 		//LEFT ARROW
-		if (player != null && player.isPlaying()) {
+		if (player.isPlaying()) {
 			//player.writeToProcess(KEY_LEFT);
 			player.writeToProcess("6");
 		}		
@@ -181,7 +170,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	
 	public void seekBackwardFast() {
 		//DOWN ARROW
-		if (player != null && player.isPlaying()) {
+		if (player.isPlaying()) {
 			//player.writeToProcess(KEY_DOWN);
 			player.writeToProcess("9");
 		}
@@ -201,9 +190,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	 * {@inheritDoc}
 	 */
 	
-	public synchronized void notifyComplete() {
-		//the player reported that it is done playing
-		player = null;		
+	public synchronized void notifyComplete() {	
 		updateStatus(new RPIStatus(RPIStatus.IDLE));
 	}
 

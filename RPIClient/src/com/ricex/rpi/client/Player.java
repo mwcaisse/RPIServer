@@ -1,6 +1,5 @@
 package com.ricex.rpi.client;
 
-import java.awt.event.KeyEvent;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -33,12 +32,31 @@ public class Player implements Runnable {
 	/** Listeners tha will be notified when this is done playing */
 	private List<PlayerCompleteListener> listeners;
 	
+	/** The base directory for the movies */
+	private final String baseDir;
+	
+	/** The base of the command for running the movies */
+	private final String baseCommand;
+	
+	/** The movie file that is being played */
+	private String movieFile;
+	
 	/** Create the player module. */	
-	public  Player(String command) {
+	public  Player() {
 		playing = false;
-		this.command = command;
 		movieProcess = null;
 		listeners = new ArrayList<PlayerCompleteListener>();
+		
+		baseDir = RPIClientProperties.getInstance().getBaseDir();
+		baseCommand = RPIClientProperties.getInstance().getBaseCommand();
+		
+	}
+	
+	/** Sets the command of the player */
+	
+	public void setMovieFile(String movieFile) {
+		this.movieFile = movieFile;
+		this.command = baseCommand + " " + baseDir + movieFile.trim();
 	}
 	
 	/** Starts run the movie this is setup to play,
@@ -56,6 +74,22 @@ public class Player implements Runnable {
 		playerThread = new Thread(this);
 		playerThread.start();
 		return true;
+	}
+	
+	/** If the player is currently playing a video, stops it, otherwise it does nothing
+	 *  Will wait for the process to stop playing before returning.
+	 * 
+	 */
+	
+	public void stop() {
+		writeToProcess("q");
+		try {
+			playerThread.join();
+		}
+		catch (InterruptedException e) {
+			//we were interupted while waiting for the player thread to end...
+			e.printStackTrace();
+		}
 	}
 
 	public void run() {
@@ -83,13 +117,8 @@ public class Player implements Runnable {
 		}
 		finally {
 			playing = false;
-			notifyListeners(); // notify the listeners that we have finished playing
-			
-		}
-		
-		
-	
-		
+			notifyListeners(); // notify the listeners that we have finished playing	
+		}		
 	}	
 	
 	public boolean isPlaying() {
