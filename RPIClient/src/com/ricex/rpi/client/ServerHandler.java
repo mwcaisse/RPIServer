@@ -71,7 +71,7 @@ public class ServerHandler implements Runnable {
 	 * @return True if successful false otherwise
 	 */
 
-	public boolean sendMessage(IMessage msg) {
+	public synchronized boolean sendMessage(IMessage msg) {
 		try {
 			System.out.println("Sending message to server: " + msg);
 			outStream.writeObject(msg);
@@ -123,7 +123,7 @@ public class ServerHandler implements Runnable {
 	 *            The message that was received from the server
 	 */
 
-	public synchronized void processMessage(IMessage message) {
+	public void processMessage(IMessage message) {
 		if (message instanceof MovieMessage) {
 			System.out.println("We received a movie message from the server");
 			
