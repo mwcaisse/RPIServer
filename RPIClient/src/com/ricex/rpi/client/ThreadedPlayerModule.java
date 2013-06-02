@@ -36,6 +36,9 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	/** Monitor used to stop this thread while it is waiting for movie to complete */
 	private Object stopMonitor;
 	
+	/** Monitor used to lock on status changes */
+	private Object statusLock;
+	
 	/** Creates a new ThreadedPlayerModule with the given ServerHandler */
 	
 	public ThreadedPlayerModule(ServerHandler handler) {
@@ -46,12 +49,18 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 		player.addListener(this);
 		
 		stopMonitor = new Object();
+		statusLock = new Object();
 	}
 	
 	protected void updateStatus(RPIStatus newStatus) {
-		status = newStatus;
-		//send the updatd status to the server
-		handler.sendMessage(new StatusMessage(status));
+		System.out.println("UpdateStatus called: " + newStatus);
+		synchronized(statusLock) {
+			status = newStatus;
+			//send the updatd status to the server
+			System.out.println("We have Updated the status to: " + newStatus);
+		}
+		System.out.println("About to send message to server");
+		handler.sendMessage(new StatusMessage(status));		
 	}	
 
 	/**
@@ -208,11 +217,10 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	
 	public void notifyComplete() {	
 		System.out.println("Threaded PlayerModule has been notified");
+		updateStatus(new RPIStatus(RPIStatus.IDLE));
+		
 		synchronized(stopMonitor) {
 			stopMonitor.notify(); //notify the thread that it is safe to resume
 		}
-		updateStatus(new RPIStatus(RPIStatus.IDLE));
 	}
-
-
 }

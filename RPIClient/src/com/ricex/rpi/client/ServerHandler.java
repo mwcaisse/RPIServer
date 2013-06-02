@@ -71,7 +71,7 @@ public class ServerHandler implements Runnable {
 	 * @return True if successful false otherwise
 	 */
 
-	public synchronized boolean sendMessage(IMessage msg) {
+	public boolean sendMessage(IMessage msg) {
 		try {
 			System.out.println("Sending message to server: " + msg);
 			outStream.writeObject(msg);
