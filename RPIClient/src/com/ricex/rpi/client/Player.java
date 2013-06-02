@@ -82,13 +82,8 @@ public class Player implements Runnable {
 	 */
 	
 	public void stop() {
-		writeToProcess("q");
-		try {
-			playerThread.join();
-		}
-		catch (InterruptedException e) {
-			//we were interupted while waiting for the player thread to end...
-			e.printStackTrace();
+		if (playing) {		
+			writeToProcess("q");			
 		}
 	}
 
@@ -103,7 +98,9 @@ public class Player implements Runnable {
 			out = new BufferedWriter(new OutputStreamWriter(movieProcess.getOutputStream()));
 			
 			//wait for the process to finish executing
+			System.out.println("We are waiting for the movie process");
 			movieProcess.waitFor();
+			System.out.println("Movie process is done");
 		}
 		catch (IOException e) {
 			System.out.println("Error playing video: " + command);
@@ -118,7 +115,8 @@ public class Player implements Runnable {
 		finally {
 			playing = false;
 			notifyListeners(); // notify the listeners that we have finished playing	
-		}		
+		}	
+		System.out.println("Player thread is done executing");
 	}	
 	
 	public boolean isPlaying() {
@@ -137,6 +135,7 @@ public class Player implements Runnable {
 		}
 		//the video is playing we can send the commands 
 		try {
+			System.out.println("We are writing to the process");
 			out.write(str);
 			out.flush();
 		}
@@ -188,6 +187,7 @@ public class Player implements Runnable {
 	 */
 	
 	private void notifyListeners() {
+		System.out.println("We are notifying the listeners");
 		for (PlayerCompleteListener listener : listeners) {
 			listener.notifyComplete();
 		}

@@ -33,6 +33,9 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	/** The handler for communicating with the server */
 	private ServerHandler handler;
 
+	/** Monitor used to stop this thread while it is waiting for movie to complete */
+	private Object stopMonitor;
+	
 	/** Creates a new ThreadedPlayerModule with the given ServerHandler */
 	
 	public ThreadedPlayerModule(ServerHandler handler) {
@@ -41,9 +44,11 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 		
 		player = new Player();
 		player.addListener(this);
+		
+		stopMonitor = new Object();
 	}
 	
-	protected synchronized void updateStatus(RPIStatus newStatus) {
+	protected void updateStatus(RPIStatus newStatus) {
 		status = newStatus;
 		//send the updatd status to the server
 		handler.sendMessage(new StatusMessage(status));
@@ -62,7 +67,9 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	
 		//create and run the thread
 		//stop the currently running video before we decide to start a new one
-		stop();
+		if (player.isPlaying()) {
+			stop();
+		}
 		player.setMovieFile(videoPath);
 		player.start();		
 		
@@ -77,6 +84,15 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	
 	public void stop() {
 		player.stop();	
+		synchronized(stopMonitor) {
+			try {
+				stopMonitor.wait();
+			}
+			catch (InterruptedException e) {
+				//we were interupted, not much to do here really.
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/** Pause / resumes the currently playing video
@@ -190,7 +206,11 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	 * {@inheritDoc}
 	 */
 	
-	public synchronized void notifyComplete() {	
+	public void notifyComplete() {	
+		System.out.println("Threaded PlayerModule has been notified");
+		synchronized(stopMonitor) {
+			stopMonitor.notify(); //notify the thread that it is safe to resume
+		}
 		updateStatus(new RPIStatus(RPIStatus.IDLE));
 	}
 
