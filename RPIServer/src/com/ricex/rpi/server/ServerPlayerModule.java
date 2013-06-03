@@ -18,20 +18,14 @@ import com.ricex.rpi.server.client.RPIClient;
 
 public class ServerPlayerModule {
 
-	/** The list of clients to send the commands to */
-	private List<RPIClient> clients;
+	/** The active client */
+	private RPIClient activeClient;
 	
-	/** Creates a new ServerPlayerModule with no clients */
+	/** Creates a new ServerPlayerModule with no active client */
 	
 	public ServerPlayerModule() {
-		this(new ArrayList<RPIClient>());
-	}
-	
-	/** Creates a new ServerPlayerModule with the given clients */
-	public ServerPlayerModule(List<RPIClient> clients) {
-		this.clients = clients;
-	}
-	                                            
+		activeClient = null;
+	}		                                            
 
 	/** Starts playing the movie with the given path
 	 * 
@@ -111,20 +105,27 @@ public class ServerPlayerModule {
 	 */
 	
 	private void sendMessage(IMessage message) {
-		for (RPIClient client: clients) {
-			client.sendMessage(message);
+		if (activeClient != null) {
+			activeClient.sendMessage(message);
 		}
+
 	}
 
-	/** Adds the given client to the list to send commands to */
+	/** Sets the active client to the given client 
+	 * 
+	 * @param client
+	 */
 	
-	public void addClient(RPIClient client) {
-		clients.add(client);
-	}	
+	public void setActiveClient(RPIClient client) {
+		activeClient = client;
+	}
 	
-	/** Removes the given client from the list to send commands to */
-	public void removeClient(RPIClient client) {
-		clients.remove(client);
+	/** Removes the active client, any calls made to this module will not be sent to any client
+	 * 
+	 */
+	
+	public void removeActiveClient() {
+		activeClient = null;
 	}
 
 }

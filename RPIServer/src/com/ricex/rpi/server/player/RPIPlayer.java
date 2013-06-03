@@ -59,7 +59,7 @@ public class RPIPlayer extends Application {
 	public RPIPlayer() {	
 		initServers();
 		
-		playerModule = new ServerPlayerModule(rpiServer.getConnectedClients());		
+		playerModule = new ServerPlayerModule();		
 	}
 
 	/** Initialize two servers, and start thier threads */
@@ -76,6 +76,7 @@ public class RPIPlayer extends Application {
 		
 		rpiServerThread.start();
 		remoteServerThread.start();
+		
 	}
 	
 	public static void main (String[] args) {

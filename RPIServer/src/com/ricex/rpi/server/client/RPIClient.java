@@ -72,6 +72,14 @@ public class RPIClient extends Client {
 		notifyChangeListeners();
 	}
 	
+	/** To string method of RPI CLient, returns the clients name
+	 * 
+	 */
+	
+	public String toString() {
+		return getName();
+	}
+	
 	/** Sets the connected value of this client */
 	
 	public void setConnected(boolean connected) {

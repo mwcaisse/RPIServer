@@ -94,7 +94,7 @@ public abstract class Client {
 	
 	/** Disconnects this client from the server */
 	
-	public void disconnectClient() {
+	public void disconnect() {
 		server.disconnectClient(this);	
 	}
 	

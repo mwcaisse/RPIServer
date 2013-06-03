@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 
+import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Movie;
 import com.ricex.rpi.common.video.Video;
 

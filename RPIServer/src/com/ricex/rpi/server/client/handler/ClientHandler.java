@@ -69,7 +69,7 @@ public abstract class ClientHandler<T extends Client> implements Runnable {
 		}	
 
 		System.out.println("ClientHandler, we left server loop");		
-		client.setConnected(false);
+		client.disconnect();
 	}
 	
 	/** Processes the given message after it has been received from the server
