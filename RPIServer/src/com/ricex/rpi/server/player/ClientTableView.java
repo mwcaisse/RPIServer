@@ -10,7 +10,7 @@ import javafx.scene.layout.BorderPane;
 
 import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.server.RPIServer;
-import com.ricex.rpi.server.client.Client;
+import com.ricex.rpi.server.client.ClientChangeEvent;
 import com.ricex.rpi.server.client.ClientChangeListener;
 import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
@@ -73,15 +73,19 @@ public class ClientTableView extends BorderPane implements ClientChangeListener<
 		rpiClient.removeChangeListener(this);
 	}
 
-	public void clientChanged(RPIClient rpiClient) {
+	public void clientChanged(ClientChangeEvent<RPIClient> changeEvent) {
 		System.out.println("Client has changed thier status");
 		
-		Platform.runLater(new Runnable() {
-			public void run() {
-				clientTable.getColumns().get(0).setVisible(false);
-				clientTable.getColumns().get(0).setVisible(true);
-			}
-		});
+		int eventType = changeEvent.getEventType();
+		
+		if (eventType == ClientChangeEvent.EVENT_NAME_CHANGE || eventType == ClientChangeEvent.EVENT_STATUS_CHANGE) {		
+			Platform.runLater(new Runnable() {
+				public void run() {
+					clientTable.getColumns().get(0).setVisible(false);
+					clientTable.getColumns().get(0).setVisible(true);
+				}
+			});
+		}
 		
 	}
 }

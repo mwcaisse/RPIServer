@@ -3,6 +3,7 @@ package com.ricex.rpi.common.message.remote;
 import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.common.message.IMessage;
 
+//TODO: Refactor ClientUpdateMessage and ClientStatusUpdateMessage to use the form of player.ClientChangeEvent
 
 public class ClientUpdateMessage implements IMessage {
 

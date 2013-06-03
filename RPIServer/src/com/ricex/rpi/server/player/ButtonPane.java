@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import com.ricex.rpi.server.RPIServer;
 import com.ricex.rpi.server.Server;
 import com.ricex.rpi.server.ServerPlayerModule;
+import com.ricex.rpi.server.client.ClientChangeEvent;
 import com.ricex.rpi.server.client.ClientChangeListener;
 import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
@@ -217,7 +218,7 @@ public class ButtonPane extends HBox implements EventHandler<ActionEvent>, Clien
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void clientChanged(RPIClient client) {
+	public void clientChanged(ClientChangeEvent<RPIClient> changeEvent) {
 		Platform.runLater(new Runnable() {
 			public void run() {
 				cboxClients.setVisible(false);

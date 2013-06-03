@@ -5,12 +5,11 @@ import java.net.Socket;
 import com.ricex.rpi.common.message.remote.ClientListMessage;
 import com.ricex.rpi.common.message.remote.ClientStatusUpdateMessage;
 import com.ricex.rpi.common.message.remote.ClientUpdateMessage;
-import com.ricex.rpi.common.message.remote.DirectoryListingMessage;
+import com.ricex.rpi.server.client.ClientChangeEvent;
 import com.ricex.rpi.server.client.ClientChangeListener;
 import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
 import com.ricex.rpi.server.client.RemoteClient;
-import com.ricex.rpi.server.player.MovieParser;
 
 /** The server that listens for connections from RPIRemotes, and creates threads to respond to them
  * 
@@ -49,11 +48,7 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 
 		//send the list of rpi clients to the remote client
 		client.sendMessage(constructClientListMessage());
-		
-		//send the directory listing to the clint
-		MovieParser mp = new MovieParser(RPIServerProperties.getInstance().getBaseDir());
-		client.sendMessage(new DirectoryListingMessage(mp.parseVideos()));
-		
+			
 		return client;
 	}
 
@@ -88,8 +83,12 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 	 */
 	
 	@Override
-	public void clientChanged(RPIClient client) {
-		sendToAllClients(new ClientStatusUpdateMessage(client.getId(), client.getStatus()));
+	public void clientChanged(ClientChangeEvent<RPIClient> changeEvent) {
+		//TODO: Implement ClientChange event for name, and directory structure.
+		if (changeEvent.getEventType() == ClientChangeEvent.EVENT_STATUS_CHANGE) {
+			RPIClient client = changeEvent.getSource();
+			sendToAllClients(new ClientStatusUpdateMessage(client.getId(), client.getStatus()));
+		}
 	}
 	                                                        
 	                                                       

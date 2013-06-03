@@ -4,8 +4,10 @@ package com.ricex.rpi.server.client;
 
 public interface ClientChangeListener<T extends Client> {
 	
-	/** Notifies the listener that a chage has been made in the client,
-	 * @param client The client the change occured on
+	/** Notifies the listener that a change has taken place on the client
+	 * 
+	 * @param changeEvent The event representing the change
 	 */
-	public void clientChanged(T client);
+	
+	public void clientChanged(ClientChangeEvent<T> changeEvent);
 }
