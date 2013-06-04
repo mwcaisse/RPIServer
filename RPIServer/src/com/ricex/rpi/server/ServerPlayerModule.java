@@ -1,13 +1,8 @@
 package com.ricex.rpi.server;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.ricex.rpi.common.PlayerModule;
-import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.common.message.MovieMessage;
-import com.ricex.rpi.server.client.Client;
+import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
 
 /** Interface between the GUI and the Server
@@ -16,7 +11,7 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class ServerPlayerModule {
+public class ServerPlayerModule implements ClientConnectionListener<RPIClient> {
 
 	/** The active client */
 	private RPIClient activeClient;
@@ -128,4 +123,18 @@ public class ServerPlayerModule {
 		activeClient = null;
 	}
 
+	@Override
+	public void clientConnected(RPIClient client) {
+		
+	}
+
+	/** Removes the active client if it has disconnected */
+	
+	@Override
+	public void clientDisconnected(RPIClient client) {
+		if (client.equals(activeClient)) {
+			removeActiveClient();
+		}
+	}
 }
+

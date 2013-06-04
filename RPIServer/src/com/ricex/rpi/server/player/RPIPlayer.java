@@ -15,7 +15,6 @@ import com.ricex.rpi.server.ServerPlayerModule;
 /** The gui for the server that will report status of the server, as well
  * 		as allowing the user to control the playing movie
  * 
- * TODO: Implement play lists
  * 
  * @author Mitchell
  *

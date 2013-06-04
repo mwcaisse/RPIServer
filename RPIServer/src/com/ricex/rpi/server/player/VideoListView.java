@@ -13,6 +13,8 @@ import com.ricex.rpi.server.RPIServerProperties;
 
 public class VideoListView extends BorderPane {
 
+	//TODO: get the video list from the currently active client
+	
 	private static Image movieIconImage = new Image(VideoListView.class.getResourceAsStream("/data/icons/movie.png"));
 	private static Image directoryIconImage = new Image(VideoListView.class.getResourceAsStream("/data/icons/directory.png"));
 	
