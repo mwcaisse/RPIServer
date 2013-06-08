@@ -28,6 +28,14 @@ public class Playlist {
 	/** Repeat the current video when it is done playing */
 	private boolean repeatCurrent;
 
+	/** Creates a playlist with an empty name, not meant to be saved, nor created by user
+	 * 
+	 */
+
+	public Playlist() {
+		this("");
+	}
+
 	public Playlist(String name) {
 		this.name = name;
 		currentIndex = 0;

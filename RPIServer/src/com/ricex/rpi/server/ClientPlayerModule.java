@@ -1,11 +1,13 @@
 package com.ricex.rpi.server;
 
+import com.ricex.rpi.common.Playlist;
+import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.common.message.MovieMessage;
 import com.ricex.rpi.common.video.Video;
+import com.ricex.rpi.server.client.ClientChangeEvent;
 import com.ricex.rpi.server.client.ClientChangeListener;
 import com.ricex.rpi.server.client.RPIClient;
-import com.ricex.rpi.server.player.Playlist;
 
 /** Interface between the GUI and the Server
  * 
@@ -13,7 +15,7 @@ import com.ricex.rpi.server.player.Playlist;
  *
  */
 
-public class ServerPlayerModule implements ClientChangeListener<RPIClient> {
+public class ClientPlayerModule implements ClientChangeListener<RPIClient> {
 
 	/** The client to send the commands to */
 	private RPIClient client;
@@ -22,7 +24,7 @@ public class ServerPlayerModule implements ClientChangeListener<RPIClient> {
 	private Playlist playlist;
 
 	/** Creates a new ServerPlayerModule with the given client */
-	public ServerPlayerModule(RPIClient client) {
+	public ClientPlayerModule(RPIClient client) {
 		this.client = client;
 		client.addChangeListener(this);
 	}
@@ -124,10 +126,18 @@ public class ServerPlayerModule implements ClientChangeListener<RPIClient> {
 	}
 
 
-	@Override
-	public void clientChanged(RPIClient client) {
 
+	@Override
+	public void clientChanged(ClientChangeEvent<RPIClient> changeEvent) {
+		if (changeEvent.getEventType() == ClientChangeEvent.EVENT_STATUS_CHANGE) {
+			if (client.getStatus().getStatus() == RPIStatus.IDLE) {
+				if (playVideo(playlist.getNextItem())) {
+
+				}
+			}
+		}
 
 	}
+
 }
 
