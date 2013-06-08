@@ -2,6 +2,8 @@ package com.ricex.rpi.server;
 
 import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.common.message.MovieMessage;
+import com.ricex.rpi.common.video.Video;
+import com.ricex.rpi.server.client.ClientChangeListener;
 import com.ricex.rpi.server.client.RPIClient;
 import com.ricex.rpi.server.player.Playlist;
 
@@ -11,17 +13,18 @@ import com.ricex.rpi.server.player.Playlist;
  *
  */
 
-public class ServerPlayerModule {
+public class ServerPlayerModule implements ClientChangeListener<RPIClient> {
 
 	/** The client to send the commands to */
 	private RPIClient client;
 
 	/** The currently playing playlist */
-	private Playlist currentPlaylist;
+	private Playlist playlist;
 
 	/** Creates a new ServerPlayerModule with the given client */
 	public ServerPlayerModule(RPIClient client) {
 		this.client = client;
+		client.addChangeListener(this);
 	}
 
 
@@ -31,8 +34,22 @@ public class ServerPlayerModule {
 	 */
 
 	public void play(Playlist playlist) {
-		currentPlaylist = playlist;
-		//sendMessage(new MovieMessage(videoPath, MovieMessage.Command.PLAY));
+		this.playlist = playlist;
+		playVideo(playlist.getNextItem());
+	}
+
+	/** Plays the given video from the playlist, if the video passed in it will return false.
+	 * 
+	 * @param video THe video to play
+	 * @return True if the video started to play, false if there was no video to play
+	 */
+
+	private boolean playVideo(Video video) {
+		if (video == null) {
+			return false;
+		}
+		sendMessage(new MovieMessage( video.getVideoFile(), MovieMessage.Command.PLAY));
+		return true;
 	}
 
 	/** Stops the currently playing movie */
@@ -103,6 +120,13 @@ public class ServerPlayerModule {
 
 	private void sendMessage(IMessage message) {
 		client.sendMessage(message);
+	}
+
+
+	@Override
+	public void clientChanged(RPIClient client) {
+
+
 	}
 
 
