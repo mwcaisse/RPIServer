@@ -1,6 +1,5 @@
-package com.ricex.rpi.common.message.remote;
+package com.ricex.rpi.common.message;
 
-import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.common.video.Video;
 
 

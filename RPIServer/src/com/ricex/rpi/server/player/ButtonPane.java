@@ -1,13 +1,22 @@
 package com.ricex.rpi.server.player;
 
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 
+import com.ricex.rpi.server.RPIServer;
 import com.ricex.rpi.server.Server;
 import com.ricex.rpi.server.ServerPlayerModule;
+import com.ricex.rpi.server.client.ClientChangeEvent;
+import com.ricex.rpi.server.client.ClientChangeListener;
 import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
 
@@ -19,7 +28,8 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class ButtonPane extends HBox implements EventHandler<ActionEvent>, ClientConnectionListener<RPIClient> {
+public class ButtonPane extends HBox implements EventHandler<ActionEvent>, ClientConnectionListener<RPIClient>, ClientChangeListener<RPIClient>,
+			ChangeListener<RPIClient> {
 	
 	/** Button to start playing the selected movie in the list view */
 	private Button butPlay;	
@@ -47,6 +57,12 @@ public class ButtonPane extends HBox implements EventHandler<ActionEvent>, Clien
 	
 	/** Button to go back to the last chapter */
 	private Button butLastChapter;
+	
+	/** The combobox to select which client to currently control */
+	private ComboBox<RPIClient>  cboxClients;
+	
+	/** List of currently connected clients */
+	private ObservableList<RPIClient> connectedClients;
 	
 	/** The player module interface to complete the given actions */
 	private ServerPlayerModule playerModule;
@@ -78,10 +94,10 @@ public class ButtonPane extends HBox implements EventHandler<ActionEvent>, Clien
 		butSeekRight = new Button(">");
 		butSeekRightFast = new Button(">>");
 		butNextChapter = new Button(">>|");
-		butLastChapter = new Button("|<<");
+		butLastChapter = new Button("|<<");		
 		
-		//set the width
-	
+		
+		//set the width	
 		butPlay.setPrefWidth(BUTTON_WIDTH);
 		butPause.setPrefWidth(BUTTON_WIDTH);
 		butStop.setPrefWidth(BUTTON_WIDTH);
@@ -110,15 +126,29 @@ public class ButtonPane extends HBox implements EventHandler<ActionEvent>, Clien
 		setSpacing(5); // spacing between the children
 		setAlignment(Pos.CENTER);
 		
+		
+		//set up the client combo box
+		cboxClients = new ComboBox<RPIClient>();
+		connectedClients = FXCollections.observableArrayList(RPIServer.getInstance().getConnectedClients());
+		cboxClients.setItems(connectedClients);
+		
+		cboxClients.valueProperty().addListener(this);
+		
+		
+		//add all of the elements
 		getChildren().add(butPlay);
 		getChildren().add(butPause);
 		getChildren().add(butStop);
 		getChildren().add(butSeekLeft);
 		getChildren().add(butSeekLeftFast);
+		getChildren().add(butLastChapter);
 		getChildren().add(butSeekRight);
 		getChildren().add(butSeekRightFast);	
 		getChildren().add(butNextChapter);
-		getChildren().add(butLastChapter);
+		
+		//add the children combo box
+		getChildren().add(cboxClients);
+	
 		
 	}
 
@@ -157,12 +187,55 @@ public class ButtonPane extends HBox implements EventHandler<ActionEvent>, Clien
 	}
 
 	@Override
-	public void clientConnected(RPIClient client) {
-		playerModule.addClient(client);
+	public void clientConnected(final RPIClient client) {
+		Platform.runLater(new Runnable() {
+			public void run() {
+				connectedClients.add(client);
+				if (connectedClients.size() == 1) {
+					//only one element in the list , automatically select it.		
+					//cboxClients.setValue(client);
+					//cboxClients.getSelectionModel().select(0);
+				}
+			}
+		});
+		
 	}
 
 	@Override
-	public void clientDisconnected(RPIClient client) {
-		playerModule.removeClient(client);
+	public void clientDisconnected(final RPIClient client) {
+		Platform.runLater(new Runnable() {
+			public void run() {
+				connectedClients.remove(client);	
+				if (connectedClients.isEmpty()) {
+					//there are no more connected clients, remove the active client
+					playerModule.removeActiveClient();
+				}
+			}
+		});
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void clientChanged(ClientChangeEvent<RPIClient> changeEvent) {
+		Platform.runLater(new Runnable() {
+			public void run() {
+				cboxClients.setVisible(false);
+				cboxClients.setVisible(true);
+			}
+		});
+				
+	}
+
+	@Override
+	public void changed(ObservableValue<? extends RPIClient> ov, RPIClient oldVal, RPIClient newVal) {
+		System.out.println("ButtonPane CBOX Selected value changed to: " + newVal);
+		if (newVal == null) {
+			playerModule.removeActiveClient();
+		}
+		else {
+			playerModule.setActiveClient(newVal); // set the playerModule's active client to the selected value
+		}
 	}
 }

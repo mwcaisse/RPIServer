@@ -9,6 +9,7 @@ import com.ricex.rpi.common.PlayerModule;
 import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.common.message.MovieMessage;
 import com.ricex.rpi.common.message.NameMessage;
+import com.ricex.rpi.common.message.QuitMessage;
 import com.ricex.rpi.common.message.StatusMessage;
 import com.ricex.rpi.common.message.StatusRequestMessage;
 
@@ -32,6 +33,9 @@ public class ServerHandler implements Runnable {
 	
 	/** The playermodule that will be used by this handler */
 	private PlayerModule playerModule;
+	
+	/** Whether or not we are connected to the server */
+	private boolean connected;
 
 	/**
 	 * Creates a new ServerHandle with the given socket
@@ -50,6 +54,7 @@ public class ServerHandler implements Runnable {
 		inStream = new ObjectInputStream(socket.getInputStream());
 		outStream = new ObjectOutputStream(socket.getOutputStream());
 		
+		connected = true;
 		sendName();
 	}
 	
@@ -93,9 +98,10 @@ public class ServerHandler implements Runnable {
 
 		System.out.println("We connected to the server, lets wait for messages!");
 
-		Object input;
+
 		try {
-			while ((input = inStream.readObject()) != null) {
+			while (connected) {
+				Object input = inStream.readObject();
 				if (!(input instanceof IMessage)) {
 					System.out.println("Received invalid message object");
 					continue;
@@ -113,6 +119,8 @@ public class ServerHandler implements Runnable {
 		}
 
 		System.out.println("Disconnecting from server");
+		//stop the playerModule from playing
+		playerModule.stop();
 
 	}	
 	
@@ -136,8 +144,19 @@ public class ServerHandler implements Runnable {
 			IMessage toSend = new StatusMessage(playerModule.getStatus());
 			sendMessage(toSend);
 		}
+		else if (message instanceof QuitMessage) {
+			disconnect();
+		}
 		else {
 			System.out.println("Msg received: " + message);
 		}
+	}
+	
+	/** Disconnects from the server
+	 * 
+	 */
+	
+	public void disconnect() {
+		connected = false;
 	}
 }

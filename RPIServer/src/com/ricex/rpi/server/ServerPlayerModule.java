@@ -28,6 +28,7 @@ public class ServerPlayerModule implements ClientChangeListener<RPIClient> {
 	}
 
 
+
 	/** Starts playing the given play list
 	 * 
 	 * @param videoPath Path to the movie to play
@@ -128,7 +129,5 @@ public class ServerPlayerModule implements ClientChangeListener<RPIClient> {
 
 
 	}
-
-
-
 }
+

@@ -1,6 +1,5 @@
-package com.ricex.rpi.common.message.remote;
+package com.ricex.rpi.common.message;
 
-import com.ricex.rpi.common.message.IMessage;
 
 /** Message for requesting a directory listing from the server 
  * 

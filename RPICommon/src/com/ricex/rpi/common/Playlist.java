@@ -1,4 +1,4 @@
-package com.ricex.rpi.server.player;
+package com.ricex.rpi.common;
 
 import java.util.ArrayList;
 import java.util.List;

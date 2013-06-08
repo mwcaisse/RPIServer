@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.ricex.rpi.common.PlayerModule;
-import com.ricex.rpi.common.message.IMessage;
-import com.ricex.rpi.common.message.MovieMessage;
-import com.ricex.rpi.common.message.StatusMessage;
-import com.ricex.rpi.common.message.StatusRequestMessage;
+import com.ricex.rpi.common.message.DirectoryListingMessage;
+import com.ricex.rpi.common.video.MovieParser;
+import com.ricex.rpi.common.video.Video;
 
 /**
  * RPI client that connects to the server
@@ -30,13 +28,27 @@ public class RPIClient {
 	
 	/** Port of the server to connect to */
 	private int serverPort;
+	
+	/** The directory listing of the videos this client has to play */
+	private Video rootDirectory;
+	
+	/** The movie parser to parse the movies */
+	private MovieParser movieParser;
 
 	public RPIClient() throws UnknownHostException, IOException {
+		//parse the movies
+		movieParser = new MovieParser(RPIClientProperties.getInstance().getBaseDir());
+		rootDirectory = movieParser.parseVideos();
+		
+		
 		serverIp = RPIClientProperties.getInstance().getServerIp();
 		serverPort = RPIClientProperties.getInstance().getRPIPort();
 		
 		socket = new Socket(serverIp, serverPort);
-		serverHandler = new ServerHandler(socket);		
+		serverHandler = new ServerHandler(socket);	
+		
+		//send the directory listing to the server
+		serverHandler.sendMessage(new DirectoryListingMessage(rootDirectory));
 		
 		//block on the server handler
 		serverHandler.run();

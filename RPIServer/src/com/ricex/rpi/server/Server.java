@@ -210,6 +210,7 @@ public abstract class Server<T extends Client> implements Runnable {
 		updateConnectedClients();
 	}
 	
+	
 	/** Ssends the given message to all connected clients */
 	
 	public synchronized void sendToAllClients(IMessage message) {

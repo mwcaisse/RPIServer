@@ -6,12 +6,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
+import com.ricex.rpi.common.video.MovieParser;
 import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.server.RPIServerProperties;
 
 
 public class VideoListView extends BorderPane {
 
+	//TODO: get the video list from the currently active client
+	
 	private static Image movieIconImage = new Image(VideoListView.class.getResourceAsStream("/data/icons/movie.png"));
 	private static Image directoryIconImage = new Image(VideoListView.class.getResourceAsStream("/data/icons/directory.png"));
 	
@@ -21,14 +24,14 @@ public class VideoListView extends BorderPane {
 	/** The current root video */
 	private Video rootVideo;
 	
-	/** The Parser used to read movies from the base directory */
-	private MovieParser movieParser;
+	/** Creates a new video list view
+	 * 
+	 */
 	
 	public VideoListView() {
 		videoTree = new TreeView<Video>();		
-		//create the movie parser to use      
-		movieParser = new MovieParser(RPIServerProperties.getInstance().getBaseDir());	
-		updateVideos(); // update the videos using the parser
+		//create the movie parser to use     
+
 		setCenter(videoTree);
 	}
 	
@@ -40,14 +43,6 @@ public class VideoListView extends BorderPane {
 	public void updateVideos(Video rootVideo) {
 		this.rootVideo = rootVideo;
 		parseVideos();
-	}
-	
-	/** Updates the videos using its built in movie parser 
-	 * 
-	 */
-	
-	public void updateVideos() {
-		updateVideos(movieParser.parseVideos());
 	}
 	
 	/** Returns the selected video item  */

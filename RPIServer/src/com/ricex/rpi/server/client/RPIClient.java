@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ricex.rpi.common.RPIStatus;
-import com.ricex.rpi.common.message.IMessage;
+import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.server.Server;
 import com.ricex.rpi.server.client.handler.RPIClientHandler;
 
@@ -23,6 +23,9 @@ public class RPIClient extends Client {
 	
 	/** The status of this client */
 	private RPIStatus status;
+	
+	/** The root directory of this client */
+	private Video rootDirectory;
 	
 	/** The list of change listeners registered for this client */
 	private List<ClientChangeListener<RPIClient>> changeListeners;
@@ -56,7 +59,8 @@ public class RPIClient extends Client {
 	
 	public void setStatus(RPIStatus status) {
 		this.status = status;
-		notifyChangeListeners(); //notify listeners that the status has been changed
+		ClientChangeEvent<RPIClient> changeEvent = new ClientChangeEvent<RPIClient>(this, ClientChangeEvent.EVENT_STATUS_CHANGE);
+		notifyChangeListeners(changeEvent); //notify listeners that the status has been changed
 	}
 	
 	/** Returns the name of this client */
@@ -69,9 +73,34 @@ public class RPIClient extends Client {
 	
 	public void setName(String name) {
 		this.name = name;
-		notifyChangeListeners();
+		ClientChangeEvent<RPIClient> changeEvent = new ClientChangeEvent<RPIClient>(this, ClientChangeEvent.EVENT_NAME_CHANGE);
+		notifyChangeListeners(changeEvent); //notify listeners that the status has been changed
 	}
 	
+	/** To string method of RPI CLient, returns the clients name
+	 * 
+	 */
+	
+	public String toString() {
+		return getName();
+	}	
+	
+	/**
+	 * @return the rootDirectory
+	 */
+	public Video getRootDirectory() {
+		return rootDirectory;
+	}
+	
+	/**
+	 * @param rootDirectory the rootDirectory to set
+	 */
+	public void setRootDirectory(Video rootDirectory) {
+		this.rootDirectory = rootDirectory;
+		ClientChangeEvent<RPIClient> changeEvent = new ClientChangeEvent<RPIClient>(this, ClientChangeEvent.EVENT_ROOT_DIRECTORY_CHANGE);
+		notifyChangeListeners(changeEvent); //notify listeners that the status has been changed
+	}
+
 	/** Sets the connected value of this client */
 	
 	public void setConnected(boolean connected) {
@@ -88,9 +117,9 @@ public class RPIClient extends Client {
 		changeListeners.remove(listener);
 	}	
 
-	protected void notifyChangeListeners() {
+	protected void notifyChangeListeners(ClientChangeEvent<RPIClient> changeEvent) {
 		for (ClientChangeListener<RPIClient> listener : changeListeners) {
-			listener.clientChanged(this);
+			listener.clientChanged(changeEvent);
 		}
 	}
 
