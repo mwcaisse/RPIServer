@@ -36,11 +36,12 @@ public class RPIClient extends Client {
 
 	public RPIClient (Server<RPIClient> server, long id, Socket socket) {
 		super(server, id, socket);
-
+		rootDirectory = null;
 		name = "Unnamed Client " + id;
 		status = new RPIStatus(RPIStatus.IDLE);
 		changeListeners = new ArrayList<ClientChangeListener<RPIClient>>();
 		playerModule = new ClientPlayerModule(this);
+
 	}
 
 	/** Closes the clients connection, and cleans up resources */

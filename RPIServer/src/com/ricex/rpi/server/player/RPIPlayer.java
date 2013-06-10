@@ -94,7 +94,7 @@ public class RPIPlayer extends Application {
 		
 		stage.setTitle("RPI Player");
 
-		movieListView = new VideoListView();
+		movieListView = new VideoListView(this);
 		clientTableView = new ClientTableView(rpiServer);
 		buttonPane = new ButtonPane(this, rpiServer, movieListView);
 		playlistView = new PlaylistView();

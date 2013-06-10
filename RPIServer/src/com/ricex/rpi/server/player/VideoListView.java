@@ -6,12 +6,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
-import com.ricex.rpi.common.video.MovieParser;
 import com.ricex.rpi.common.video.Video;
-import com.ricex.rpi.server.RPIServerProperties;
+import com.ricex.rpi.server.client.ClientChangeEvent;
+import com.ricex.rpi.server.client.ClientChangeListener;
+import com.ricex.rpi.server.client.RPIClient;
 
 
-public class VideoListView extends BorderPane {
+public class VideoListView extends BorderPane implements ClientChangeListener<RPIClient>, ActiveClientListener {
 
 	//TODO: get the video list from the currently active client
 	
@@ -21,6 +22,9 @@ public class VideoListView extends BorderPane {
 	/** The tree view for displaying the videos */
 	private TreeView<Video> videoTree;
 	
+	/** The currently active client */
+	private RPIClient activeClient;
+	
 	/** The current root video */
 	private Video rootVideo;
 	
@@ -28,7 +32,8 @@ public class VideoListView extends BorderPane {
 	 * 
 	 */
 	
-	public VideoListView() {
+	public VideoListView(RPIPlayer player) {
+		player.addActiveClientListener(this);
 		videoTree = new TreeView<Video>();		
 		//create the movie parser to use     
 
@@ -41,6 +46,10 @@ public class VideoListView extends BorderPane {
 	 */
 	
 	public void updateVideos(Video rootVideo) {
+		videoTree.getRoot().getChildren().clear();
+		if (rootVideo == null) {
+			return;
+		}
 		this.rootVideo = rootVideo;
 		parseVideos();
 	}
@@ -97,6 +106,35 @@ public class VideoListView extends BorderPane {
 	
 	private TreeItem<Video> parseMovie(Video v) {
 		return new TreeItem<Video>(v, new ImageView(movieIconImage));
+	}
+
+	@Override
+	public void activeClientChanged(RPIClient activeClient) {
+		this.activeClient.removeChangeListener(this);		
+		this.activeClient = activeClient;		
+		if (activeClient != null) {
+			updateVideos(activeClient.getRootDirectory());
+			activeClient.addChangeListener(this);
+		}
+		else {
+			updateVideos(null);
+		}
+		
+	}
+
+	@Override
+	public void activeClientRemoved() {
+		activeClient.removeChangeListener(this);
+		activeClient = null;
+		updateVideos(null);
+	}
+
+	@Override
+	public void clientChanged(ClientChangeEvent<RPIClient> changeEvent) {
+		if (changeEvent.getEventType() == ClientChangeEvent.EVENT_ROOT_DIRECTORY_CHANGE) {
+			updateVideos(changeEvent.getSource().getRootDirectory());
+		}
+		
 	}
 	
 	
