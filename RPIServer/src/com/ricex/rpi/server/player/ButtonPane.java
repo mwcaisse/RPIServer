@@ -30,8 +30,11 @@ import com.ricex.rpi.server.client.RPIClient;
  */
 
 public class ButtonPane extends HBox implements EventHandler<ActionEvent>, ClientConnectionListener<RPIClient>, ClientChangeListener<RPIClient>,
-ChangeListener<RPIClient> {
+		ChangeListener<RPIClient> {
 
+	/** The UI host and controller */
+	private RPIPlayer player;
+	
 	/** Button to start playing the selected movie in the list view */
 	private Button butPlay;
 
@@ -79,7 +82,8 @@ ChangeListener<RPIClient> {
 
 	/** Creates a new ButtonPane for controlling the movies */
 
-	public ButtonPane(Server<RPIClient> server, VideoListView movieView) {
+	public ButtonPane(RPIPlayer player, Server<RPIClient> server, VideoListView movieView) {
+		this.player = player;
 		this.server = server;
 		playerModule = null;
 		this.movieView = movieView;

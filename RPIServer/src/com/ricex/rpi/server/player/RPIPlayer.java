@@ -1,5 +1,8 @@
 package com.ricex.rpi.server.player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -10,6 +13,7 @@ import javafx.stage.Stage;
 
 import com.ricex.rpi.server.RPIServer;
 import com.ricex.rpi.server.RemoteServer;
+import com.ricex.rpi.server.client.RPIClient;
 
 /** The gui for the server that will report status of the server, as well
  * 		as allowing the user to control the playing movie
@@ -50,9 +54,17 @@ public class RPIPlayer extends Application {
 
 	/** The tab pane for the different views */
 	private TabPane tabPane;
+	
+	/** The currently active RPIClient */
+	private RPIClient activeClient;
+	
+	/** List of the active client listeners */
+	private List<ActiveClientListener> activeClientListeners;
 
 	public RPIPlayer() {
+		activeClientListeners = new ArrayList<ActiveClientListener>();
 		initServers();
+		activeClient = null;
 	}
 
 	/** Initialize two servers, and start thier threads */
@@ -79,11 +91,12 @@ public class RPIPlayer extends Application {
 
 	@Override
 	public void start(Stage stage) {
+		
 		stage.setTitle("RPI Player");
 
 		movieListView = new VideoListView();
 		clientTableView = new ClientTableView(rpiServer);
-		buttonPane = new ButtonPane(rpiServer, movieListView);
+		buttonPane = new ButtonPane(this, rpiServer, movieListView);
 		playlistView = new PlaylistView();
 
 
@@ -114,4 +127,39 @@ public class RPIPlayer extends Application {
 		stage.show();
 		stage.centerOnScreen();
 	}
+
+	
+	/**
+	 * @return the activeClient
+	 */
+	public RPIClient getActiveClient() {
+		return activeClient;
+	}
+
+	
+	/**
+	 * @param activeClient the activeClient to set
+	 */
+	public void setActiveClient(RPIClient activeClient) {
+		this.activeClient = activeClient;
+		
+		for (ActiveClientListener listener : activeClientListeners) {
+			listener.activeClientChanged(activeClient);
+		}
+	}
+	
+	/** Adds the given active client listener */
+	
+	public void addActiveClientListener(ActiveClientListener listener) {
+		activeClientListeners.add(listener);
+	}
+	
+	/** Removes the given active client listener */
+	
+	public void removeActiveClientListener(ActiveClientListener listener) {
+		activeClientListeners.remove(listener);
+	}
+	
+	
+	
 }
