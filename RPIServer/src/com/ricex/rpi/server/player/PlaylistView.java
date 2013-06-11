@@ -11,8 +11,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 
 import com.ricex.rpi.common.Playlist;
-import com.ricex.rpi.common.video.Movie;
 import com.ricex.rpi.common.video.Video;
+import com.ricex.rpi.server.client.RPIClient;
 
 /** The view that will display a playlist and allow user to modify / play / create one 
  * 
@@ -20,8 +20,10 @@ import com.ricex.rpi.common.video.Video;
  *
  */
 
-public class PlaylistView extends BorderPane {
+public class PlaylistView extends BorderPane implements ActiveClientListener {
 
+	/** The RPIPlayer */
+	private RPIPlayer player;
 	
 	/** The listview for displaying the selected playlist items */
 	private ListView<Video> listViewPlaylistItems;
@@ -29,34 +31,31 @@ public class PlaylistView extends BorderPane {
 	/** The list view for displaying the playlists */
 	private ListView<Playlist> listViewPlaylists;
 	
-	private List<Playlist> playlists;
+	/** Creates a new playlist view */
 	
-	public PlaylistView() {
-	
-		playlists = new ArrayList<Playlist>();
+	public PlaylistView(RPIPlayer player) {
+		this.player = player;		
 		
-		for (int i=0;i<10;i++) {
-			Playlist playlist = new Playlist("Playlist " + (i+1));
-			for (int j=0;j<(i+1)*5;j++) {
-				playlist.addItem(new Movie("Playlist " + (i+1) + " Movie " + (j+1)));
-			}
-			playlists.add(playlist);
-		}
-		
-		
+		//initialize the list views
 		listViewPlaylistItems = new ListView<Video>();		
 		listViewPlaylists = new ListView<Playlist>();
 		
+		//add the selection change listener
 		listViewPlaylists.getSelectionModel().selectedItemProperty().addListener(new PlaylistChangeListener());
 		
-		ObservableList<Playlist> data = FXCollections.observableArrayList(playlists);
+		activeClientChanged(player.getActiveClient());	
 		
-		listViewPlaylists.setItems(data);
-
-		
+		//add the list views to the border pane
 		setCenter(listViewPlaylistItems);
 		setRight(listViewPlaylists);
 		
+	}
+	
+	/** Updates the playlists being displayed with the given list of playlists */
+	
+	private void updatePlaylistList(List<Playlist> playlists) {
+		ObservableList<Playlist> data = FXCollections.observableArrayList(playlists);
+		listViewPlaylists.setItems(data);
 	}
 	
 	private class PlaylistChangeListener implements ChangeListener<Playlist> {
@@ -70,5 +69,24 @@ public class PlaylistView extends BorderPane {
 			ObservableList<Video> playlistItems = FXCollections.observableArrayList(newVal.getItems());
 			listViewPlaylistItems.setItems(playlistItems);
 		}
+	}
+
+	@Override
+	public void activeClientChanged(RPIClient activeClient) {
+		if (activeClient == null) {
+			//if the active client is null, clear the listview items
+			listViewPlaylists.setItems(FXCollections.observableArrayList(new ArrayList<Playlist>()));
+			listViewPlaylistItems.setItems(FXCollections.observableArrayList(new ArrayList<Video>()));
+		}
+		else {
+			listViewPlaylists.setItems(FXCollections.observableArrayList(activeClient.getPlaylistController().getAllPlaylists()));
+		}
+		
+	}
+
+	@Override
+	public void activeClientRemoved() {
+		// TODO Auto-generated method stub
+		
 	}
 }

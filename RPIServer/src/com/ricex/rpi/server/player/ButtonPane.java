@@ -85,7 +85,7 @@ public class ButtonPane extends HBox implements EventHandler<ActionEvent>, Clien
 	public ButtonPane(RPIPlayer player, Server<RPIClient> server, VideoListView movieView) {
 		this.player = player;
 		this.server = server;
-		playerModule = null;
+		playerModule = player.getActiveClient().getPlayerModule();
 		this.movieView = movieView;
 
 		server.addConnectionListener(this);
@@ -237,6 +237,6 @@ public class ButtonPane extends HBox implements EventHandler<ActionEvent>, Clien
 	@Override
 	public void changed(ObservableValue<? extends RPIClient> ov, RPIClient oldVal, RPIClient newVal) {
 		System.out.println("ButtonPane CBOX Selected value changed to: " + newVal);
-		// TODO: how to set the active clientS
+		player.setActiveClient(newVal);
 	}
 }

@@ -84,7 +84,6 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 	
 	@Override
 	public void clientChanged(ClientChangeEvent<RPIClient> changeEvent) {
-		//TODO: Implement ClientChange event for name, and directory structure.
 		if (changeEvent.getEventType() == ClientChangeEvent.EVENT_STATUS_CHANGE) {
 			RPIClient client = changeEvent.getSource();
 			sendToAllClients(new ClientStatusUpdateMessage(client.getId(), client.getStatus()));
