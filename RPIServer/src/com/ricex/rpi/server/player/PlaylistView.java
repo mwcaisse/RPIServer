@@ -43,6 +43,7 @@ public class PlaylistView extends BorderPane implements ActiveClientListener {
 		//add the selection change listener
 		listViewPlaylists.getSelectionModel().selectedItemProperty().addListener(new PlaylistChangeListener());
 		
+		player.addActiveClientListener(this);
 		activeClientChanged(player.getActiveClient());	
 		
 		//add the list views to the border pane

@@ -46,7 +46,8 @@ public class VideoListView extends BorderPane implements ClientChangeListener<RP
 	 */
 	
 	public void updateVideos(Video rootVideo) {
-		videoTree.getRoot().getChildren().clear();
+		videoTree.setRoot(new TreeItem<Video>());
+		//videoTree.getRoot().getChildren().clear();
 		if (rootVideo == null) {
 			return;
 		}
@@ -110,7 +111,9 @@ public class VideoListView extends BorderPane implements ClientChangeListener<RP
 
 	@Override
 	public void activeClientChanged(RPIClient activeClient) {
-		this.activeClient.removeChangeListener(this);		
+		if (this.activeClient != null) {
+			this.activeClient.removeChangeListener(this);
+		}
 		this.activeClient = activeClient;		
 		if (activeClient != null) {
 			updateVideos(activeClient.getRootDirectory());

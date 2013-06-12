@@ -30,7 +30,7 @@ import com.ricex.rpi.server.client.RPIClient;
  */
 
 public class ButtonPane extends HBox implements EventHandler<ActionEvent>, ClientConnectionListener<RPIClient>, ClientChangeListener<RPIClient>,
-		ChangeListener<RPIClient> {
+		ChangeListener<RPIClient>, ActiveClientListener {
 
 	/** The UI host and controller */
 	private RPIPlayer player;
@@ -85,8 +85,9 @@ public class ButtonPane extends HBox implements EventHandler<ActionEvent>, Clien
 	public ButtonPane(RPIPlayer player, Server<RPIClient> server, VideoListView movieView) {
 		this.player = player;
 		this.server = server;
-		playerModule = player.getActiveClient().getPlayerModule();
 		this.movieView = movieView;
+		
+		player.addActiveClientListener(this);
 
 		server.addConnectionListener(this);
 
@@ -161,6 +162,10 @@ public class ButtonPane extends HBox implements EventHandler<ActionEvent>, Clien
 	public void handle(ActionEvent e) {
 		Object source = e.getSource();
 
+		if (playerModule == null) {
+			return;
+		}
+		
 		if (source.equals(butPlay)) {
 			Playlist playlist = new Playlist();
 			playlist.addItem(movieView.getSelectedItem());
@@ -238,5 +243,16 @@ public class ButtonPane extends HBox implements EventHandler<ActionEvent>, Clien
 	public void changed(ObservableValue<? extends RPIClient> ov, RPIClient oldVal, RPIClient newVal) {
 		System.out.println("ButtonPane CBOX Selected value changed to: " + newVal);
 		player.setActiveClient(newVal);
+	}
+
+	@Override
+	public void activeClientChanged(RPIClient activeClient) {
+		playerModule = activeClient.getPlayerModule();
+		
+	}
+
+	@Override
+	public void activeClientRemoved() {
+		playerModule = null;		
 	}
 }

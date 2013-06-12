@@ -97,7 +97,7 @@ public class RPIPlayer extends Application {
 		movieListView = new VideoListView(this);
 		clientTableView = new ClientTableView(rpiServer);
 		buttonPane = new ButtonPane(this, rpiServer, movieListView);
-		playlistView = new PlaylistView();
+		playlistView = new PlaylistView(this);
 
 
 

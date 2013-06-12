@@ -55,8 +55,11 @@ public class ClientPlayerModule implements ClientChangeListener<RPIClient> {
 		return true;
 	}
 
-	/** Stops the currently playing movie */
-
+	/** Stops the currently playing movie
+	 * 
+	 * TODO: Figure out if stop should stop playlist or just the currently playing movie, more opt towards Playlist.
+	 */
+	
 	public void stop() {
 		sendMessage(new MovieMessage(MovieMessage.Command.STOP));
 	}

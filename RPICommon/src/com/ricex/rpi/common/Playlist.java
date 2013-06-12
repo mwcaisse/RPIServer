@@ -40,6 +40,9 @@ public class Playlist {
 		this.name = name;
 		currentIndex = 0;
 		items = new ArrayList<Video>();
+		
+		repeat = false;
+		repeatCurrent = false;
 	}
 
 	/** Returns the name of this play list */
@@ -79,9 +82,8 @@ public class Playlist {
 		}
 		if (repeatCurrent) {
 			return items.get(currentIndex);
-		}
-		currentIndex++; //advance to the next item
-		if (items.size() >= currentIndex) {
+		}		
+		if (currentIndex >= items.size()) {
 			//currentIndex is over the limit.
 			if (repeat) {
 				// set the current index to the first item
@@ -92,7 +94,11 @@ public class Playlist {
 				return null;
 			}
 		}
-		return items.get(currentIndex);
+		// the current video item
+		Video currentItem = items.get(currentIndex);
+		//we retreived the video, increase the counter.
+		currentIndex++;
+		return currentItem;
 	}
 
 
