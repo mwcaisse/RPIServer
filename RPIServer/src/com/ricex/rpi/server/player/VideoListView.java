@@ -1,9 +1,12 @@
 package com.ricex.rpi.server.player;
 
+import javafx.event.EventHandler;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
 import com.ricex.rpi.common.video.Video;
@@ -12,7 +15,7 @@ import com.ricex.rpi.server.client.ClientChangeListener;
 import com.ricex.rpi.server.client.RPIClient;
 
 
-public class VideoListView extends BorderPane implements ClientChangeListener<RPIClient>, ActiveClientListener {
+public class VideoListView extends BorderPane implements ClientChangeListener<RPIClient>, ActiveClientListener, EventHandler<MouseEvent> {
 
 	//TODO: get the video list from the currently active client
 	
@@ -34,7 +37,9 @@ public class VideoListView extends BorderPane implements ClientChangeListener<RP
 	
 	public VideoListView(RPIPlayer player) {
 		player.addActiveClientListener(this);
-		videoTree = new TreeView<Video>();		
+		videoTree = new TreeView<Video>();	
+		
+		videoTree.addEventHandler(MouseEvent.MOUSE_CLICKED, this);
 		//create the movie parser to use     
 
 		setCenter(videoTree);
@@ -136,6 +141,18 @@ public class VideoListView extends BorderPane implements ClientChangeListener<RP
 	public void clientChanged(ClientChangeEvent<RPIClient> changeEvent) {
 		if (changeEvent.getEventType() == ClientChangeEvent.EVENT_ROOT_DIRECTORY_CHANGE) {
 			updateVideos(changeEvent.getSource().getRootDirectory());
+		}
+		
+	}
+
+	@Override
+	public void handle(MouseEvent e) {
+		System.out.println("Mouse Event");
+		if (e.getButton() == MouseButton.SECONDARY) {
+			System.out.println("MouseEvent SEcondary");
+			Video video = getSelectedItem();
+			VideoContextMenu cm = new VideoContextMenu(video, activeClient);
+			cm.show(videoTree, e.getScreenX(), e.getScreenY());
 		}
 		
 	}
