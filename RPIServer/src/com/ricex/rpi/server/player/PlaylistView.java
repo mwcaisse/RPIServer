@@ -31,6 +31,9 @@ public class PlaylistView extends BorderPane implements ActiveClientListener {
 	/** The list view for displaying the playlists */
 	private ListView<Playlist> listViewPlaylists;
 	
+	/** The control view for the play lists */
+	private PlaylistControlView playlistControlView;
+	
 	/** Creates a new playlist view */
 	
 	public PlaylistView(RPIPlayer player) {
@@ -39,6 +42,7 @@ public class PlaylistView extends BorderPane implements ActiveClientListener {
 		//initialize the list views
 		listViewPlaylistItems = new ListView<Video>();		
 		listViewPlaylists = new ListView<Playlist>();
+		playlistControlView = new PlaylistControlView(this);
 		
 		//add the selection change listener
 		listViewPlaylists.getSelectionModel().selectedItemProperty().addListener(new PlaylistChangeListener());
@@ -49,27 +53,50 @@ public class PlaylistView extends BorderPane implements ActiveClientListener {
 		//add the list views to the border pane
 		setCenter(listViewPlaylistItems);
 		setRight(listViewPlaylists);
+		setBottom(playlistControlView);
 		
 	}
 	
+	/** Creates a playlist with the given name
+	 * 
+	 * @param name The name of the playlist to create
+	 * @return True if the creation was sucessful, false otherwise
+	 */
+	
+	public boolean createPlaylist(String name) {
+		if (player.getActiveClient() == null) {
+			return false;
+		}
+		System.out.println("We are adding a playlist ");
+		Playlist toAdd = new Playlist(name);
+		player.getActiveClient().getPlaylistController().addPlaylist(toAdd);
+		refresh();
+		return true;
+	}
+	
+	/** Deletes the currently selected playlist
+	 * 
+	 */
+	
+	public void deleteSelectedPlaylist() {
+		if (player.getActiveClient() == null) {
+			return;
+		}
+		Playlist toDelete = listViewPlaylists.getSelectionModel().getSelectedItem();
+		player.getActiveClient().getPlaylistController().removePlaylist(toDelete);
+	}
 	/** Updates the playlists being displayed with the given list of playlists */
 	
 	private void updatePlaylistList(List<Playlist> playlists) {
+		System.out.println("we are updating the items in the play list view");
 		ObservableList<Playlist> data = FXCollections.observableArrayList(playlists);
 		listViewPlaylists.setItems(data);
-	}
+	}	
 	
-	private class PlaylistChangeListener implements ChangeListener<Playlist> {
+	/** Clears the items from the play list views */
+	
+	private void clearPlaylistViews() {
 		
-		private PlaylistChangeListener() {
-			
-		}
-
-		@Override
-		public void changed(ObservableValue<? extends Playlist> ob, Playlist oldVal, Playlist newVal) {
-			ObservableList<Video> playlistItems = FXCollections.observableArrayList(newVal.getItems());
-			listViewPlaylistItems.setItems(playlistItems);
-		}
 	}
 
 	@Override
@@ -84,10 +111,54 @@ public class PlaylistView extends BorderPane implements ActiveClientListener {
 		}
 		
 	}
+	
+	/** Refreshes the list views of the playlists
+	 * 
+	 */
+	
+	public void refresh() {
+		System.out.println("We are refreshing");
+		if (player.getActiveClient() == null) {
+			// no active client, clean the playlist views
+			clearPlaylistViews();
+		}
+		else {
+			//we have an active client update the list view.
+			updatePlaylistList(player.getActiveClient().getPlaylistController().getAllPlaylists());
+		}
+	}
 
 	@Override
 	public void activeClientRemoved() {
-		// TODO Auto-generated method stub
+
 		
 	}
+	
+	/** Listens for changes in the list of palylists on the right 
+	 * 
+	 * @author Mitchell
+	 *
+	 */
+	
+	private class PlaylistChangeListener implements ChangeListener<Playlist> {
+		
+		private PlaylistChangeListener() {
+			
+		}
+
+		@Override
+		public void changed(ObservableValue<? extends Playlist> ob, Playlist oldVal, Playlist newVal) {
+			//if there actual is a new val
+			if (newVal != null) {	
+				System.out.println("Changed!?" + newVal);
+				ObservableList<Video> playlistItems = FXCollections.observableArrayList(newVal.getItems());
+				listViewPlaylistItems.setItems(playlistItems);
+				System.out.println("Size?: " + newVal.getItems().size());
+			}
+			else {
+				//TODO: Implement this
+			}
+		}
+	}
+
 }

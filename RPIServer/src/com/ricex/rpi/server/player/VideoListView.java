@@ -16,8 +16,6 @@ import com.ricex.rpi.server.client.RPIClient;
 
 
 public class VideoListView extends BorderPane implements ClientChangeListener<RPIClient>, ActiveClientListener, EventHandler<MouseEvent> {
-
-	//TODO: get the video list from the currently active client
 	
 	private static Image movieIconImage = new Image(VideoListView.class.getResourceAsStream("/data/icons/movie.png"));
 	private static Image directoryIconImage = new Image(VideoListView.class.getResourceAsStream("/data/icons/directory.png"));
