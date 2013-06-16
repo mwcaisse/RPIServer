@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -58,6 +60,15 @@ public class RPIPlayer extends Application {
 	/** The currently active RPIClient */
 	private RPIClient activeClient;
 	
+	/** The tab for the playlist view */
+	private Tab tabPlaylistView;
+	
+	/** The tab for the movie view */
+	private Tab tabMovieView;
+	
+	/** The tab for the client view */
+	private Tab tabClientView;
+	
 	/** List of the active client listeners */
 	private List<ActiveClientListener> activeClientListeners;
 
@@ -104,14 +115,31 @@ public class RPIPlayer extends Application {
 		tabPane = new TabPane();
 		tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
-		Tab tabMovieView = new Tab("Movies");
+		tabMovieView = new Tab("Movies");
 		tabMovieView.setContent(movieListView);
 
-		Tab tabClientView = new Tab("Clients");
+		tabClientView = new Tab("Clients");
 		tabClientView.setContent(clientTableView);
 
-		Tab tabPlaylistView = new Tab("Playlists");
+		tabPlaylistView = new Tab("Playlists");
 		tabPlaylistView.setContent(playlistView);
+		
+		tabPane.getSelectionModel().selectedItemProperty().addListener( new ChangeListener<Tab>() {
+
+			public void changed(ObservableValue<? extends Tab> tab, Tab oldVal, Tab newVal) {
+				if (newVal.equals(tabMovieView)) {
+					buttonPane.updatePlayableView(movieListView);
+				}
+				else if (newVal.equals(tabPlaylistView)) {
+					buttonPane.updatePlayableView(playlistView);
+				}
+				else {
+					buttonPane.updatePlayableView(null);
+				}
+				
+			}
+			
+		});
 
 
 		tabPane.getTabs().add(tabMovieView);

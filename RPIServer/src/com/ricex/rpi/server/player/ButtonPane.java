@@ -12,7 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 
-import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.server.ClientPlayerModule;
 import com.ricex.rpi.server.RPIServer;
 import com.ricex.rpi.server.Server;
@@ -71,21 +70,21 @@ public class ButtonPane extends HBox implements EventHandler<ActionEvent>, Clien
 	/** The player module interface to complete the given actions */
 	private ClientPlayerModule playerModule;
 
-	/** The list view representing the movies */
-	private VideoListView movieView;
-
 	/** The RPI server that is running */
 	private Server<RPIClient> server;
 
 	/** The width of the buttons */
 	private final int BUTTON_WIDTH = 55;
+	
+	/** The playable view to get the playlist to play when the user presses the play button */
+	private PlayableView playableView;
 
 	/** Creates a new ButtonPane for controlling the movies */
 
-	public ButtonPane(RPIPlayer player, Server<RPIClient> server, VideoListView movieView) {
+	public ButtonPane(RPIPlayer player, Server<RPIClient> server, PlayableView playableView) {
 		this.player = player;
 		this.server = server;
-		this.movieView = movieView;
+		this.playableView = playableView;
 		
 		player.addActiveClientListener(this);
 
@@ -167,9 +166,9 @@ public class ButtonPane extends HBox implements EventHandler<ActionEvent>, Clien
 		}
 		
 		if (source.equals(butPlay)) {
-			Playlist playlist = new Playlist();
-			playlist.addItem(movieView.getSelectedItem());
-			playerModule.play(playlist);
+			if (playableView != null) {
+				playerModule.play(playableView.getPlaylistToPlay());
+			}
 		}
 		else if (source.equals(butPause)) {
 			playerModule.pause();
@@ -255,4 +254,18 @@ public class ButtonPane extends HBox implements EventHandler<ActionEvent>, Clien
 	public void activeClientRemoved() {
 		playerModule = null;		
 	}
+	
+	/** Updates the currently playable view
+	 * 
+	 * @param playableView
+	 */
+	
+	public void updatePlayableView(PlayableView playableView) {
+		this.playableView = playableView;
+		// if playable view is null, disable the play button
+		butPlay.setDisable(playableView == null);
+	}
+	                                                           
+	                                                           
+	
 }

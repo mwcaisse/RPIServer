@@ -9,13 +9,15 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
+import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.server.client.ClientChangeEvent;
 import com.ricex.rpi.server.client.ClientChangeListener;
 import com.ricex.rpi.server.client.RPIClient;
 
 
-public class VideoListView extends BorderPane implements ClientChangeListener<RPIClient>, ActiveClientListener, EventHandler<MouseEvent> {
+public class VideoListView extends BorderPane implements ClientChangeListener<RPIClient>, ActiveClientListener, EventHandler<MouseEvent>,
+		PlayableView {
 	
 	private static Image movieIconImage = new Image(VideoListView.class.getResourceAsStream("/data/icons/movie.png"));
 	private static Image directoryIconImage = new Image(VideoListView.class.getResourceAsStream("/data/icons/directory.png"));
@@ -60,7 +62,7 @@ public class VideoListView extends BorderPane implements ClientChangeListener<RP
 	
 	/** Returns the selected video item  */
 	
-	public Video getSelectedItem() {		
+	private Video getSelectedItem() {		
 		return videoTree.getSelectionModel().getSelectedItem().getValue();
 	}
 	
@@ -153,6 +155,21 @@ public class VideoListView extends BorderPane implements ClientChangeListener<RP
 			cm.show(videoTree, e.getScreenX(), e.getScreenY());
 		}
 		
+	}
+
+	/** Returns a playlist to play, with the currently selected item added to the playlist,
+	 *  if there is no currently selected item it returns an empty playlist instead
+	 */
+	
+	@Override
+	public Playlist getPlaylistToPlay() {
+		Playlist playlist = new Playlist();
+		Video toPlay = getSelectedItem();
+		if (toPlay != null) {
+			playlist.addItem(toPlay);
+		}
+		return playlist;
+				
 	}
 	
 	

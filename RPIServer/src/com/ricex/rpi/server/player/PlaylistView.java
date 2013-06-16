@@ -20,7 +20,7 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class PlaylistView extends BorderPane implements ActiveClientListener {
+public class PlaylistView extends BorderPane implements ActiveClientListener, PlayableView {
 
 	/** The RPIPlayer */
 	private RPIPlayer player;
@@ -159,6 +159,17 @@ public class PlaylistView extends BorderPane implements ActiveClientListener {
 				//TODO: Implement this
 			}
 		}
+	}
+
+	/** Returns a copy of the selected playlist, or a new playlist if there is currently no selected playlist
+	 * 
+	 */
+	
+	@Override
+	public Playlist getPlaylistToPlay() {
+		Playlist playlist = listViewPlaylists.getSelectionModel().getSelectedItem();
+		//if playlist is null return a new playlist, other wise return the selected playlist
+		return playlist == null ? new Playlist() : playlist;
 	}
 
 }
