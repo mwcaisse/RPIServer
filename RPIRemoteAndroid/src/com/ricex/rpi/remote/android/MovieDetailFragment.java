@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.message.MovieMessage;
 import com.ricex.rpi.common.message.remote.RemoteClient;
 import com.ricex.rpi.common.message.remote.RemoteMovieMessage;
@@ -58,7 +59,9 @@ public class MovieDetailFragment extends Fragment implements OnClickListener {
 			//get the active client and send it the movie message
 			RemoteClient client = ClientCache.getInstance().getActiveClient();			
 			if (client != null) {
-				RemoteMovieMessage message = new RemoteMovieMessage(movie.getVideoFile(),
+				Playlist playlist = new Playlist();
+				playlist.addItem(movie);
+				RemoteMovieMessage message = new RemoteMovieMessage(playlist,
 						MovieMessage.Command.PLAY, client.getId());
 				ServerConnector.getInstance().sendMessage(message);
 				getFragmentManager().popBackStack();

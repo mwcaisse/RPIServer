@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.ricex.rpi.common.message.remote.RemoteClient;
+import com.ricex.rpi.remote.android.cache.ClientCache;
 
 
 public class PlayerDetailFragment extends Fragment implements OnClickListener{
@@ -52,9 +53,10 @@ public class PlayerDetailFragment extends Fragment implements OnClickListener{
 	
 	public void onClick(View view) {
 		boolean checked = ((CheckBox) view).isChecked();
-		
-		client.setEnabled(checked);
-		Log.i("RPI Client Detail", "Setting client " + client.getName() + "{" + client + "} to enabled: " + checked);
+		//TODO: only setting active is supported right now
+		if (checked) {
+			ClientCache.getInstance().setActiveClient(client);
+		}
 	}
 
 

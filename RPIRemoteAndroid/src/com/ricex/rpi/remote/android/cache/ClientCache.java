@@ -36,6 +36,7 @@ public class ClientCache {
 	
 	private ClientCache() {
 		clients = new HashMap<Long, RemoteClient>();
+		activeClientId = -1; // initialize to -1
 	}
 	
 	/** Sets the list of clients to the given list
@@ -59,7 +60,7 @@ public class ClientCache {
 		clients.put(client.getId(), client);
 		//if there is only one client, make it active
 		if (clients.size() == 1) {
-			activeClientId = client.getId();
+			setActiveClient(client);
 		}
 	}
 	
@@ -73,6 +74,7 @@ public class ClientCache {
 		if (clients.isEmpty()) {
 			//if there are no more clients left, remove the active client
 			activeClientId = -1;
+			
 		}
 	}
 	
@@ -108,5 +110,20 @@ public class ClientCache {
 	
 	public RemoteClient getActiveClient() {
 		return clients.get(activeClientId);
+	}
+	
+	/** Sets the given client as the active client
+	 * 
+	 * @param client
+	 */
+	
+	public void setActiveClient(RemoteClient client) {
+		if (activeClientId >= 0) {
+			//if there is currently an active client, set it to disabled.
+			clients.get(activeClientId).setEnabled(false);		
+		}
+		//enable the new client, and set the current active client id
+		client.setEnabled(true);
+		activeClientId = client.getId();
 	}
 }

@@ -1,6 +1,7 @@
 package com.ricex.rpi.common.message.remote;
 
 import com.ricex.rpi.common.Playlist;
+import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.common.message.MovieMessage.Command;
 
 /** A movie message send by the remote, that includes the ID of the client to send the message
@@ -9,7 +10,7 @@ import com.ricex.rpi.common.message.MovieMessage.Command;
  *
  */
 
-public class RemoteMovieMessage {
+public class RemoteMovieMessage implements IMessage {
 
 	/** The movie command to execute */
 	private Command command;
