@@ -1,5 +1,8 @@
 package com.ricex.rpi.remote.android;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -13,10 +16,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.ricex.rpi.common.message.remote.RemoteClient;
 import com.ricex.rpi.common.video.Directory;
 import com.ricex.rpi.common.video.Movie;
 import com.ricex.rpi.common.video.Video;
-import com.ricex.rpi.remote.android.cache.DirectoryCache;
+import com.ricex.rpi.remote.android.cache.ClientCache;
 import com.ricex.rpi.remote.android.cache.DirectoryChangeListener;
 
 /** The fragment for displaying the movies list
@@ -25,7 +29,7 @@ import com.ricex.rpi.remote.android.cache.DirectoryChangeListener;
  *
  */
 
-public class MoviesListFragment extends Fragment implements OnItemClickListener, DirectoryChangeListener {
+public class MoviesListFragment extends Fragment implements OnItemClickListener {
 
 	/** The list view that will display the movies in the current directory */
 	private ListView moviesListView;
@@ -40,8 +44,7 @@ public class MoviesListFragment extends Fragment implements OnItemClickListener,
 	 */
 	
 	public MoviesListFragment() {
-		moviesListView = null;		
-		DirectoryCache.getInstance().addListener(this);
+		moviesListView = null;	
 	}
 	
 	/**
@@ -55,12 +58,9 @@ public class MoviesListFragment extends Fragment implements OnItemClickListener,
 		
 		moviesListView = (ListView) view.findViewById(R.id.movies_list);
 		
-		//VideoAdapter adapter = generateVideoAdapter(view.getContext());
-		VideoAdapter adapter = new VideoAdapter(context, DirectoryCache.getInstance().getRootDirectory().getChildren());
-
-		Log.i("RPI", "Adapter: " + adapter);
-
-		moviesListView.setAdapter(adapter);
+		//update the directory listing
+		updateDirectoryListing();
+		
 		moviesListView.setOnItemClickListener(this);
 		
 		return view;
@@ -70,24 +70,6 @@ public class MoviesListFragment extends Fragment implements OnItemClickListener,
 	@Override
 	public void onStart() {
 		super.onStart();
-	}
-	
-	/** Generates a temporary video adapter for testing purposes
-	 */
-	
-	private VideoAdapter generateVideoAdapter(Context context) {
-		VideoAdapter adapter = new VideoAdapter(context);
-		
-		for (int i=0;i<10;i++) {
-			if (i % 2 == 0) {
-				adapter.addItem(new Movie("Movie: " + i/2, ""));
-			}
-			if (i % 2 == 0) {
-				adapter.addItem(new Directory("Directory: " + (i/2+ 1)));
-			}
-		}
-		
-		return adapter;
 	}
 
 	/**
@@ -111,18 +93,18 @@ public class MoviesListFragment extends Fragment implements OnItemClickListener,
 			ft.commit();
 		}
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	
-	@Override
-	public void rootDirectoryChanged(Video rootDirectory) {
-		if (moviesListView != null) {
-			VideoAdapter adapter = new VideoAdapter(context, rootDirectory.getChildren());
-			moviesListView.setAdapter(adapter);
-		}
+	private void updateDirectoryListing() {
+		RemoteClient client = ClientCache.getInstance().getActiveClient();
 		
+		List<Video> videos;
+		if (client == null) {
+			videos = new ArrayList<Video>();
+		}
+		else {
+			videos = client.getDirectoryListing().getChildren();
+		}		
+		VideoAdapter adapter = new VideoAdapter(context, videos);
+		moviesListView.setAdapter(adapter);
 	}
-
 }

@@ -68,7 +68,10 @@ public class ControlsFragment extends Fragment implements OnClickListener {
 	public void onClick(View v) {
 		RemoteMovieMessage message = null;
 		
-		for (RemoteClient client : ClientCache.getInstance().getEnabledClients()) {
+		//send the appropriate message to the active client, if it exists
+		RemoteClient client = ClientCache.getInstance().getActiveClient();		
+		if (client != null) {	
+			
 			if (v.equals(butPause)) {
 				message = new RemoteMovieMessage(MovieMessage.Command.PAUSE, client.getId());
 			}
@@ -91,6 +94,7 @@ public class ControlsFragment extends Fragment implements OnClickListener {
 				message = new RemoteMovieMessage(MovieMessage.Command.NEXT_CHAPER, client.getId());
 			}
 			ServerConnector.getInstance().sendMessage(message);
-		}	
+		}
+
 	}
 }

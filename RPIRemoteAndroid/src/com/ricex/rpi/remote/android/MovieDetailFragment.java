@@ -54,8 +54,10 @@ public class MovieDetailFragment extends Fragment implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		if (movie != null) {
-			for (RemoteClient client : ClientCache.getInstance().getEnabledClients()) {
+		if (movie != null) {			
+			//get the active client and send it the movie message
+			RemoteClient client = ClientCache.getInstance().getActiveClient();			
+			if (client != null) {
 				RemoteMovieMessage message = new RemoteMovieMessage(movie.getVideoFile(),
 						MovieMessage.Command.PLAY, client.getId());
 				ServerConnector.getInstance().sendMessage(message);

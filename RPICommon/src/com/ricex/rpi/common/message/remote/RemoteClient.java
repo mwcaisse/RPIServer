@@ -3,6 +3,7 @@ package com.ricex.rpi.common.message.remote;
 import java.io.Serializable;
 
 import com.ricex.rpi.common.RPIStatus;
+import com.ricex.rpi.common.video.Video;
 
 
 /** Holder class to send the clients over the network */
@@ -17,6 +18,9 @@ public class RemoteClient implements Serializable {
 	
 	/** The status of the given client */
 	private RPIStatus status;
+	
+	/** The directory listing for this client */
+	private Video directoryListing;
 	
 	/** Whether or not this client is enabled */
 	private boolean enabled;
@@ -59,15 +63,22 @@ public class RemoteClient implements Serializable {
 		this.enabled = enabled;
 	}
 	
-	/**
-	 * {@inheritDoc}
+	/** @return the root directory of the directory listing for this client
 	 */
-	/*
-	@Override
-	public String toString() {
-		return getName();
+	
+	public Video getDirectoryListing() {
+		return directoryListing;
 	}
-	*/
+	
+	/** Sets the directory listing of this client
+	 * 
+	 * @param directoryListing The new directory listing
+	 */
+	
+	public void setDirectoryListing(Video directoryListing) {
+		this.directoryListing = directoryListing;
+	}
+	
 	
 	
 }

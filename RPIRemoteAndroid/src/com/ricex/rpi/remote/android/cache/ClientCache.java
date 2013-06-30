@@ -18,6 +18,9 @@ public class ClientCache {
 	/** The singleton instance of the class */
 	private static ClientCache _instance;
 	
+	/** The id of the currentl active id */
+	private long activeClientId;
+	
 	/** Returns the singleton instance of this class */	
 	public static ClientCache getInstance() {
 		if (_instance == null) {
@@ -54,6 +57,10 @@ public class ClientCache {
 	
 	public void addClient(RemoteClient client) {
 		clients.put(client.getId(), client);
+		//if there is only one client, make it active
+		if (clients.size() == 1) {
+			activeClientId = client.getId();
+		}
 	}
 	
 	/** Removes the client with the given id
@@ -63,6 +70,10 @@ public class ClientCache {
 	
 	public void removeClient(long id) {
 		clients.remove(id);
+		if (clients.isEmpty()) {
+			//if there are no more clients left, remove the active client
+			activeClientId = -1;
+		}
 	}
 	
 	/** Removes the given client
@@ -90,15 +101,12 @@ public class ClientCache {
 		return new ArrayList<RemoteClient>(clients.values());
 	}	   
 	
-	/** Returns a list of all the enabled clients */
+	/** Returns the currently active client
+	 * 
+	 * @return
+	 */
 	
-	public List<RemoteClient> getEnabledClients() {
-		List<RemoteClient> activeClients = new ArrayList<RemoteClient>();
-		for (RemoteClient client : getClients()) {
-			if (client.isEnabled()) {
-				activeClients.add(client);
-			}
-		}
-		return activeClients;
+	public RemoteClient getActiveClient() {
+		return clients.get(activeClientId);
 	}
 }

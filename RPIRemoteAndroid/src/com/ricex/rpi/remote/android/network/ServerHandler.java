@@ -10,13 +10,12 @@ import android.util.Log;
 
 import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.common.message.IMessage;
+import com.ricex.rpi.common.message.remote.ClientDirectoryListingMessage;
 import com.ricex.rpi.common.message.remote.ClientListMessage;
 import com.ricex.rpi.common.message.remote.ClientStatusUpdateMessage;
 import com.ricex.rpi.common.message.remote.ClientUpdateMessage;
-import com.ricex.rpi.common.message.remote.DirectoryListingMessage;
 import com.ricex.rpi.common.message.remote.RemoteClient;
 import com.ricex.rpi.remote.android.cache.ClientCache;
-import com.ricex.rpi.remote.android.cache.DirectoryCache;
 
 
 /** Runs in the background and listens for messages received from the server
@@ -148,6 +147,7 @@ public class ServerHandler implements Runnable {
 		else if (message instanceof ClientUpdateMessage) {
 			ClientUpdateMessage msg = (ClientUpdateMessage) message;
 			RemoteClient client = new RemoteClient(msg.getId(), msg.getName(), new RPIStatus(RPIStatus.IDLE));
+			//TODO: Not sure why this is here..
 			if (msg.isConnected()) {
 				
 			}
@@ -163,10 +163,10 @@ public class ServerHandler implements Runnable {
 					" ClientStatus: " + client.getStatus());
 			
 		}
-		else if (message instanceof DirectoryListingMessage) {
-			DirectoryListingMessage msg = (DirectoryListingMessage) message;
-			//put the root directory into the dir cache
-			DirectoryCache.getInstance().setRootDirectory(msg.getRootDirectory());
+		else if (message instanceof ClientDirectoryListingMessage) {
+			ClientDirectoryListingMessage msg = (ClientDirectoryListingMessage) message;
+			RemoteClient client = ClientCache.getInstance().getClient(msg.getId());
+			client.setDirectoryListing(msg.getRootDirectory()); //add the new directory listing to the client			
 		}
 	}
 }

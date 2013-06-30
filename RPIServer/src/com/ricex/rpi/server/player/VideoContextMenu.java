@@ -4,6 +4,7 @@ import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -31,6 +32,7 @@ public class VideoContextMenu extends ContextMenu {
 		this.video = video;
 		this.activeClient = activeClient;
 		generateItems();
+		setAutoHide(true);
 	}	
 	
 	/** Populates the context menu with the given items
@@ -66,8 +68,8 @@ public class VideoContextMenu extends ContextMenu {
 			//add the listener, and add it to the menu	
 			getItems().add(playlistItem);
 		}		
-	}  	    
-	
+	}  
+
 	/** Menu Item for a playlist
 	 * 
 	 * @author Mitchell

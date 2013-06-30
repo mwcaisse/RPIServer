@@ -147,9 +147,7 @@ public class VideoListView extends BorderPane implements ClientChangeListener<RP
 
 	@Override
 	public void handle(MouseEvent e) {
-		System.out.println("Mouse Event");
 		if (e.getButton() == MouseButton.SECONDARY) {
-			System.out.println("MouseEvent SEcondary");
 			Video video = getSelectedItem();
 			VideoContextMenu cm = new VideoContextMenu(video, activeClient);
 			cm.show(videoTree, e.getScreenX(), e.getScreenY());
