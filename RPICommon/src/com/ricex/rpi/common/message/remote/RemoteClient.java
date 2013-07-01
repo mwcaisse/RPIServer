@@ -26,10 +26,11 @@ public class RemoteClient implements Serializable {
 	private boolean enabled;
 	
 	/** Creates a new client with the given id and name */
-	public RemoteClient(long id, String name, RPIStatus status) {
+	public RemoteClient(long id, String name, RPIStatus status, Video directoryListing) {
 		this.id = id;
 		this.name = name;
 		this.status = status;
+		this.directoryListing = directoryListing;
 		enabled = false;
 	}
 	

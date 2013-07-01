@@ -146,13 +146,12 @@ public class ServerHandler implements Runnable {
 		}
 		else if (message instanceof ClientUpdateMessage) {
 			ClientUpdateMessage msg = (ClientUpdateMessage) message;
-			RemoteClient client = new RemoteClient(msg.getId(), msg.getName(), new RPIStatus(RPIStatus.IDLE));
-			//TODO: Not sure why this is here..
 			if (msg.isConnected()) {
-				
+				RemoteClient client = new RemoteClient(msg.getId(), msg.getName(), new RPIStatus(RPIStatus.IDLE), msg.getDirectoryListing());
+				ClientCache.getInstance().addClient(client);
 			}
 			else {
-				//the client in the message has disconnected
+				ClientCache.getInstance().removeClient(msg.getId());
 			}
 		}
 		else if (message instanceof ClientStatusUpdateMessage) {

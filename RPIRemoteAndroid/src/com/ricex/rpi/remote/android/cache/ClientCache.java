@@ -47,7 +47,7 @@ public class ClientCache {
 	public void setClients(List<RemoteClient> clients) {
 		this.clients.clear();
 		for (RemoteClient client: clients) {
-			this.clients.put(client.getId(), client);
+			addClient(client);
 		}
 	}
 	

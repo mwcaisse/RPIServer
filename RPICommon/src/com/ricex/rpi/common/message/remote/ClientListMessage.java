@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.common.message.IMessage;
+import com.ricex.rpi.common.video.Video;
 
 
 /** Sends back a list of all the currently connected RPI Clients
@@ -37,8 +38,8 @@ public class ClientListMessage implements IMessage {
 	 * @param name The clients name
 	 */
 	
-	public void addClient(long id, String name, RPIStatus status) {
-		clients.add(new RemoteClient(id, name, status));
+	public void addClient(long id, String name, RPIStatus status, Video directoryListing) {
+		clients.add(new RemoteClient(id, name, status, directoryListing));
 	}
 	
 	/** Returns the list of clients */	

@@ -3,6 +3,7 @@ package com.ricex.rpi.remote.android;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +24,6 @@ public class PlayersListFragment extends Fragment implements OnItemClickListener
 	
 	/** The list view that will display the movies in the current directory */
 	private ListView playerListView;
-	
-	public PlayersListFragment() {
-
-	}
 	
 	/**
 	 * {@inheritDoc}
@@ -51,6 +48,8 @@ public class PlayersListFragment extends Fragment implements OnItemClickListener
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		RemoteClient item = (RemoteClient)parent.getAdapter().getItem(position);
 	
+		Log.i("RPI Players List", "We are opening up a remote client pls");
+		
 		PlayerDetailFragment fragment = new PlayerDetailFragment();
 		fragment.setClient(item);
 		FragmentTransaction ft = getFragmentManager().beginTransaction();

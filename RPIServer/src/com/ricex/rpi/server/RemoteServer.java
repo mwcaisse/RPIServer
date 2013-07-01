@@ -56,7 +56,7 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 	
 	@Override
 	public void clientConnected(RPIClient client) {
-		sendToAllClients(new ClientUpdateMessage(client.getId(), client.getName(), true));
+		sendToAllClients(new ClientUpdateMessage(client.getId(), client.getName(), true, null));
 		client.addChangeListener(this);
 	}
 
@@ -64,7 +64,7 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 	
 	@Override
 	public void clientDisconnected(RPIClient client) {
-		sendToAllClients(new ClientUpdateMessage(client.getId(), client.getName(), false));
+		sendToAllClients(new ClientUpdateMessage(client.getId(), client.getName(), false, null));
 		client.removeChangeListener(this);
 	}
 	
@@ -73,7 +73,7 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 	private ClientListMessage constructClientListMessage() {
 		ClientListMessage clientMessage = new ClientListMessage();
 		for (RPIClient c : RPIServer.getInstance().getConnectedClients()) {
-			clientMessage.addClient(c.getId(), c.getName(), c.getStatus());
+			clientMessage.addClient(c.getId(), c.getName(), c.getStatus(), c.getRootDirectory());
 		}
 		return clientMessage;
 	}
