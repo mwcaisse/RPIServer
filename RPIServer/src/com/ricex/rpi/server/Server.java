@@ -32,6 +32,9 @@ public abstract class Server<T extends Client> implements Runnable {
 	
 	/** The Socket this server will use */
 	private ServerSocket socket;
+	
+	/** Whether or not the server is running */
+	private boolean running;
 
 	/** The port that this server will listen for conenctions on */
 	private final int port;
@@ -68,11 +71,12 @@ public abstract class Server<T extends Client> implements Runnable {
 			e.printStackTrace();
 			return;
 		}
-
+		running = true;
+		
 		System.out.println(name + " Server Started");
+		
 		// listen for conenctions to the server
-		//TODO: Add a way for the server loop to exit
-		while (true) {			
+		while (running) {			
 			try {
 				/*
 				 * before we check for new clients, let update the current list
@@ -217,5 +221,14 @@ public abstract class Server<T extends Client> implements Runnable {
 		for (Client client : connectedClients.values()) {
 			client.sendMessage(message);
 		}
+	}
+	
+	/** Shuts down the server
+	 *  TODO: implement shutdown better
+	 */
+	
+	public synchronized void shutdown() {
+		System.out.println(name + " shutting down");
+		running = false;
 	}
 }

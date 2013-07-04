@@ -73,6 +73,21 @@ public class RPIPlayer extends JFrame {
 		setContentPane(tabbedPane);
 	}
 	
+	/** Adds the shutdown hook for the program, that will shutdown both servers
+	 * 
+	 */
+	
+	private void addShutdownHook() {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			
+			public void run() {
+				RPIServer.getInstance().shutdown();
+				RemoteServer.getInstance().shutdown();
+			}
+			
+		});
+	}
+	
 	/** Sets the look and feel to the System Look and Feel
 	 * 
 	 */
@@ -94,8 +109,13 @@ public class RPIPlayer extends JFrame {
 		clientServerThread = new Thread(RPIServer.getInstance());
 		remoteServerThread = new Thread(RemoteServer.getInstance());
 		
+		clientServerThread.setDaemon(true);
+		remoteServerThread.setDaemon(true);
+		
 		clientServerThread.start();
 		remoteServerThread.start();
+		
+		
 	}
 	
 }
