@@ -12,6 +12,9 @@ import com.ricex.rpi.server.client.RPIClient;
 
 /** View for displaying a list of all the clients currently connected to the server
  * 
+ * TODO: Add change listener for name changes
+ * TODO: Add a view for the status of the client
+ * 
  * @author Mitchell
  *
  */
@@ -24,7 +27,7 @@ public class ClientListView extends JPanel implements ClientConnectionListener<R
 	/** The list model for the clientList */
 	private DefaultListModel<RPIClient> clientListModel;
 	
-	public ClientListView() { 
+	public ClientListView() {
 		
 		clientListModel = new DefaultListModel<RPIClient>();
 		initListModel();
@@ -36,6 +39,9 @@ public class ClientListView extends JPanel implements ClientConnectionListener<R
 		setLayout(layout);
 		//add the list to the layout
 		add(clientList, BorderLayout.CENTER);
+		
+		//add this as a connection listener
+		RPIServer.getInstance().addConnectionListener(this);
 	}
 	
 	/** Populates the client list model from the list of clients in RPIServer

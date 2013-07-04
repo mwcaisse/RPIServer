@@ -52,6 +52,7 @@ public class RPIPlayer extends JFrame {
 	 */
 	
 	public RPIPlayer() {
+		startServers();		
 		setTitle("RPI Player -- Swing Build");
 		setPreferredSize(new Dimension(800, 600));
 		pack();
