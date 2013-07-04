@@ -203,11 +203,10 @@ public class ButtonPane extends HBox implements EventHandler<ActionEvent>, Clien
 			@Override
 			public void run() {
 				connectedClients.add(client);
-				if (connectedClients.size() == 1) {
+				/*if (connectedClients.size() == 1) {
 					//only one element in the list , automatically select it.
-					//cboxClients.setValue(client);
-					//cboxClients.getSelectionModel().select(0);
-				}
+					cboxClients.setValue(client);
+				}*/
 			}
 		});
 

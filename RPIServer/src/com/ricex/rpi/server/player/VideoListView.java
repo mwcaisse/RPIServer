@@ -1,5 +1,6 @@
 package com.ricex.rpi.server.player;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -138,9 +139,13 @@ public class VideoListView extends BorderPane implements ClientChangeListener<RP
 	}
 
 	@Override
-	public void clientChanged(ClientChangeEvent<RPIClient> changeEvent) {
+	public void clientChanged(final ClientChangeEvent<RPIClient> changeEvent) {
 		if (changeEvent.getEventType() == ClientChangeEvent.EVENT_ROOT_DIRECTORY_CHANGE) {
-			updateVideos(changeEvent.getSource().getRootDirectory());
+			Platform.runLater(new Runnable() {
+				public void run() {
+					updateVideos(changeEvent.getSource().getRootDirectory());
+				}
+			});
 		}
 		
 	}
