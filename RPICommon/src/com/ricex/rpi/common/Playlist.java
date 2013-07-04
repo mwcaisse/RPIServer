@@ -1,5 +1,6 @@
 package com.ricex.rpi.common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import com.ricex.rpi.common.video.Video;
  *
  */
 
-public class Playlist {
+public class Playlist implements Serializable {
 
 	/** The name of the play list */
 	private final String name;
