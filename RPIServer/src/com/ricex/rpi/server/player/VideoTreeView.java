@@ -3,6 +3,7 @@ package com.ricex.rpi.server.player;
 import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -36,9 +37,13 @@ public class VideoTreeView extends JPanel implements ClientConnectionListener<RP
 		treeModel = new DefaultTreeModel(new DefaultMutableTreeNode("Videos"));		
 		videoTree = new JTree(treeModel);
 		
-		BorderLayout layout = new BorderLayout();
-		setLayout(layout);
-		add(videoTree, BorderLayout.CENTER);
+		JScrollPane scrollPane = new JScrollPane();
+		
+		//scrollPane.getViewport().setLayout(new BorderLayout());
+		scrollPane.getViewport().add(videoTree);
+		
+		setLayout(new BorderLayout());
+		add(scrollPane, BorderLayout.CENTER);
 		
 		RPIServer.getInstance().addConnectionListener(this);
 	}
