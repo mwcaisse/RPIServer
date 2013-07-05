@@ -1,10 +1,12 @@
 package com.ricex.rpi.server.player;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -58,6 +60,9 @@ public class RPIPlayer extends JFrame {
 	/** The list view for displaying the connected clients */
 	private ClientListView clientListView;
 	
+	/** The view for the controller pane */
+	private ControllerPane controllerPane;
+	
 	/** The thread for the RPI client server to run in */
 	private Thread clientServerThread;
 	
@@ -90,17 +95,24 @@ public class RPIPlayer extends JFrame {
 		
 		//setSystemLookAndFeel();
 		
+		JPanel contentPane = new JPanel();
+		BorderLayout layout = new BorderLayout();
+		contentPane.setLayout(layout);
 		tabbedPane = new JTabbedPane();
 		
 		videoTreeView = new VideoTreeView();
 		playlistView = new PlaylistView();
 		clientListView = new ClientListView();
+		controllerPane = new ControllerPane();
 		
 		tabbedPane.add("Videos", videoTreeView);
 		tabbedPane.add("Playlists", playlistView);
 		tabbedPane.add("Clients", clientListView);
 		
-		setContentPane(tabbedPane);
+		contentPane.add(tabbedPane, BorderLayout.CENTER);
+		contentPane.add(controllerPane, BorderLayout.SOUTH);
+		
+		setContentPane(contentPane);
 		
 		addShutdownHook();
 	}
