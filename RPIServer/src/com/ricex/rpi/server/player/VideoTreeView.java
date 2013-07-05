@@ -9,10 +9,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import com.ricex.rpi.common.video.Video;
-import com.ricex.rpi.server.RPIServer;
-import com.ricex.rpi.server.client.ClientChangeEvent;
-import com.ricex.rpi.server.client.ClientChangeListener;
-import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
 
 /** View that will display a tree of the videos for the active clietn
@@ -21,7 +17,7 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class VideoTreeView extends JPanel implements ClientConnectionListener<RPIClient>, ClientChangeListener<RPIClient> {
+public class VideoTreeView extends JPanel implements ActiveClientListener {
 
 	/** The tree containing the list of videos */
 	private JTree videoTree;
@@ -37,6 +33,11 @@ public class VideoTreeView extends JPanel implements ClientConnectionListener<RP
 		treeModel = new DefaultTreeModel(new DefaultMutableTreeNode("Videos"));		
 		videoTree = new JTree(treeModel);
 		
+		// if an active client exists, update the tree view with its videos
+		if (RPIPlayer.getInstance().activeClientExists()) {
+			updateTree(RPIPlayer.getInstance().getActiveClient().getRootDirectory());
+		}
+		
 		JScrollPane scrollPane = new JScrollPane();
 		
 		//scrollPane.getViewport().setLayout(new BorderLayout());
@@ -45,7 +46,7 @@ public class VideoTreeView extends JPanel implements ClientConnectionListener<RP
 		setLayout(new BorderLayout());
 		add(scrollPane, BorderLayout.CENTER);
 		
-		RPIServer.getInstance().addConnectionListener(this);
+		RPIPlayer.getInstance().addActiveClientListener(this);
 	}
 	
 	/** Creates the tree view from the given rootDirectory
@@ -55,6 +56,14 @@ public class VideoTreeView extends JPanel implements ClientConnectionListener<RP
 	
 	private void updateTree(Video rootDirectory) {
 		treeModel.setRoot(processDirectory(rootDirectory));		
+	}
+	
+	/** Clears the tree view by removing all of its nodes
+	 * 
+	 */
+	
+	private void clearTree() {
+		treeModel.setRoot(new DefaultMutableTreeNode("Videos"));
 	}
 	
 	/** Processes a directory tree node 
@@ -86,34 +95,20 @@ public class VideoTreeView extends JPanel implements ClientConnectionListener<RP
 		return new DefaultMutableTreeNode(video);
 	}
 
-	/**
-	 * {@inheritDoc}
+	/** Updates the tree view when the active client is chagned
 	 */
 	
 	@Override
-	public void clientConnected(RPIClient client) {
-		client.addChangeListener(this);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	
-	@Override
-	public void clientDisconnected(RPIClient client) {
+	public void activeClientChanged(RPIClient activeClient) {
+		updateTree(activeClient.getRootDirectory());
 		
 	}
-
-	/**
-	 * {@inheritDoc}
+	
+	/** Clears teh tree view when the active client is removed
 	 */
-	
+
 	@Override
-	public void clientChanged(ClientChangeEvent<RPIClient> changeEvent) {
-		if (changeEvent.getEventType() == ClientChangeEvent.EVENT_ROOT_DIRECTORY_CHANGE) {
-			//update the tree with the new directory
-			updateTree(changeEvent.getSource().getRootDirectory());
-		}		
-	}
-	
+	public void activeClientRemoved() {
+		clearTree();
+	}	
 }
