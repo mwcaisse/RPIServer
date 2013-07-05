@@ -1,6 +1,7 @@
 package com.ricex.rpi.server.player;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -40,6 +41,8 @@ public class RPIPlayer extends JFrame {
 	
 	public static void main(String[] args) {
 		RPIPlayer player = getInstance();
+		player.startServers();
+		player.initializeWindow();
 		player.setVisible(true);
 	}	
 	
@@ -68,13 +71,20 @@ public class RPIPlayer extends JFrame {
 	private List<ActiveClientListener> activeClientListeners;
 	
 	/** Creates a new instance of RPI Player
-	 * 
 	 */
 	
 	private RPIPlayer() {
-		startServers();		
+		activeClientListeners = new ArrayList<ActiveClientListener>();
+	}
+	
+	/** Initialize the RPIPlayer window 
+	 * 
+	 */
+	
+	private void initializeWindow() {			
 		setTitle("RPI Player -- Swing Build");
 		setPreferredSize(new Dimension(800, 600));
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setResizable(false);
 		
@@ -91,6 +101,8 @@ public class RPIPlayer extends JFrame {
 		tabbedPane.add("Clients", clientListView);
 		
 		setContentPane(tabbedPane);
+		
+		addShutdownHook();
 	}
 	
 	/** Adds the shutdown hook for the program, that will shutdown both servers
