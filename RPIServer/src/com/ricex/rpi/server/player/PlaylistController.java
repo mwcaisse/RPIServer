@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ricex.rpi.common.Playlist;
+import com.ricex.rpi.common.video.Movie;
 
 /** Maintains a list of playlists
  * 
@@ -21,6 +22,14 @@ public class PlaylistController {
 	/** Creates a new instance of playlist controller */
 	public PlaylistController() {
 		playlists = new HashMap<String, Playlist>();
+		
+		for (int i=0;i<10;i++) {
+			Playlist p = new Playlist("Test Playlist " + i);
+			for (int j=0;j<20;j++) {
+				p.addItem(new Movie("Playlist " + i + " Movie: " + j, ""));
+			}
+			addPlaylist(p);
+		}
 	}	
 	
 	/** Removes the given play list */
@@ -29,7 +38,11 @@ public class PlaylistController {
 		return new ArrayList<Playlist>(playlists.values());
 	}
 	
-	/** Adds the given playlist to the list */
+	/** Adds the given playlist to the list
+	 * If a playlist with the same name already exists, it will be replaced with the given playlist
+	 * 
+	 * @param playlist The playlist to add 
+	 */
 	
 	public void addPlaylist(Playlist playlist) {
 		playlists.put(playlist.getName(), playlist);
