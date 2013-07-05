@@ -3,13 +3,17 @@ package com.ricex.rpi.server.player;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.server.ClientPlayerModule;
+import com.ricex.rpi.server.RPIServer;
 import com.ricex.rpi.server.client.ClientChangeEvent;
 import com.ricex.rpi.server.client.ClientChangeListener;
+import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
 
 /** The pane for the window controls
@@ -18,7 +22,8 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class ControllerPane extends JPanel implements ClientChangeListener<RPIClient>, ActionListener, ActiveClientListener {
+public class ControllerPane extends JPanel implements ClientChangeListener<RPIClient>, ActionListener, ActiveClientListener, 
+		ClientConnectionListener<RPIClient>{
 
 	/** Button to play the selected video / playlist */
 	private JButton butPlay;
@@ -47,6 +52,12 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 	/** Button to go back to the previous chapter */
 	private JButton butLastChapter;
 	
+	/** The combobox containg a list of connected clients */
+	private JComboBox<RPIClient> cbxActiveClient;
+	
+	/** The ComboBoxModel for the active client combo box */
+	private DefaultComboBoxModel<RPIClient> activeClientModel;
+	
 	public ControllerPane() {
 		
 		//create the buttons 
@@ -58,8 +69,18 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 		butSeekRight = new JButton(">");
 		butSeekRightFast = new JButton(">>");		
 		butLastChapter = new JButton("|<<");
-		butNextChapter = new JButton(">>|");
+		butNextChapter = new JButton(">>|");	
 		
+		//create the activeCLient combo box and model
+		activeClientModel = new DefaultComboBoxModel<RPIClient>();
+		
+		//add the currently connected clients to the list model
+		for (RPIClient client : RPIServer.getInstance().getConnectedClients()) {
+			activeClientModel.addElement(client);
+		}
+		RPIServer.getInstance().addConnectionListener(this);
+		cbxActiveClient = new JComboBox<RPIClient>(activeClientModel);
+	
 		//add the action listeners
 		butPlay.addActionListener(this);
 		butPause.addActionListener(this);
@@ -70,6 +91,7 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 		butSeekRightFast.addActionListener(this);
 		butLastChapter.addActionListener(this);
 		butNextChapter.addActionListener(this);
+		cbxActiveClient.addActionListener(this);
 		
 		//add all the buttons
 		add(butPlay);
@@ -80,7 +102,8 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 		add(butSeekRight);
 		add(butSeekRightFast);
 		add(butLastChapter);
-		add(butNextChapter);		
+		add(butNextChapter);	
+		add(cbxActiveClient);
 		
 	}
 
@@ -159,10 +182,16 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Object source = e.getSource();
+		if (source.equals(cbxActiveClient)) {
+			System.out.println("ActiveClient selected eh?");
+			//update the selected client
+			RPIClient selectedClient = (RPIClient) cbxActiveClient.getSelectedItem();
+			RPIPlayer.getInstance().setActiveClient(selectedClient);
+		}
 		//check to make sure an active client exists
-		if (RPIPlayer.getInstance().activeClientExists()) {
+		else if (RPIPlayer.getInstance().activeClientExists()) {
 			ClientPlayerModule playerModule = RPIPlayer.getInstance().getActiveClient().getPlayerModule();
-			Object source = e.getSource();
 			
 			if (source.equals(butPlay)) {
 				//TODO: determine how to implement play
@@ -204,6 +233,15 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 	public void activeClientRemoved() {
 		disableAllButtons();
 	}
-	
+
+	@Override
+	public void clientConnected(RPIClient client) {
+		activeClientModel.addElement(client);
+	}
+
+	@Override
+	public void clientDisconnected(RPIClient client) {
+		activeClientModel.removeElement(client);
+	}	
 	
 }

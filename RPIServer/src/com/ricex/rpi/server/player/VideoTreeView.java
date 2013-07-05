@@ -9,6 +9,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import com.ricex.rpi.common.video.Video;
+import com.ricex.rpi.server.client.ClientChangeEvent;
+import com.ricex.rpi.server.client.ClientChangeListener;
 import com.ricex.rpi.server.client.RPIClient;
 
 /** View that will display a tree of the videos for the active clietn
@@ -17,13 +19,16 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class VideoTreeView extends JPanel implements ActiveClientListener {
+public class VideoTreeView extends JPanel implements ActiveClientListener, ClientChangeListener<RPIClient> {
 
 	/** The tree containing the list of videos */
 	private JTree videoTree;
 	
 	/** The tree model for the tree view */
 	private DefaultTreeModel treeModel;
+	
+	/** The currently active client */
+	private RPIClient activeClient;
 	
 	/** Creates a new instance of VideoTreeView
 	 * 
@@ -55,7 +60,12 @@ public class VideoTreeView extends JPanel implements ActiveClientListener {
 	 */
 	
 	private void updateTree(Video rootDirectory) {
-		treeModel.setRoot(processDirectory(rootDirectory));		
+		if (rootDirectory == null) {
+			treeModel.setRoot(new DefaultMutableTreeNode("Videos"));
+		}
+		else {
+			treeModel.setRoot(processDirectory(rootDirectory));		
+		}
 	}
 	
 	/** Clears the tree view by removing all of its nodes
@@ -100,7 +110,9 @@ public class VideoTreeView extends JPanel implements ActiveClientListener {
 	
 	@Override
 	public void activeClientChanged(RPIClient activeClient) {
+		this.activeClient = activeClient;
 		updateTree(activeClient.getRootDirectory());
+		activeClient.addChangeListener(this);
 		
 	}
 	
@@ -109,6 +121,14 @@ public class VideoTreeView extends JPanel implements ActiveClientListener {
 
 	@Override
 	public void activeClientRemoved() {
+		activeClient.removeChangeListener(this);
 		clearTree();
+	}
+
+	@Override
+	public void clientChanged(ClientChangeEvent<RPIClient> changeEvent) {
+		if (changeEvent.getEventType() == ClientChangeEvent.EVENT_ROOT_DIRECTORY_CHANGE) {
+			updateTree(changeEvent.getSource().getRootDirectory());
+		}
 	}	
 }
