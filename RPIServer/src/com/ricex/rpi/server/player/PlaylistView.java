@@ -67,7 +67,7 @@ public class PlaylistView extends JPanel implements ActiveClientListener, ListSe
 
 		playlistList.addListSelectionListener(this);
 		
-		playlistList.setMinimumSize(new Dimension(500,250));
+		playlistList.setPreferredSize(new Dimension(200,250));
 		
 		setLayout(new BorderLayout());
 		add(playlistList, BorderLayout.EAST);
