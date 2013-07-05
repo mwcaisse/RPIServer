@@ -8,6 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -65,13 +66,16 @@ public class PlaylistView extends JPanel implements ActiveClientListener, ListSe
 		playlistList.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		playlistItemList.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-		playlistList.addListSelectionListener(this);
+		playlistList.addListSelectionListener(this);		
 		
-		playlistList.setPreferredSize(new Dimension(200,250));
+		JScrollPane playlistScrollPane = new JScrollPane(playlistList);
+		JScrollPane playlistItemScrollPane = new JScrollPane(playlistItemList);
+		
+		playlistScrollPane.setPreferredSize(new Dimension(200,250));
 		
 		setLayout(new BorderLayout());
-		add(playlistList, BorderLayout.EAST);
-		add(playlistItemList, BorderLayout.CENTER);
+		add(playlistScrollPane, BorderLayout.EAST);
+		add(playlistItemScrollPane, BorderLayout.CENTER);
 		
 		RPIPlayer.getInstance().addActiveClientListener(this);
 		

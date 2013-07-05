@@ -23,9 +23,9 @@ public class PlaylistController {
 	public PlaylistController() {
 		playlists = new HashMap<String, Playlist>();
 		
-		for (int i=0;i<10;i++) {
+		for (int i=0;i<100;i++) {
 			Playlist p = new Playlist("Test Playlist " + i);
-			for (int j=0;j<20;j++) {
+			for (int j=0;j<100;j++) {
 				p.addItem(new Movie("Playlist " + i + " Movie: " + j, ""));
 			}
 			addPlaylist(p);
