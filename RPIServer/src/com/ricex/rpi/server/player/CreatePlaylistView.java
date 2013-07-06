@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
+import com.ricex.rpi.server.RPIServer;
+import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
 
 /** Class for displaying the controls to create a playlist
@@ -18,7 +20,7 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class CreatePlaylistView extends JPanel {
+public class CreatePlaylistView extends JPanel implements ClientConnectionListener<RPIClient> {
 
 	/** Button for creating / updating the play list */
 	private JButton butSave;
@@ -55,10 +57,18 @@ public class CreatePlaylistView extends JPanel {
 		butSave = new JButton("Save");
 		butCancel = new JButton("Cancel");
 		
-		txtPlaylistName = new JTextField();
-		
 		labPlaylistName = new JLabel("Name:");
 		labClient = new JLabel("Client:");
+		
+		clientModel = new DefaultComboBoxModel<RPIClient>();
+		
+		for (RPIClient client: RPIServer.getInstance().getConnectedClients()) {
+			clientModel.addElement(client);
+		}
+		
+		
+		txtPlaylistName = new JTextField();
+		cbxClients = new JComboBox<RPIClient>(clientModel);
 		
 		SpringLayout layout = new SpringLayout();
 		
@@ -69,14 +79,39 @@ public class CreatePlaylistView extends JPanel {
 		layout.putConstraint(SpringLayout.WEST, txtPlaylistName, HORIZONTAL_PADDING, SpringLayout.EAST, labPlaylistName);
 		layout.putConstraint(SpringLayout.EAST, txtPlaylistName, -HORIZONTAL_PADDING, SpringLayout.EAST, this);
 		
+		layout.putConstraint(SpringLayout.NORTH, labClient, 0, SpringLayout.NORTH, cbxClients);
+		layout.putConstraint(SpringLayout.WEST, labClient, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		
+		layout.putConstraint(SpringLayout.NORTH, cbxClients, VERTICAL_PADDING , SpringLayout.SOUTH, txtPlaylistName);
+		layout.putConstraint(SpringLayout.WEST, cbxClients, 0, SpringLayout.WEST, txtPlaylistName);
+		layout.putConstraint(SpringLayout.EAST, cbxClients, -HORIZONTAL_PADDING , SpringLayout.WEST, butSave);
+		
+		layout.putConstraint(SpringLayout.EAST, butCancel, -HORIZONTAL_PADDING, SpringLayout.EAST, this);
+		layout.putConstraint(SpringLayout.NORTH, butCancel, 0, SpringLayout.NORTH, cbxClients);
+		
+		layout.putConstraint(SpringLayout.EAST, butSave, -HORIZONTAL_PADDING, SpringLayout.WEST, butCancel);
+		layout.putConstraint(SpringLayout.NORTH, butSave, 0, SpringLayout.NORTH, butCancel);
+		
 		setLayout(layout);
 		
-		//add(butSave);
-		//add(butCancel);
+		add(butSave);
+		add(butCancel);
 		add(txtPlaylistName);
 		add(labPlaylistName);
+		add(labClient);
+		add(cbxClients);
 		
-		setPreferredSize(new Dimension(250,50));
+		setPreferredSize(new Dimension(250,60));
+	}
+
+	@Override
+	public void clientConnected(RPIClient client) {
+		clientModel.addElement(client);		
+	}
+
+	@Override
+	public void clientDisconnected(RPIClient client) {
+		clientModel.removeElement(client);
 	}
 	
 }

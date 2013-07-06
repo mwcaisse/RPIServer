@@ -92,6 +92,7 @@ public class RPIPlayer extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setResizable(false);
+		setLocationRelativeTo(null);
 		
 		//setSystemLookAndFeel();
 		
