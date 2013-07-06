@@ -1,10 +1,8 @@
 package com.ricex.rpi.server.player;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -49,6 +47,8 @@ public class PlaylistView extends JPanel implements ActiveClientListener, ListSe
 		playlistItemModel = new DefaultListModel<Video>();
 		playlistModel = new DefaultListModel<Playlist>();
 		
+		createPlaylistView = new CreatePlaylistView();
+		
 		//if there is an active client, populate its playlists 
 		if (RPIPlayer.getInstance().activeClientExists()) {
 			populatePlaylistModel(RPIPlayer.getInstance().getActiveClient());
@@ -63,8 +63,8 @@ public class PlaylistView extends JPanel implements ActiveClientListener, ListSe
 		playlistItemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		//add the border around the lists
-		playlistList.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		playlistItemList.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		/*playlistList.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		playlistItemList.setBorder(BorderFactory.createLineBorder(Color.BLACK));*/
 
 		playlistList.addListSelectionListener(this);		
 		
@@ -73,9 +73,15 @@ public class PlaylistView extends JPanel implements ActiveClientListener, ListSe
 		
 		playlistScrollPane.setPreferredSize(new Dimension(200,250));
 		
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new BorderLayout());
+		
+		centerPanel.add(playlistItemScrollPane, BorderLayout.CENTER);
+		centerPanel.add(createPlaylistView, BorderLayout.SOUTH);
+		
 		setLayout(new BorderLayout());
 		add(playlistScrollPane, BorderLayout.EAST);
-		add(playlistItemScrollPane, BorderLayout.CENTER);
+		add(centerPanel, BorderLayout.CENTER);
 		
 		RPIPlayer.getInstance().addActiveClientListener(this);
 		
