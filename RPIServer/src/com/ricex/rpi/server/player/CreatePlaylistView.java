@@ -1,6 +1,8 @@
 package com.ricex.rpi.server.player;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -10,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
+import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.server.RPIServer;
 import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
@@ -20,7 +23,7 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class CreatePlaylistView extends JPanel implements ClientConnectionListener<RPIClient> {
+public class CreatePlaylistView extends JPanel implements ClientConnectionListener<RPIClient>, ActionListener {
 
 	/** Button for creating / updating the play list */
 	private JButton butSave;
@@ -43,6 +46,8 @@ public class CreatePlaylistView extends JPanel implements ClientConnectionListen
 	/** The ComboBoxModel for the client combo box */
 	private DefaultComboBoxModel<RPIClient> clientModel;
 	
+	/** The view that this playlistView corresponds to */
+	private PlaylistView playlistView;
 	
 	private static final int HORIZONTAL_PADDING = 5;
 	private static final int VERTICAL_PADDING = 5;
@@ -51,7 +56,7 @@ public class CreatePlaylistView extends JPanel implements ClientConnectionListen
 	 *
 	 */
 	
-	public CreatePlaylistView() {
+	public CreatePlaylistView(PlaylistView playlistView) {
 		
 		//initialize the buttons 
 		butSave = new JButton("Save");
@@ -69,6 +74,9 @@ public class CreatePlaylistView extends JPanel implements ClientConnectionListen
 		
 		txtPlaylistName = new JTextField();
 		cbxClients = new JComboBox<RPIClient>(clientModel);
+		
+		butSave.addActionListener(this);
+		butCancel.addActionListener(this);
 		
 		SpringLayout layout = new SpringLayout();
 		
@@ -112,6 +120,31 @@ public class CreatePlaylistView extends JPanel implements ClientConnectionListen
 	@Override
 	public void clientDisconnected(RPIClient client) {
 		clientModel.removeElement(client);
+	}
+	
+	/** Saves the given play list */
+	
+	private void save() {
+		String name = txtPlaylistName.getText();
+		RPIClient client = (RPIClient) cbxClients.getSelectedItem();
+		if (client != null) {
+			Playlist playlist = new Playlist(name);
+			client.getPlaylistController().addPlaylist(playlist);
+			txtPlaylistName.setText("");
+		}
+		else {
+			//there is no selected client, for now do nothing
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(butSave)) {
+			save();
+		}
+		else {
+			txtPlaylistName.setText("");
+		}
 	}
 	
 }

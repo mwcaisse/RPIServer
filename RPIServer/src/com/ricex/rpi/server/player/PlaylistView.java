@@ -47,7 +47,7 @@ public class PlaylistView extends JPanel implements ActiveClientListener, ListSe
 		playlistItemModel = new DefaultListModel<Video>();
 		playlistModel = new DefaultListModel<Playlist>();
 		
-		createPlaylistView = new CreatePlaylistView();
+		createPlaylistView = new CreatePlaylistView(this);
 		
 		//if there is an active client, populate its playlists 
 		if (RPIPlayer.getInstance().activeClientExists()) {
@@ -120,6 +120,10 @@ public class PlaylistView extends JPanel implements ActiveClientListener, ListSe
 		for (Video video : selectedPlaylist.getItems()) {
 			playlistItemModel.addElement(video);
 		}
+	}
+	
+	public void refreshPlaylists() {
+		populatePlaylistModel(RPIPlayer.getInstance().getActiveClient());
 	}
 	
 }
