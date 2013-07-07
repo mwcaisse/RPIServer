@@ -120,7 +120,6 @@ public class PlaylistView extends JPanel implements ActiveClientListener, ListSe
 			return; //TODO: implement what happens when this is null
 		}
 		playlistItemModel.clear();
-		System.out.println("ValueChanged: " + selectedPlaylist);
 		for (Video video : selectedPlaylist.getItems()) {
 			playlistItemModel.addElement(video);
 		}

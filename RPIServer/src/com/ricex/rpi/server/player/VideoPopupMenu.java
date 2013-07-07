@@ -75,12 +75,14 @@ public class VideoPopupMenu extends JPopupMenu implements ActionListener {
 		
 		private PlaylistMenuItem(Playlist playlist, Video video) {
 			super(playlist.getName());
+			this.playlist = playlist;
+			this.video = video;
+			
 			addActionListener(this);
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//TODO: somethign here is null.
 			playlist.addItem(video);
 		}
 		
