@@ -38,8 +38,7 @@ public class RPIClient {
 	public RPIClient() throws UnknownHostException, IOException {
 		//parse the movies
 		movieParser = new MovieParser(RPIClientProperties.getInstance().getBaseDir());
-		rootDirectory = movieParser.parseVideos();
-		
+		rootDirectory = movieParser.parseVideos();		
 		
 		serverIp = RPIClientProperties.getInstance().getServerIp();
 		serverPort = RPIClientProperties.getInstance().getRPIPort();
@@ -53,7 +52,34 @@ public class RPIClient {
 		//block on the server handler
 		serverHandler.run();
 	}
-
+	
+	/** Parses the movies and then sends the results to the server
+	 * 
+	 */
+	
+	public void parseMovies() {
+		//parse the movies
+		movieParser = new MovieParser(RPIClientProperties.getInstance().getBaseDir());
+		rootDirectory = movieParser.parseVideos();
+		serverHandler.sendMessage(new DirectoryListingMessage(rootDirectory));
+	}
+	
+	/** Connects to the server
+	 * 
+	 * @throws UnknownHostException If the host cannot be found
+	 * @throws IOException
+	 */
+	
+	public void connectToServer() throws UnknownHostException, IOException {
+		socket = new Socket(serverIp, serverPort);
+		serverHandler = new ServerHandler(socket);	
+	}
+	
+	public void disconnectFromServer() throws IOException {
+		serverHandler.disconnect();
+		socket.close();
+	}
+	/*
 	public static void main(String[] args) {
 
 		RPIClient client;
@@ -77,4 +103,5 @@ public class RPIClient {
 			}
 		}
 	}
+	*/
 }
