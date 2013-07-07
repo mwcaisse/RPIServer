@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.ricex.rpi.server.RPIServer;
 import com.ricex.rpi.server.RemoteServer;
@@ -110,6 +112,16 @@ public class RPIPlayer extends JFrame {
 		tabbedPane.add("Videos", videoTreeView);
 		tabbedPane.add("Playlists", playlistView);
 		tabbedPane.add("Clients", clientListView);
+		
+		tabbedPane.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				Component selectedComponent = tabbedPane.getSelectedComponent();
+				
+			}
+			
+		});
 		
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		contentPane.add(controllerPane, BorderLayout.SOUTH);

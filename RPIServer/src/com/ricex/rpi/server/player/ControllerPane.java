@@ -58,7 +58,12 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 	/** The ComboBoxModel for the active client combo box */
 	private DefaultComboBoxModel<RPIClient> activeClientModel;
 	
+	/** The view that is currently displayed */
+	private PlayableView playableView;
+	
 	public ControllerPane() {
+		
+		playableView = null;
 		
 		//create the buttons 
 		butPlay = new JButton("Play");
@@ -71,6 +76,7 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 		butLastChapter = new JButton("|<<");
 		butNextChapter = new JButton(">>|");	
 		
+		butPlay.setEnabled(false);
 		//create the activeCLient combo box and model
 		activeClientModel = new DefaultComboBoxModel<RPIClient>();
 		
@@ -194,7 +200,9 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 			ClientPlayerModule playerModule = RPIPlayer.getInstance().getActiveClient().getPlayerModule();
 			
 			if (source.equals(butPlay)) {
-				//TODO: determine how to implement play
+				if (playableView != null) {
+					playerModule.play(playableView.getPlaylistToPlay());
+				}
 			}
 			else if (source.equals(butPause)) {
 				playerModule.pause();
@@ -242,6 +250,11 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 	@Override
 	public void clientDisconnected(RPIClient client) {
 		activeClientModel.removeElement(client);
-	}	
+	}
+	
+	public void updatePlayableView(PlayableView playableView) {
+		this.playableView = playableView;
+		butPlay.setEnabled(playableView != null);
+	}
 	
 }
