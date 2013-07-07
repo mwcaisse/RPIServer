@@ -1,12 +1,15 @@
 package com.ricex.rpi.server.player;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.server.client.ClientChangeEvent;
@@ -52,6 +55,8 @@ public class VideoTreeView extends JPanel implements ActiveClientListener, Clien
 		add(scrollPane, BorderLayout.CENTER);
 		
 		RPIPlayer.getInstance().addActiveClientListener(this);
+		
+		videoTree.addMouseListener(new TreeViewMouseListener());
 	}
 	
 	/** Creates the tree view from the given rootDirectory
@@ -130,5 +135,23 @@ public class VideoTreeView extends JPanel implements ActiveClientListener, Clien
 		if (changeEvent.getEventType() == ClientChangeEvent.EVENT_ROOT_DIRECTORY_CHANGE) {
 			updateTree(changeEvent.getSource().getRootDirectory());
 		}
-	}	
+	}
+
+	private class TreeViewMouseListener extends MouseAdapter {		
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if (e.getButton() == MouseEvent.BUTTON3) {
+				TreePath selectedPath = videoTree.getPathForLocation(e.getX(), e.getY());
+				if (selectedPath != null) {
+					Video selectedItem = (Video)((DefaultMutableTreeNode)selectedPath.getLastPathComponent()).getUserObject();
+					if (!selectedItem.isDirectory()) {
+						VideoPopupMenu menu = new VideoPopupMenu(selectedItem);
+						menu.show(videoTree, e.getX(), e.getY());
+					}
+				}
+			}
+		}
+	}
+	
 }

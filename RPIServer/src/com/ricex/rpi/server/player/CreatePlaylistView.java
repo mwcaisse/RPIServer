@@ -57,6 +57,7 @@ public class CreatePlaylistView extends JPanel implements ClientConnectionListen
 	 */
 	
 	public CreatePlaylistView(PlaylistView playlistView) {
+		this.playlistView = playlistView;
 		
 		//initialize the buttons 
 		butSave = new JButton("Save");
@@ -110,6 +111,8 @@ public class CreatePlaylistView extends JPanel implements ClientConnectionListen
 		add(cbxClients);
 		
 		setPreferredSize(new Dimension(250,60));
+		
+		RPIServer.getInstance().addConnectionListener(this);
 	}
 
 	@Override
@@ -127,10 +130,11 @@ public class CreatePlaylistView extends JPanel implements ClientConnectionListen
 	private void save() {
 		String name = txtPlaylistName.getText();
 		RPIClient client = (RPIClient) cbxClients.getSelectedItem();
-		if (client != null) {
+		if (client != null && !name.trim().isEmpty()) {
 			Playlist playlist = new Playlist(name);
 			client.getPlaylistController().addPlaylist(playlist);
 			txtPlaylistName.setText("");
+			playlistView.refreshPlaylists();
 		}
 		else {
 			//there is no selected client, for now do nothing

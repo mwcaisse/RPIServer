@@ -22,14 +22,6 @@ public class PlaylistController {
 	/** Creates a new instance of playlist controller */
 	public PlaylistController() {
 		playlists = new HashMap<String, Playlist>();
-		
-		for (int i=0;i<100;i++) {
-			Playlist p = new Playlist("Test Playlist " + i);
-			for (int j=0;j<100;j++) {
-				p.addItem(new Movie("Playlist " + i + " Movie: " + j, ""));
-			}
-			addPlaylist(p);
-		}
 	}	
 	
 	/** Removes the given play list */
