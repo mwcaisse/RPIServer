@@ -20,8 +20,7 @@ import com.ricex.rpi.server.client.ClientConnectionListener;
  * 
  */
 
-/*TODO: Change the framework used to send and receive data, possibly move to gson?, in order to make it more compatible with
-    	other languages.
+/*TODO: Change the framework used to send and receive data
 */
 
 

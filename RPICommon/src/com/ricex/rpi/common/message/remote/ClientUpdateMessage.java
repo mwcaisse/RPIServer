@@ -4,7 +4,6 @@ import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.common.video.Video;
 
-//TODO: Refactor ClientUpdateMessage and ClientStatusUpdateMessage to use the form of player.ClientChangeEvent
 
 public class ClientUpdateMessage implements IMessage {
 

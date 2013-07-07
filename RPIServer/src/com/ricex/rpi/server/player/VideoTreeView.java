@@ -11,6 +11,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.server.client.ClientChangeEvent;
 import com.ricex.rpi.server.client.ClientChangeListener;
@@ -22,7 +23,7 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class VideoTreeView extends JPanel implements ActiveClientListener, ClientChangeListener<RPIClient> {
+public class VideoTreeView extends JPanel implements ActiveClientListener, ClientChangeListener<RPIClient>, PlayableView {
 
 	/** The tree containing the list of videos */
 	private JTree videoTree;
@@ -152,6 +153,21 @@ public class VideoTreeView extends JPanel implements ActiveClientListener, Clien
 				}
 			}
 		}
+	}
+
+	/** Return the playlist to play
+	 * 
+	 */
+	
+	@Override
+	public Playlist getPlaylistToPlay() {
+		Playlist playlist = new Playlist();
+		if (videoTree.getSelectionPath() != null) {
+			Video selectedVideo = (Video) ((DefaultMutableTreeNode)videoTree.getSelectionPath().getLastPathComponent()).getUserObject();
+			playlist.addItem(selectedVideo);			
+		}
+		return playlist;
+		
 	}
 	
 }

@@ -21,7 +21,7 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class PlaylistView extends JPanel implements ActiveClientListener, ListSelectionListener {
+public class PlaylistView extends JPanel implements ActiveClientListener, ListSelectionListener, PlayableView {
 
 	/** The List of play lists */
 	private JList<Playlist> playlistList;
@@ -127,6 +127,19 @@ public class PlaylistView extends JPanel implements ActiveClientListener, ListSe
 	
 	public void refreshPlaylists() {
 		populatePlaylistModel(RPIPlayer.getInstance().getActiveClient());
+	}
+
+	/** Returns the selected playlist
+	 * 
+	 */
+	
+	@Override
+	public Playlist getPlaylistToPlay() {
+		Playlist playlist = playlistList.getSelectedValue();
+		if (playlist == null) {
+			playlist = new Playlist();
+		}
+		return playlist;
 	}
 	
 }

@@ -1,6 +1,7 @@
 package com.ricex.rpi.server.player;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
@@ -224,5 +225,16 @@ public class RPIPlayer extends JFrame {
 			}
 		}		
 	}
+	
+	/** Returns the currently displayed view 
+	 * 
+	 * @return The currently displayed view
+	 */
+	
+	public Component getCurrentView() {
+		return tabbedPane.getSelectedComponent();
+	}
+	
+
 	
 }
