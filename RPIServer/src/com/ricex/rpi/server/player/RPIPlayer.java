@@ -118,7 +118,7 @@ public class RPIPlayer extends JFrame {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				Component selectedComponent = tabbedPane.getSelectedComponent();
-				
+				controllerPane.updatePlayableView(selectedComponent);				
 			}
 			
 		});

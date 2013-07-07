@@ -1,5 +1,6 @@
 package com.ricex.rpi.server.player;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -132,6 +133,7 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 	 */
 	
 	private void disableButtonsStatus(RPIStatus status) {
+		butPlay.setEnabled(playableView != null);
 		switch (status.getStatus()) {		
 		case RPIStatus.IDLE:					
 			butStop.setEnabled(false);
@@ -252,9 +254,18 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 		activeClientModel.removeElement(client);
 	}
 	
-	public void updatePlayableView(PlayableView playableView) {
-		this.playableView = playableView;
-		butPlay.setEnabled(playableView != null);
+	public void updatePlayableView(Component playableView) {
+		if (playableView instanceof PlayableView) {
+			this.playableView = (PlayableView)playableView;
+			butPlay.setEnabled(true);
+			System.out.println("Updatying playable view to NOT null");
+		}
+		else {
+			this.playableView = null;
+			butPlay.setEnabled(false);
+			System.out.println("Updatying playable view to NULL");
+		}		
+		//butPlay.setEnabled(playableView != null);
 	}
 	
 }
