@@ -99,7 +99,7 @@ public class ServerHandler implements Runnable {
 		System.out.println("We connected to the server, lets wait for messages!");
 		while (connected) {
 			try {
-				if (inStream.available() > 0) {					
+				if (inStream.available() > 0) {	
 					Object input = inStream.readObject();
 					if (!(input instanceof IMessage)) {
 						System.out.println("Received invalid message object");
@@ -110,8 +110,7 @@ public class ServerHandler implements Runnable {
 				}
 				else {
 					Thread.sleep(500);
-				}
-		
+				}		
 			}
 			catch (ClassNotFoundException e) {
 				System.out.println("Received invalid class");
@@ -124,6 +123,8 @@ public class ServerHandler implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		
+		sendMessage(new QuitMessage());
 
 		System.out.println("Disconnecting from server");
 		//stop the playerModule from playing
@@ -165,5 +166,14 @@ public class ServerHandler implements Runnable {
 	
 	public void disconnect() {
 		connected = false;
+	}
+	
+	/** Returns whether or not this is not connected to the server
+	 * 
+	 * @return
+	 */
+	
+	public boolean isConnected() {
+		return connected;
 	}
 }

@@ -24,6 +24,7 @@ public class InputHandler implements Runnable {
 	
 	public InputHandler() {
 		client = new RPIClient();
+		running = true;
 	}
 	
 	public void run() {
@@ -45,9 +46,12 @@ public class InputHandler implements Runnable {
 					}
 					else if (line.toLowerCase().startsWith("d")) {
 						client.disconnectFromServer();
+						System.out.println("We have disconnected from the server");
 					}
 					else if (line.toLowerCase().startsWith("q")) {
-						client.disconnectFromServer();
+						if (client.isConnected()) {
+							client.disconnectFromServer();
+						}
 						running = false;
 					}
 				}

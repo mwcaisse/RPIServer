@@ -80,23 +80,33 @@ public class RPIClient {
 	 */
 	
 	public void disconnectFromServer() {
-		serverHandler.disconnect();
-		try {
-			serverHandlerThread.join();
+		if (serverHandler != null) {			
+			serverHandler.disconnect();
+			try {
+				serverHandlerThread.join();
+			}
+			catch (InterruptedException e) {
+				System.out.println("Error waiting on server handler thread");
+				e.printStackTrace();
+			}
+			serverHandlerThread = null;
+			
+			try {
+				socket.close();
+			}
+			catch (IOException e) {
+				System.out.println("Error closing the server socket");
+				e.printStackTrace();
+			}
 		}
-		catch (InterruptedException e) {
-			System.out.println("Error waiting on server handler thread");
-			e.printStackTrace();
-		}
-		serverHandlerThread = null;
-		
-		try {
-			socket.close();
-		}
-		catch (IOException e) {
-			System.out.println("Error closing the server socket");
-			e.printStackTrace();
-		}
+	}
+	
+	/** 
+	 * @return Whether the client is connected to the server or not
+	 */
+	
+	public boolean isConnected() {
+		return serverHandler != null && serverHandler.isConnected();
 	}
 	
 	public static void main(String[] args) {
