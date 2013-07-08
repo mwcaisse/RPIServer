@@ -23,6 +23,9 @@ public class RPIClient {
 	/** The server handle for this client */
 	private ServerHandler serverHandler;
 	
+	/** The thread that the server handler will run in */
+	private Thread serverHandlerThread;
+	
 	/** The ip address of the server */
 	private String serverIp;
 	
@@ -35,22 +38,14 @@ public class RPIClient {
 	/** The movie parser to parse the movies */
 	private MovieParser movieParser;
 
-	public RPIClient() throws UnknownHostException, IOException {
+	public RPIClient() {
 		//parse the movies
 		movieParser = new MovieParser(RPIClientProperties.getInstance().getBaseDir());
 		rootDirectory = movieParser.parseVideos();		
 		
 		serverIp = RPIClientProperties.getInstance().getServerIp();
 		serverPort = RPIClientProperties.getInstance().getRPIPort();
-		
-		socket = new Socket(serverIp, serverPort);
-		serverHandler = new ServerHandler(socket);	
-		
-		//send the directory listing to the server
-		serverHandler.sendMessage(new DirectoryListingMessage(rootDirectory));
-		
-		//block on the server handler
-		serverHandler.run();
+	
 	}
 	
 	/** Parses the movies and then sends the results to the server
@@ -73,35 +68,39 @@ public class RPIClient {
 	public void connectToServer() throws UnknownHostException, IOException {
 		socket = new Socket(serverIp, serverPort);
 		serverHandler = new ServerHandler(socket);	
+		
+		//create and start the server handler thread
+		serverHandlerThread = new Thread(serverHandler);
+		serverHandlerThread.start();
 	}
 	
-	public void disconnectFromServer() throws IOException {
+	/** Disconnects from the server, waits for the server thread to finish, and closes the socket connections
+	 * 
+	 * @throws IOException
+	 */
+	
+	public void disconnectFromServer() {
 		serverHandler.disconnect();
-		socket.close();
-	}
-	/*
-	public static void main(String[] args) {
-
-		RPIClient client;
+		try {
+			serverHandlerThread.join();
+		}
+		catch (InterruptedException e) {
+			System.out.println("Error waiting on server handler thread");
+			e.printStackTrace();
+		}
+		serverHandlerThread = null;
 		
-		while (true) {			
-			try {
-				client = new RPIClient();
-			}
-			catch (UnknownHostException e) {
-				e.printStackTrace();
-			}
-			catch (IOException e) {
-				System.out.println("Connection refused, try again in 15 mins");
-				try {
-					Thread.sleep( 1000 * 60 * 15); //sleep for 15 mins
-					
-				}
-				catch (InterruptedException ex) {
-					System.out.println("Waiting interupted, trying to connect again");
-				}
-			}
+		try {
+			socket.close();
+		}
+		catch (IOException e) {
+			System.out.println("Error closing the server socket");
+			e.printStackTrace();
 		}
 	}
-	*/
+	
+	public static void main(String[] args) {
+		InputHandler handler = new InputHandler();
+		handler.run();
+	}
 }

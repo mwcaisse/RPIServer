@@ -97,25 +97,32 @@ public class ServerHandler implements Runnable {
 	public void run() {
 
 		System.out.println("We connected to the server, lets wait for messages!");
-
-
-		try {
-			while (connected) {
-				Object input = inStream.readObject();
-				if (!(input instanceof IMessage)) {
-					System.out.println("Received invalid message object");
-					continue;
+		while (connected) {
+			try {
+				if (inStream.available() > 0) {					
+					Object input = inStream.readObject();
+					if (!(input instanceof IMessage)) {
+						System.out.println("Received invalid message object");
+						continue;
+					}
+					IMessage msg = (IMessage) input;
+					processMessage(msg); // process the received message
 				}
-				IMessage msg = (IMessage) input;
-				processMessage(msg); // process the received message
+				else {
+					Thread.sleep(500);
+				}
+		
 			}
-		}
-		catch (ClassNotFoundException e) {
-			System.out.println("Received invalid class");
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
+			catch (ClassNotFoundException e) {
+				System.out.println("Received invalid class");
+				e.printStackTrace();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 
 		System.out.println("Disconnecting from server");
