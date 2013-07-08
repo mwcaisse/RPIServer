@@ -128,7 +128,9 @@ public class ServerHandler implements Runnable {
 
 		System.out.println("Disconnecting from server");
 		//stop the playerModule from playing
+		System.out.println("We are abotu to stop the player module");
 		playerModule.stop();
+		System.out.println("The player module has stopped");
 
 	}	
 	
