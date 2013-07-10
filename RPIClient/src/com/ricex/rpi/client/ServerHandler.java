@@ -36,6 +36,9 @@ public class ServerHandler implements Runnable {
 	
 	/** Whether or not we are connected to the server */
 	private boolean connected;
+	
+	/** The client this server handler is listening for */
+	private RPIClient client;
 
 	/**
 	 * Creates a new ServerHandle with the given socket
@@ -46,7 +49,8 @@ public class ServerHandler implements Runnable {
 	 *             if it cannot create in/out streams
 	 */
 
-	public ServerHandler(Socket socket) throws IOException {
+	public ServerHandler(RPIClient client, Socket socket) throws IOException {
+		this.client = client;
 		this.serverSocket = socket;
 
 		playerModule = new ThreadedPlayerModule(this);

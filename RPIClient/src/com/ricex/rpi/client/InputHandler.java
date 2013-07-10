@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import com.ricex.rpi.common.video.MovieParser;
+
 /** Thread for handling the user input for the client
  * 
  * @author Mitchell
@@ -15,6 +17,9 @@ public class InputHandler implements Runnable {
 	/** The rpi client */
 	private RPIClient client;
 	
+	/** The movie parser to parse the movies */
+	private MovieParser movieParser;
+	
 	/** Indicates whether or not the input handler should continue running */
 	private boolean running;
 	
@@ -23,7 +28,8 @@ public class InputHandler implements Runnable {
 	 */
 	
 	public InputHandler() {
-		client = new RPIClient();
+		movieParser = new MovieParser(RPIClientProperties.getInstance().getBaseDir());
+		client = new RPIClient(movieParser);
 		running = true;
 	}
 	
