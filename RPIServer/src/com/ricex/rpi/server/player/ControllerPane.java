@@ -191,6 +191,7 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
+		System.out.println("Action Performed on " + source);
 		if (source.equals(cbxActiveClient)) {
 			System.out.println("ActiveClient selected eh?");
 			//update the selected client
