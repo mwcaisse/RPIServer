@@ -116,15 +116,21 @@ public class ServerHandler implements Runnable {
 				System.out.println("Received invalid class");
 				e.printStackTrace();
 			}
-			catch (InterruptedIOException e) {
-				//the IO was interupted..
-			}
 			catch (IOException e) {
+				System.out.println("IOException");
 				connected = false; //received an IO exception, lets disconnect..
 			}
 		}
 		
 		sendMessage(new QuitMessage());
+		
+		//while we are quitting we should close the out stream
+		try {
+			outStream.close();
+		}
+		catch (IOException e) {
+			System.out.println("Could not close the out stream");
+		}
 
 		System.out.println("Disconnecting from server");
 		//stop the playerModule from playing
@@ -168,6 +174,12 @@ public class ServerHandler implements Runnable {
 	
 	public void disconnect() {
 		connected = false;
+		try {
+			inStream.close();
+		}
+		catch (IOException e) {
+			System.out.println("Unable to close input stream");
+		}
 	}
 	
 	/** Returns whether or not this is not connected to the server

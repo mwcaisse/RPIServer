@@ -5,7 +5,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import com.ricex.rpi.common.message.DirectoryListingMessage;
-import com.ricex.rpi.common.video.MovieParser;
 import com.ricex.rpi.common.video.Video;
 
 /**
@@ -34,24 +33,21 @@ public class RPIClient {
 	
 	/** The directory listing of the videos this client has to play */
 	private Video rootDirectory;
-	
-	/** The movie parser to parse the movies */
-	private MovieParser movieParser;
 
-	public RPIClient(MovieParser movieParser) {
-		this.movieParser = movieParser;		
+	public RPIClient(Video rootDirectory) {
+		this.rootDirectory = rootDirectory;
 		serverIp = RPIClientProperties.getInstance().getServerIp();
 		serverPort = RPIClientProperties.getInstance().getRPIPort();
-	
+
 	}
 	
-	/** Parses the movies and then sends the results to the server
+	/** Sends the updated root directory to the server
 	 * 
+	 * @param rootDirectory The new root directory
 	 */
 	
-	public void parseMovies() {
-		//parse the movies
-		rootDirectory = movieParser.parseVideos();	
+	public void updateRootDirectory(Video rootDirectory) {
+		this.rootDirectory = rootDirectory;
 		serverHandler.sendMessage(new DirectoryListingMessage(rootDirectory));
 	}
 	
@@ -69,17 +65,20 @@ public class RPIClient {
 		serverHandlerThread = new Thread(serverHandler);
 		serverHandlerThread.start();
 		
-		parseMovies();
+		serverHandler.sendMessage(new DirectoryListingMessage(rootDirectory));
 	}
 	
 	/** Disconnects from the server, waits for the server thread to finish, and closes the socket connections
 	 */
 	
 	public void disconnectFromServer() {
-		if (serverHandler != null) {			
+		if (serverHandler != null) {		
+			System.out.println("Disconnecting from server");
 			serverHandler.disconnect();
+			System.out.println("Interipting server handler");
 			serverHandlerThread.interrupt();
 			try {
+				System.out.println("Waiting to join on server handler");
 				serverHandlerThread.join();
 			}
 			catch (InterruptedException e) {
@@ -106,8 +105,18 @@ public class RPIClient {
 		return serverHandler != null && serverHandler.isConnected();
 	}
 	
+	/** Returns the IP address and port that the server is connected to
+	 * 
+	 * @return serverIp:serverPort
+	 */
+	
+	public String getServerInfo() {
+		return serverIp + ":" + serverPort;
+	}
+	
 	public static void main(String[] args) {
 		InputHandler handler = new InputHandler();
 		handler.run();
-	}
+	}	
+	
 }
