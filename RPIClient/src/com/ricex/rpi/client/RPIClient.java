@@ -73,13 +73,12 @@ public class RPIClient {
 	}
 	
 	/** Disconnects from the server, waits for the server thread to finish, and closes the socket connections
-	 * 
-	 * @throws IOException
 	 */
 	
 	public void disconnectFromServer() {
 		if (serverHandler != null) {			
 			serverHandler.disconnect();
+			serverHandlerThread.interrupt();
 			try {
 				serverHandlerThread.join();
 			}

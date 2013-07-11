@@ -1,6 +1,7 @@
 package com.ricex.rpi.client;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -103,28 +104,23 @@ public class ServerHandler implements Runnable {
 		System.out.println("We connected to the server, lets wait for messages!");
 		while (connected) {
 			try {
-				if (inStream.available() > 0) {	
-					Object input = inStream.readObject();
-					if (!(input instanceof IMessage)) {
-						System.out.println("Received invalid message object");
-						continue;
-					}
-					IMessage msg = (IMessage) input;
-					processMessage(msg); // process the received message
+				Object input = inStream.readObject();
+				if (!(input instanceof IMessage)) {
+					System.out.println("Received invalid message object");
+					continue;
 				}
-				else {
-					Thread.sleep(500);
-				}		
+				IMessage msg = (IMessage) input;
+				processMessage(msg); // process the received message
 			}
 			catch (ClassNotFoundException e) {
 				System.out.println("Received invalid class");
 				e.printStackTrace();
 			}
-			catch (IOException e) {
-				e.printStackTrace();
+			catch (InterruptedIOException e) {
+				//the IO was interupted..
 			}
-			catch (InterruptedException e) {
-				e.printStackTrace();
+			catch (IOException e) {
+				connected = false; //received an IO exception, lets disconnect..
 			}
 		}
 		

@@ -69,7 +69,6 @@ public class ClientPlayerModule implements ClientChangeListener<RPIClient> {
 	 */
 
 	public void pause() {
-		System.out.println("PlayerModule pause...");
 		sendMessage(new MovieMessage(MovieMessage.Command.PAUSE));
 	}
 
@@ -126,7 +125,9 @@ public class ClientPlayerModule implements ClientChangeListener<RPIClient> {
 	 */
 
 	private void sendMessage(IMessage message) {
-		client.sendMessage(message);
+		if (!client.sendMessage(message)) {
+			System.out.println("Client PlayerModule failed to send message");
+		}
 	}
 
 
@@ -138,7 +139,6 @@ public class ClientPlayerModule implements ClientChangeListener<RPIClient> {
 				playVideo(playlist.getNextItem());
 			}
 		}
-
 	}
 
 }
