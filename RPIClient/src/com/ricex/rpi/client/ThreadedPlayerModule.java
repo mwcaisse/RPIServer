@@ -92,16 +92,17 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	 */
 	
 	public void stop() {
-		player.stop();	
-		System.out.println("Waiting on the stop monitor");
-		synchronized(stopMonitor) {
-			try {
-				System.out.println("Wait...");
-				stopMonitor.wait();
-			}
-			catch (InterruptedException e) {
-				//we were interupted, not much to do here really.
-				e.printStackTrace();
+		if (player.stop()) {	
+			System.out.println("Waiting on the stop monitor");
+			synchronized(stopMonitor) {
+				try {
+					System.out.println("Wait...");
+					stopMonitor.wait();
+				}
+				catch (InterruptedException e) {
+					//we were interupted, not much to do here really.
+					e.printStackTrace();
+				}
 			}
 		}
 	}

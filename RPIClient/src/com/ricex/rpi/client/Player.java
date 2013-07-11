@@ -81,11 +81,13 @@ public class Player implements Runnable {
 	 * 
 	 */
 	
-	public void stop() {
+	public boolean stop() {
 		if (playing) {	
 			System.out.println("We are about to write to the process");
-			writeToProcess("q");			
+			writeToProcess("q");	
+			return true;
 		}
+		return false;
 	}
 
 	public void run() {
