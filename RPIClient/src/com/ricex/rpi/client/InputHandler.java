@@ -44,41 +44,15 @@ public class InputHandler implements Runnable {
 		System.out.println("Welcome to RPIClient!");
 		System.out.println("Usage: c - connect to server \n\t d - disconnect from server \n\t q - quit \n\t s - status" + 
 					"\n\t r -reparse");
+		System.out.print("RPI>");
 		
 		while (running) {
 			try {
 				if (System.in.available() > 0) {
 					String line = reader.readLine().toLowerCase();
-			
-					 if (line.toLowerCase().startsWith("c")) {
-						if (!client.isConnected()) {
-							//only re-connect to the server if we are not already connected
-							client.connectToServer();
-						}
-					}
-					else if (line.startsWith("d")) {
-						client.disconnectFromServer();
-						System.out.println("We have disconnected from the server");
-					}
-					else if (line.startsWith("q")) {
-						if (client.isConnected()) {
-							client.disconnectFromServer();
-						}
-						running = false;
-					}
-					else if (line.startsWith("s")) {
-						if (client.isConnected()) {
-							System.out.println("We are currently connected to server: " + client.getServerInfo());
-						}
-						else {
-							System.out.println("We are not currently connected to any server");
-						}	
-					}
-					else if (line.startsWith("r")) {
-						rootDirectory = movieParser.parseVideos();
-						if (client.isConnected()) {
-							client.updateRootDirectory(rootDirectory);
-						}						
+					processInput(line);	
+					if (running) {
+						System.out.print("RPI>");
 					}
 				}
 				else {
@@ -95,5 +69,45 @@ public class InputHandler implements Runnable {
 		}
 		
 		System.out.println("We are exiting the client..");
+	}
+	
+	/** Processes the given input line
+	 * 
+	 * @param line The line of input the user has entered
+	 * @throws IOException IOException if there was an issue connecting to the server
+	 */
+	
+	private void processInput(String line) throws IOException {
+		if (line.toLowerCase().startsWith("c")) {
+			if (!client.isConnected()) {
+				//only re-connect to the server if we are not already connected
+				client.connectToServer();
+			}
+		}
+		else if (line.startsWith("d")) {
+			client.disconnectFromServer();
+			System.out.println("We have disconnected from the server");
+		}
+		else if (line.startsWith("q")) {
+			if (client.isConnected()) {
+				client.disconnectFromServer();
+			}
+			running = false;
+		}
+		else if (line.startsWith("s")) {
+			if (client.isConnected()) {
+				System.out.println("We are currently connected to server: " + client.getServerInfo());
+			}
+			else {
+				System.out.println("We are not currently connected to any server");
+			}	
+		}
+		else if (line.startsWith("r")) {
+			rootDirectory = movieParser.parseVideos();
+			System.out.println("Finished parsing videos");
+			if (client.isConnected()) {
+				client.updateRootDirectory(rootDirectory);
+			}						
+		}	
 	}
 }
