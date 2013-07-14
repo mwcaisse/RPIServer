@@ -71,11 +71,23 @@ public class MovieParser {
 	/** Returns the Movie representing the given File */
 
 	private Movie parseFile(File file) {
-		return new Movie(file.getName(), getRelativeFilePath(file));
+		return new Movie(parseMovieName(file.getName()), getRelativeFilePath(file));
 	}
 
 	private String getRelativeFilePath(File file) {
 		return baseFile.toURI().relativize(file.toURI()).getPath();
+	}
+	
+	/** Parses the name of the movie from the file name
+	 * 
+	 * @param fileName The name of the file
+	 * @return The name of the movie, or the name of the file if movie name could not be parsed
+	 */
+	
+	private String parseMovieName(String fileName) {
+		int firstDot = fileName.indexOf(".");
+		String name = fileName.substring(0, firstDot).replaceAll("_", " ");		
+		return name;
 	}
 
 	private class MovieFileFilter implements FileFilter {
