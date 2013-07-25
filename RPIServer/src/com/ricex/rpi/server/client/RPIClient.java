@@ -6,11 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ricex.rpi.common.RPIStatus;
-import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.server.ClientPlayerModule;
 import com.ricex.rpi.server.Server;
 import com.ricex.rpi.server.client.handler.RPIClientHandler;
-import com.ricex.rpi.server.player.PlaylistController;
 
 /** A client that is connected to the server
  * 
@@ -26,26 +24,18 @@ public class RPIClient extends Client {
 	/** The status of this client */
 	private RPIStatus status;
 
-	/** The root directory of this client */
-	private Video rootDirectory;
-
 	/** The list of change listeners registered for this client */
 	private List<ClientChangeListener<RPIClient>> changeListeners;
 
 	/** The player module for this client */
 	private ClientPlayerModule playerModule;
-	
-	/** The PlaylistController for this RPI Client */
-	private PlaylistController playlistController;
 
 	public RPIClient (Server<RPIClient> server, long id, Socket socket) {
 		super(server, id, socket);
-		rootDirectory = null;
 		name = "Unnamed Client " + id;
 		status = new RPIStatus(RPIStatus.IDLE);
 		changeListeners = new ArrayList<ClientChangeListener<RPIClient>>();
 		playerModule = new ClientPlayerModule(this);
-		playlistController = new PlaylistController();
 
 	}
 
@@ -98,22 +88,6 @@ public class RPIClient extends Client {
 		return getName();
 	}
 
-	/**
-	 * @return the rootDirectory
-	 */
-	public Video getRootDirectory() {
-		return rootDirectory;
-	}
-
-	/**
-	 * @param rootDirectory the rootDirectory to set
-	 */
-	public void setRootDirectory(Video rootDirectory) {
-		this.rootDirectory = rootDirectory;
-		ClientChangeEvent<RPIClient> changeEvent = new ClientChangeEvent<RPIClient>(this, ClientChangeEvent.EVENT_ROOT_DIRECTORY_CHANGE);
-		notifyChangeListeners(changeEvent); //notify listeners that the status has been changed
-	}
-
 	/** Sets the connected value of this client */
 
 	@Override
@@ -126,12 +100,6 @@ public class RPIClient extends Client {
 	 */
 	public ClientPlayerModule getPlayerModule() {
 		return playerModule;
-	}
-	
-	/** Returns the playlist controller for this client */
-	
-	public PlaylistController getPlaylistController() {
-		return playlistController;
 	}
 
 	/** Adds the given change listener */

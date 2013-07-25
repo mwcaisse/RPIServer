@@ -13,8 +13,6 @@ import javax.swing.tree.TreePath;
 
 import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Video;
-import com.ricex.rpi.server.client.ClientChangeEvent;
-import com.ricex.rpi.server.client.ClientChangeListener;
 import com.ricex.rpi.server.client.RPIClient;
 
 /** View that will display a tree of the videos for the active clietn
@@ -23,70 +21,70 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class VideoTreeView extends JPanel implements ClientChangeListener<RPIClient>, PlayableView {
+public class VideoTreeView extends JPanel implements PlayableView {
 
 	/** The tree containing the list of videos */
 	private JTree videoTree;
-	
+
 	/** The tree model for the tree view */
 	private DefaultTreeModel treeModel;
-	
+
 	/** The currently active client */
 	private RPIClient activeClient;
-	
+
 	/** Creates a new instance of VideoTreeView
 	 * 
 	 */
-	
+
 	public VideoTreeView() {
-		treeModel = new DefaultTreeModel(new DefaultMutableTreeNode("Videos"));		
+		treeModel = new DefaultTreeModel(new DefaultMutableTreeNode("Videos"));
 		videoTree = new JTree(treeModel);
-		
+
 		// if an active client exists, update the tree view with its videos
 		/* TODO:
 		if (RPIPlayer.getInstance().activeClientExists()) {
 			updateTree(RPIPlayer.getInstance().getActiveClient().getRootDirectory());
 		}*/
-		
+
 		JScrollPane scrollPane = new JScrollPane();
-		
+
 		//scrollPane.getViewport().setLayout(new BorderLayout());
 		scrollPane.getViewport().add(videoTree);
-		
+
 		setLayout(new BorderLayout());
 		add(scrollPane, BorderLayout.CENTER);
-		
+
 		videoTree.addMouseListener(new TreeViewMouseListener());
 	}
-	
+
 	/** Creates the tree view from the given rootDirectory
 	 * 
 	 * @param rootDirectory
 	 */
-	
+
 	private void updateTree(Video rootDirectory) {
 		if (rootDirectory == null) {
 			treeModel.setRoot(new DefaultMutableTreeNode("Videos"));
 		}
 		else {
-			treeModel.setRoot(processDirectory(rootDirectory));		
+			treeModel.setRoot(processDirectory(rootDirectory));
 		}
 	}
-	
+
 	/** Clears the tree view by removing all of its nodes
 	 * 
 	 */
-	
+
 	private void clearTree() {
 		treeModel.setRoot(new DefaultMutableTreeNode("Videos"));
 	}
-	
-	/** Processes a directory tree node 
+
+	/** Processes a directory tree node
 	 * 
 	 * @param directory
 	 * @return
 	 */
-	
+
 	private DefaultMutableTreeNode processDirectory(Video directory) {
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode(directory);
 		for (Video child : directory.getChildren()) {
@@ -99,26 +97,19 @@ public class VideoTreeView extends JPanel implements ClientChangeListener<RPICli
 		}
 		return node;
 	}
-	
-	/** Processes a video tree node 
+
+	/** Processes a video tree node
 	 * 
 	 * @param video
 	 * @return
 	 */
-	
+
 	private DefaultMutableTreeNode processVideo(Video video) {
 		return new DefaultMutableTreeNode(video);
 	}
 
-	@Override
-	public void clientChanged(ClientChangeEvent<RPIClient> changeEvent) {
-		if (changeEvent.getEventType() == ClientChangeEvent.EVENT_ROOT_DIRECTORY_CHANGE) {
-			updateTree(changeEvent.getSource().getRootDirectory());
-		}
-	}
+	private class TreeViewMouseListener extends MouseAdapter {
 
-	private class TreeViewMouseListener extends MouseAdapter {		
-		
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (e.getButton() == MouseEvent.BUTTON3) {
@@ -137,16 +128,16 @@ public class VideoTreeView extends JPanel implements ClientChangeListener<RPICli
 	/** Return the playlist to play
 	 * 
 	 */
-	
+
 	@Override
 	public Playlist getPlaylistToPlay() {
 		Playlist playlist = new Playlist();
 		if (videoTree.getSelectionPath() != null) {
 			Video selectedVideo = (Video) ((DefaultMutableTreeNode)videoTree.getSelectionPath().getLastPathComponent()).getUserObject();
-			playlist.addItem(selectedVideo);			
+			playlist.addItem(selectedVideo);
 		}
 		return playlist;
-		
+
 	}
-	
+
 }

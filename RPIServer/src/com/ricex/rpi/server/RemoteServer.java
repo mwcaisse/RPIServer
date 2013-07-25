@@ -21,18 +21,18 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 
 	/** The singleton instance of this server */
 	private static RemoteServer _instance;
-	
+
 	/** Returns the singleton instance */
-	
+
 	public static RemoteServer getInstance() {
 		if (_instance == null) {
 			_instance = new RemoteServer();
 		}
 		return _instance;
 	}
-	
+
 	/** Creates a new Remote Server */
-	
+
 	private RemoteServer() {
 		super(RPIServerProperties.getInstance().getRemotePort(), RPIServerProperties.getInstance().getMaxConnectins(), "RemoteServer");
 		RPIServer.getInstance().addConnectionListener(this);
@@ -41,19 +41,19 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 	/**
 	 * {@inheritDoc}
 	 */
-	
+
 	@Override
 	protected RemoteClient createClient(Socket socket) {
-		RemoteClient client = new RemoteClient(this, getNextId(), socket);		
+		RemoteClient client = new RemoteClient(this, getNextId(), socket);
 
 		//send the list of rpi clients to the remote client
 		client.sendMessage(constructClientListMessage());
-			
+
 		return client;
 	}
 
 	/** Notifies all remote clients when an RPIClietn connects */
-	
+
 	@Override
 	public void clientConnected(RPIClient client) {
 		sendToAllClients(new ClientUpdateMessage(client.getId(), client.getName(), true, null));
@@ -61,19 +61,19 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 	}
 
 	/** Notifies all remote clients when an RPIClient disconencts */
-	
+
 	@Override
 	public void clientDisconnected(RPIClient client) {
 		sendToAllClients(new ClientUpdateMessage(client.getId(), client.getName(), false, null));
 		client.removeChangeListener(this);
 	}
-	
+
 	/** Creates a client list message */
-	
+
 	private ClientListMessage constructClientListMessage() {
 		ClientListMessage clientMessage = new ClientListMessage();
 		for (RPIClient c : RPIServer.getInstance().getConnectedClients()) {
-			clientMessage.addClient(c.getId(), c.getName(), c.getStatus(), c.getRootDirectory());
+			clientMessage.addClient(c.getId(), c.getName(), c.getStatus());
 		}
 		return clientMessage;
 	}
@@ -81,7 +81,7 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 	/** Notifies all connected remote clients when a RPIClient changes its status
 	 * 
 	 */
-	
+
 	@Override
 	public void clientChanged(ClientChangeEvent<RPIClient> changeEvent) {
 		if (changeEvent.getEventType() == ClientChangeEvent.EVENT_STATUS_CHANGE) {
@@ -89,7 +89,7 @@ public class RemoteServer extends Server<RemoteClient> implements ClientConnecti
 			sendToAllClients(new ClientStatusUpdateMessage(client.getId(), client.getStatus()));
 		}
 	}
-	                                                        
-	                                                       
+
+
 
 }
