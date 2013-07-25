@@ -23,7 +23,7 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class ControllerPane extends JPanel implements ClientChangeListener<RPIClient>, ActionListener, ActiveClientListener, 
+public class ControllerPane extends JPanel implements ClientChangeListener<RPIClient>, ActionListener, 
 		ClientConnectionListener<RPIClient>{
 
 	/** Button to play the selected video / playlist */
@@ -191,14 +191,9 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
-		if (source.equals(cbxActiveClient)) {
-			System.out.println("ActiveClient selected eh?");
-			//update the selected client
-			RPIClient selectedClient = (RPIClient) cbxActiveClient.getSelectedItem();
-			RPIPlayer.getInstance().setActiveClient(selectedClient);
-		}
+		/* TODO: re implement the combo box pressing.
 		//check to make sure an active client exists
-		else if (RPIPlayer.getInstance().activeClientExists()) {
+		if (RPIPlayer.getInstance().activeClientExists()) {
 			ClientPlayerModule playerModule = RPIPlayer.getInstance().getActiveClient().getPlayerModule();
 			
 			if (source.equals(butPlay)) {
@@ -231,17 +226,8 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 				playerModule.nextChapter();
 			}
 		}
+		*/
 		
-	}
-
-	@Override
-	public void activeClientChanged(RPIClient activeClient) {
-		disableButtonsStatus(activeClient.getStatus());		
-	}
-
-	@Override
-	public void activeClientRemoved() {
-		disableAllButtons();
 	}
 
 	@Override

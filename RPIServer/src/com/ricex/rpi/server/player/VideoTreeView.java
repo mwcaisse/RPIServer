@@ -23,7 +23,7 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class VideoTreeView extends JPanel implements ActiveClientListener, ClientChangeListener<RPIClient>, PlayableView {
+public class VideoTreeView extends JPanel implements ClientChangeListener<RPIClient>, PlayableView {
 
 	/** The tree containing the list of videos */
 	private JTree videoTree;
@@ -43,9 +43,10 @@ public class VideoTreeView extends JPanel implements ActiveClientListener, Clien
 		videoTree = new JTree(treeModel);
 		
 		// if an active client exists, update the tree view with its videos
+		/* TODO:
 		if (RPIPlayer.getInstance().activeClientExists()) {
 			updateTree(RPIPlayer.getInstance().getActiveClient().getRootDirectory());
-		}
+		}*/
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
@@ -54,8 +55,6 @@ public class VideoTreeView extends JPanel implements ActiveClientListener, Clien
 		
 		setLayout(new BorderLayout());
 		add(scrollPane, BorderLayout.CENTER);
-		
-		RPIPlayer.getInstance().addActiveClientListener(this);
 		
 		videoTree.addMouseListener(new TreeViewMouseListener());
 	}
@@ -109,26 +108,6 @@ public class VideoTreeView extends JPanel implements ActiveClientListener, Clien
 	
 	private DefaultMutableTreeNode processVideo(Video video) {
 		return new DefaultMutableTreeNode(video);
-	}
-
-	/** Updates the tree view when the active client is chagned
-	 */
-	
-	@Override
-	public void activeClientChanged(RPIClient activeClient) {
-		this.activeClient = activeClient;
-		updateTree(activeClient.getRootDirectory());
-		activeClient.addChangeListener(this);
-		
-	}
-	
-	/** Clears teh tree view when the active client is removed
-	 */
-
-	@Override
-	public void activeClientRemoved() {
-		activeClient.removeChangeListener(this);
-		clearTree();
 	}
 
 	@Override

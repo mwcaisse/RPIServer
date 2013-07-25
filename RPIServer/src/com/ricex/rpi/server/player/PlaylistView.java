@@ -21,7 +21,7 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class PlaylistView extends JPanel implements ActiveClientListener, ListSelectionListener, PlayableView {
+public class PlaylistView extends JPanel implements ListSelectionListener, PlayableView {
 
 	/** The List of play lists */
 	private JList<Playlist> playlistList;
@@ -50,9 +50,10 @@ public class PlaylistView extends JPanel implements ActiveClientListener, ListSe
 		createPlaylistView = new CreatePlaylistView(this);
 		
 		//if there is an active client, populate its playlists 
+		/* TODO:
 		if (RPIPlayer.getInstance().activeClientExists()) {
 			populatePlaylistModel(RPIPlayer.getInstance().getActiveClient());
-		}
+		}*/
 		
 		//create the playlists
 		playlistList = new JList<Playlist>(playlistModel);
@@ -81,9 +82,8 @@ public class PlaylistView extends JPanel implements ActiveClientListener, ListSe
 		
 		setLayout(new BorderLayout());
 		add(playlistScrollPane, BorderLayout.EAST);
-		add(centerPanel, BorderLayout.CENTER);
-		
-		RPIPlayer.getInstance().addActiveClientListener(this);
+		add(centerPanel, BorderLayout.CENTER);		
+
 		
 	}
 	
@@ -99,20 +99,7 @@ public class PlaylistView extends JPanel implements ActiveClientListener, ListSe
 		}
 	}
 
-
-	@Override
-	public void activeClientChanged(RPIClient activeClient) {
-		populatePlaylistModel(activeClient);
-	}
-
-
-	@Override
-	public void activeClientRemoved() {
-		//clear the items in the list views as there is no more active client
-		playlistItemModel.clear();
-		playlistModel.clear();
-	}
-
+	//TODO: remove this combo box as it is mostly useless
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		Playlist selectedPlaylist = playlistList.getSelectedValue();
@@ -126,7 +113,8 @@ public class PlaylistView extends JPanel implements ActiveClientListener, ListSe
 	}
 	
 	public void refreshPlaylists() {
-		populatePlaylistModel(RPIPlayer.getInstance().getActiveClient());
+		//TODO: reimplement
+		//populatePlaylistModel(RPIPlayer.getInstance().getActiveClient());
 	}
 
 	/** Returns the selected playlist

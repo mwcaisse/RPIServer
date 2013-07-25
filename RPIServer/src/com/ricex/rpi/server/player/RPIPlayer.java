@@ -3,8 +3,6 @@ package com.ricex.rpi.server.player;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,7 +14,6 @@ import javax.swing.event.ChangeListener;
 
 import com.ricex.rpi.server.RPIServer;
 import com.ricex.rpi.server.RemoteServer;
-import com.ricex.rpi.server.client.RPIClient;
 
 /** The RPIPlayer
  * 
@@ -72,17 +69,10 @@ public class RPIPlayer extends JFrame {
 	/** The thread for the remote server to run in */
 	private Thread remoteServerThread;
 	
-	/** The currently active client */
-	private RPIClient activeClient;
-	
-	/** The list of active client listeners */
-	private List<ActiveClientListener> activeClientListeners;
-	
 	/** Creates a new instance of RPI Player
 	 */
 	
 	private RPIPlayer() {
-		activeClientListeners = new ArrayList<ActiveClientListener>();
 	}
 	
 	/** Initialize the RPIPlayer window 
@@ -174,70 +164,6 @@ public class RPIPlayer extends JFrame {
 		remoteServerThread.start();	
 	}
 	
-	/** Sets the active client to the given client
-	 * 
-	 * @param activeClient The new active client
-	 */
-	
-	public void setActiveClient(RPIClient activeClient) {
-		this.activeClient = activeClient;
-		notifyListeners(activeClientExists());
-	}
-	
-	/** 
-	 * @return The active client
-	 */
-	
-	public RPIClient getActiveClient() {
-		return activeClient;
-	}
-	
-	/** 
-	 * @return whether or not an active client exists
-	 */
-	
-	public boolean activeClientExists() {
-		return activeClient != null;
-	}
-	
-	/** Adds the given active client listener
-	 * 
-	 * @param listener The listener to add
-	 */
-	
-	public void addActiveClientListener(ActiveClientListener listener) {
-		activeClientListeners.add(listener);
-	}
-	
-	/** Removes the given active client lsitener
-	 * 
-	 * @param listener The active client listener to remove
-	 */
-	
-	public void removeActiveClientListener(ActiveClientListener listener) {
-		activeClientListeners.remove(listener);
-	}	
-	
-	/** Notifies the active client listeners that the active client has been changed
-	 * 
-	 * @param activeClientChanged whether or not the active client has changed, false means removed
-	 */
-	
-	private void notifyListeners(boolean activeClientChanged) { 
-		//the active client was changedm notify changed
-		if (activeClientChanged) {
-			for (ActiveClientListener listener : activeClientListeners) {
-				listener.activeClientChanged(activeClient);
-			}
-		}
-		//the client was removed, notify removed
-		else {
-			for (ActiveClientListener listener : activeClientListeners) {
-				listener.activeClientRemoved();
-			}
-		}		
-	}
-	
 	/** Returns the currently displayed view 
 	 * 
 	 * @return The currently displayed view
@@ -245,8 +171,5 @@ public class RPIPlayer extends JFrame {
 	
 	public Component getCurrentView() {
 		return tabbedPane.getSelectedComponent();
-	}
-	
-
-	
+	}	
 }
