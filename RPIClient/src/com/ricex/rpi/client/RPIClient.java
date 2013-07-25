@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.ricex.rpi.common.message.DirectoryListingMessage;
-import com.ricex.rpi.common.video.Video;
-
 /**
  * RPI client that connects to the server
  * 
@@ -29,26 +26,13 @@ public class RPIClient {
 	private String serverIp;
 	
 	/** Port of the server to connect to */
-	private int serverPort;
-	
-	/** The directory listing of the videos this client has to play */
-	private Video rootDirectory;
+	private int serverPort;	
 
-	public RPIClient(Video rootDirectory) {
-		this.rootDirectory = rootDirectory;
+
+	public RPIClient() {
 		serverIp = RPIClientProperties.getInstance().getServerIp();
 		serverPort = RPIClientProperties.getInstance().getRPIPort();
 
-	}
-	
-	/** Sends the updated root directory to the server
-	 * 
-	 * @param rootDirectory The new root directory
-	 */
-	
-	public void updateRootDirectory(Video rootDirectory) {
-		this.rootDirectory = rootDirectory;
-		serverHandler.sendMessage(new DirectoryListingMessage(rootDirectory));
 	}
 	
 	/** Connects to the server
@@ -64,8 +48,6 @@ public class RPIClient {
 		//create and start the server handler thread
 		serverHandlerThread = new Thread(serverHandler);
 		serverHandlerThread.start();
-		
-		serverHandler.sendMessage(new DirectoryListingMessage(rootDirectory));
 	}
 	
 	/** Disconnects from the server, waits for the server thread to finish, and closes the socket connections

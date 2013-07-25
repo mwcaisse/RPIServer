@@ -4,9 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import com.ricex.rpi.common.video.MovieParser;
-import com.ricex.rpi.common.video.Video;
-
 /** Thread for handling the user input for the client
  * 
  * @author Mitchell
@@ -18,12 +15,6 @@ public class InputHandler implements Runnable {
 	/** The rpi client */
 	private RPIClient client;
 	
-	/** The movie parser to parse the movies */
-	private MovieParser movieParser;
-	
-	/** The root directory */
-	private Video rootDirectory;
-	
 	/** Indicates whether or not the input handler should continue running */
 	private boolean running;
 	
@@ -32,9 +23,7 @@ public class InputHandler implements Runnable {
 	 */
 	
 	public InputHandler() {
-		movieParser = new MovieParser(RPIClientProperties.getInstance().getBaseDir());
-		rootDirectory = movieParser.parseVideos();
-		client = new RPIClient(rootDirectory);
+		client = new RPIClient();
 		running = true;
 	}
 	
@@ -42,8 +31,7 @@ public class InputHandler implements Runnable {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
 		System.out.println("Welcome to RPIClient!");
-		System.out.println("Usage: c - connect to server \n\t d - disconnect from server \n\t q - quit \n\t s - status" + 
-					"\n\t r -reparse");
+		System.out.println("Usage: c - connect to server \n\t d - disconnect from server \n\t q - quit \n\t s - status");
 		System.out.print("RPI>");
 		
 		while (running) {
@@ -102,12 +90,5 @@ public class InputHandler implements Runnable {
 				System.out.println("We are not currently connected to any server");
 			}	
 		}
-		else if (line.startsWith("r")) {
-			rootDirectory = movieParser.parseVideos();
-			System.out.println("Finished parsing videos");
-			if (client.isConnected()) {
-				client.updateRootDirectory(rootDirectory);
-			}						
-		}	
 	}
 }
