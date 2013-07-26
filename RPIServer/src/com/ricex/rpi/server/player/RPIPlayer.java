@@ -14,8 +14,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.ricex.rpi.common.video.BasicMovieParser;
+import com.ricex.rpi.common.video.MovieParser;
 import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.server.RPIServer;
+import com.ricex.rpi.server.RPIServerProperties;
 import com.ricex.rpi.server.RemoteServer;
 import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
@@ -82,12 +85,18 @@ public class RPIPlayer extends JFrame implements ClientConnectionListener<RPICli
 
 	/** The list of active clients */
 	private List<RPIClient> activeClients;
+	
+	/** The parser to use when parsing the mo vies */
+	private MovieParser movieParser;
 
 	/** Creates a new instance of RPI Player
 	 */
 
 	private RPIPlayer() {
+		playlistController = new PlaylistController();
 		activeClients = new ArrayList<RPIClient>();
+		movieParser = new BasicMovieParser();		
+		parseRootDirectory();
 	}
 
 	/** Initialize the RPIPlayer window
@@ -178,6 +187,14 @@ public class RPIPlayer extends JFrame implements ClientConnectionListener<RPICli
 
 		clientServerThread.start();
 		remoteServerThread.start();
+	}
+	
+	/** Parses the root directory for videos
+	 * 
+	 */
+	
+	public void parseRootDirectory() {
+		rootDirectory = movieParser.parseVideos(RPIServerProperties.getInstance().getBaseDirectory());
 	}
 
 	/** Returns the currently displayed view

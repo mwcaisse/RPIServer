@@ -13,7 +13,6 @@ import javax.swing.event.ListSelectionListener;
 
 import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Video;
-import com.ricex.rpi.server.client.RPIClient;
 
 /** View for displaying the list of playlists as well as creating new playlists
  * 
@@ -50,10 +49,8 @@ public class PlaylistView extends JPanel implements ListSelectionListener, Playa
 		createPlaylistView = new CreatePlaylistView(this);
 
 		//if there is an active client, populate its playlists
-		/* TODO:
-		if (RPIPlayer.getInstance().activeClientExists()) {
-			populatePlaylistModel(RPIPlayer.getInstance().getActiveClient());
-		}*/
+		populatePlaylistModel(RPIPlayer.getInstance().getPlaylistController());
+
 
 		//create the playlists
 		playlistList = new JList<Playlist>(playlistModel);
@@ -87,19 +84,18 @@ public class PlaylistView extends JPanel implements ListSelectionListener, Playa
 
 	}
 
-	/** Populates the list view with the playlists from the given active client
+	/** Populates the list view with the playlists from the given playlist controller
 	 * 
-	 * @param activeClient
+	 * @param playlistController The playlist controller to populate the playlist model from
 	 */
 
-	private void populatePlaylistModel(RPIClient activeClient) {
+	private void populatePlaylistModel(PlaylistController playlistController) {
 		playlistModel.clear();
-		for (Playlist playlist : RPIPlayer.getInstance().getPlaylistController().getAllPlaylists()) {
+		for (Playlist playlist : playlistController.getAllPlaylists()) {
 			playlistModel.addElement(playlist);
 		}
 	}
-
-	//TODO: remove this combo box as it is mostly useless
+	
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		Playlist selectedPlaylist = playlistList.getSelectedValue();
@@ -112,9 +108,8 @@ public class PlaylistView extends JPanel implements ListSelectionListener, Playa
 		}
 	}
 
-	public void refreshPlaylists() {
-		//TODO: reimplement
-		//populatePlaylistModel(RPIPlayer.getInstance().getActiveClient());
+	public void refreshPlaylists() {		
+		populatePlaylistModel(RPIPlayer.getInstance().getPlaylistController());
 	}
 
 	/** Returns the selected playlist

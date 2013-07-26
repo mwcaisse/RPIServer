@@ -25,6 +25,9 @@ public class RPIServerProperties extends RPIProperties {
 	/** Key for maximum number of server connections */
 	private static final String MAX_CONNECTIONS = "max_connections";	
 	
+	/** The key for the base directory */
+	private static final String BASE_DIRECTORY = "base_dir";
+	
 	/** Private constructor to maintain singleton.
 	 *  Calls the super constructor to load the properties in "./rpi_server.conf"
 	 */
@@ -45,5 +48,14 @@ public class RPIServerProperties extends RPIProperties {
 	/** Returns the maximum number of server connections */	
 	public int getMaxConnectins() {
 		return Integer.parseInt(getProperty(MAX_CONNECTIONS));
+	}
+	
+	/** Returns the base directory where the movies are located
+	 * 
+	 * @return
+	 */
+	
+	public String getBaseDirectory() {
+		return getProperty(BASE_DIRECTORY);
 	}
 }

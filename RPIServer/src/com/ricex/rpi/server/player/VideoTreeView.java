@@ -41,10 +41,8 @@ public class VideoTreeView extends JPanel implements PlayableView {
 		videoTree = new JTree(treeModel);
 
 		// if an active client exists, update the tree view with its videos
-		/* TODO:
-		if (RPIPlayer.getInstance().activeClientExists()) {
-			updateTree(RPIPlayer.getInstance().getActiveClient().getRootDirectory());
-		}*/
+
+		updateTree(RPIPlayer.getInstance().getRootDirectory());
 
 		JScrollPane scrollPane = new JScrollPane();
 
