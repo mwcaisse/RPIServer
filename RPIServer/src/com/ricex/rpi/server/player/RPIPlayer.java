@@ -66,7 +66,7 @@ public class RPIPlayer extends JFrame implements ClientConnectionListener<RPICli
 	private PlaylistView playlistView;
 
 	/** The list view for displaying the connected clients */
-	private ClientListView clientListView;
+	private ClientTableView clientTableView;
 
 	/** The view for the controller pane */
 	private ControllerPane controllerPane;
@@ -120,12 +120,12 @@ public class RPIPlayer extends JFrame implements ClientConnectionListener<RPICli
 
 		videoTreeView = new VideoTreeView();
 		playlistView = new PlaylistView();
-		clientListView = new ClientListView();
+		clientTableView = new ClientTableView();
 		controllerPane = new ControllerPane();
 
 		tabbedPane.add("Videos", videoTreeView);
 		tabbedPane.add("Playlists", playlistView);
-		tabbedPane.add("Clients", clientListView);
+		tabbedPane.add("Clients", clientTableView);
 
 		tabbedPane.addChangeListener(new ChangeListener() {
 
