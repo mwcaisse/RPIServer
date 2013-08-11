@@ -38,10 +38,14 @@ public class VideoPopupMenu extends JPopupMenu implements ActionListener {
 		
 		itemPlay = new JMenuItem("Play");
 		itemPlay.addActionListener(this);
-		add(itemPlay);
-
-		List<Playlist> playlists = RPIPlayer.getInstance().getPlaylistController().getAllPlaylists();
 		
+		//add the play item if active client exists
+		if (RPIPlayer.getInstance().activeClientExists()) {
+			add(itemPlay);
+		}		
+
+		//add the play list menu items
+		List<Playlist> playlists = RPIPlayer.getInstance().getPlaylistController().getAllPlaylists();		
 		if (!playlists.isEmpty()) {
 			itemAddToPlaylist = new JMenu("Add to playlist");		
 			for (Playlist playlist : playlists) {
@@ -50,8 +54,6 @@ public class VideoPopupMenu extends JPopupMenu implements ActionListener {
 			
 			add(itemAddToPlaylist);
 		}
-
-		
 	}
 
 	@Override

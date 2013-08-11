@@ -16,6 +16,7 @@ import com.ricex.rpi.common.video.Video;
 
 /** View for displaying the list of playlists as well as creating new playlists
  * 
+ * TODO: have the playlist view refresh when it is open / selected
  * @author Mitchell Caisse
  *
  */

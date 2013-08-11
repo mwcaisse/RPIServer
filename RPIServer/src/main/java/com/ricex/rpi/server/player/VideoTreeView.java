@@ -112,6 +112,7 @@ public class VideoTreeView extends JPanel implements PlayableView {
 		public void mouseClicked(MouseEvent e) {
 			if (e.getButton() == MouseEvent.BUTTON3) {
 				TreePath selectedPath = videoTree.getPathForLocation(e.getX(), e.getY());
+				videoTree.setSelectionPath(selectedPath); // set the selected path of the tree, so right click vissualy selects
 				if (selectedPath != null) {
 					Video selectedItem = (Video)((DefaultMutableTreeNode)selectedPath.getLastPathComponent()).getUserObject();
 					if (!selectedItem.isDirectory()) {
