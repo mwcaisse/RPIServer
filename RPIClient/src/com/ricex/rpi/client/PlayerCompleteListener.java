@@ -2,7 +2,7 @@ package com.ricex.rpi.client;
 
 /** Listeners to the player thread, to be notified when the player has finished player
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

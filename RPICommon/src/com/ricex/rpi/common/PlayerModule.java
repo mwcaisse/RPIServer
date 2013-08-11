@@ -2,7 +2,7 @@ package com.ricex.rpi.common;
 
 /** Interface for a PlayerModule, that will controll playing and pausing movies / videos
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

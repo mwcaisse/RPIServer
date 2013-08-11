@@ -2,7 +2,7 @@ package com.ricex.rpi.common.message;
 
 /** Message using for Acknowledging the receiving of messages
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

@@ -13,7 +13,7 @@ import com.ricex.rpi.server.client.RPIClient;
 /**
  * The table model for the ClientTableView
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  * 
  */
 

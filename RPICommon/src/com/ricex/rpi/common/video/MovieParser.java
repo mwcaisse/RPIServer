@@ -2,7 +2,7 @@ package com.ricex.rpi.common.video;
 
 /** Interface for parsing movies
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

@@ -14,7 +14,7 @@ import com.ricex.rpi.server.client.RPIClient;
  * 
  * TODO: Add change listener for name changes
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

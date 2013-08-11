@@ -11,7 +11,7 @@ import com.ricex.rpi.server.client.handler.ClientHandler;
 /**
  * A client that connects to the given server interface
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  * 
  */
 

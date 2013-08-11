@@ -17,7 +17,7 @@ import com.ricex.rpi.server.client.RPIClient;
 
 /** View that will display a tree of the videos for the active clietn
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

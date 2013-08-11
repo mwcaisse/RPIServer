@@ -19,11 +19,11 @@ import com.ricex.rpi.server.client.RPIClient;
 
 /** Class for displaying the controls to create a playlist
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 
-public class CreatePlaylistView extends JPanel implements ClientConnectionListener<RPIClient>, ActionListener {
+public class CreatePlaylistView extends JPanel implements ActionListener {
 
 	/** Button for creating / updating the play list */
 	private JButton butSave;
@@ -36,15 +36,6 @@ public class CreatePlaylistView extends JPanel implements ClientConnectionListen
 
 	/** The label for the playlist name */
 	private JLabel labPlaylistName;
-
-	/** the label for the client */
-	private JLabel labClient;
-
-	/** The combo box containing the list of clients */
-	private JComboBox<RPIClient> cbxClients;
-
-	/** The ComboBoxModel for the client combo box */
-	private DefaultComboBoxModel<RPIClient> clientModel;
 
 	/** The view that this playlistView corresponds to */
 	private PlaylistView playlistView;
@@ -64,17 +55,9 @@ public class CreatePlaylistView extends JPanel implements ClientConnectionListen
 		butCancel = new JButton("Cancel");
 
 		labPlaylistName = new JLabel("Name:");
-		labClient = new JLabel("Client:");
-
-		clientModel = new DefaultComboBoxModel<RPIClient>();
-
-		for (RPIClient client: RPIServer.getInstance().getConnectedClients()) {
-			clientModel.addElement(client);
-		}
-
 
 		txtPlaylistName = new JTextField();
-		cbxClients = new JComboBox<RPIClient>(clientModel);
+
 
 		butSave.addActionListener(this);
 		butCancel.addActionListener(this);
@@ -88,15 +71,8 @@ public class CreatePlaylistView extends JPanel implements ClientConnectionListen
 		layout.putConstraint(SpringLayout.WEST, txtPlaylistName, HORIZONTAL_PADDING, SpringLayout.EAST, labPlaylistName);
 		layout.putConstraint(SpringLayout.EAST, txtPlaylistName, -HORIZONTAL_PADDING, SpringLayout.EAST, this);
 
-		layout.putConstraint(SpringLayout.NORTH, labClient, 0, SpringLayout.NORTH, cbxClients);
-		layout.putConstraint(SpringLayout.WEST, labClient, HORIZONTAL_PADDING, SpringLayout.WEST, this);
-
-		layout.putConstraint(SpringLayout.NORTH, cbxClients, VERTICAL_PADDING , SpringLayout.SOUTH, txtPlaylistName);
-		layout.putConstraint(SpringLayout.WEST, cbxClients, 0, SpringLayout.WEST, txtPlaylistName);
-		layout.putConstraint(SpringLayout.EAST, cbxClients, -HORIZONTAL_PADDING , SpringLayout.WEST, butSave);
-
 		layout.putConstraint(SpringLayout.EAST, butCancel, -HORIZONTAL_PADDING, SpringLayout.EAST, this);
-		layout.putConstraint(SpringLayout.NORTH, butCancel, 0, SpringLayout.NORTH, cbxClients);
+		layout.putConstraint(SpringLayout.NORTH, butCancel, VERTICAL_PADDING , SpringLayout.SOUTH, txtPlaylistName);
 
 		layout.putConstraint(SpringLayout.EAST, butSave, -HORIZONTAL_PADDING, SpringLayout.WEST, butCancel);
 		layout.putConstraint(SpringLayout.NORTH, butSave, 0, SpringLayout.NORTH, butCancel);
@@ -107,40 +83,30 @@ public class CreatePlaylistView extends JPanel implements ClientConnectionListen
 		add(butCancel);
 		add(txtPlaylistName);
 		add(labPlaylistName);
-		add(labClient);
-		add(cbxClients);
 
 		setPreferredSize(new Dimension(250,60));
 
-		RPIServer.getInstance().addConnectionListener(this);
-	}
-
-	@Override
-	public void clientConnected(RPIClient client) {
-		clientModel.addElement(client);
-	}
-
-	@Override
-	public void clientDisconnected(RPIClient client) {
-		clientModel.removeElement(client);
 	}
 
 	/** Saves the given play list */
 
 	private void save() {
 		String name = txtPlaylistName.getText();
-		RPIClient client = (RPIClient) cbxClients.getSelectedItem();
-		if (client != null && !name.trim().isEmpty()) {
+		if (!name.trim().isEmpty()) { 
+			//if the user entered a name, add the playlist
 			Playlist playlist = new Playlist(name);
-			//TODO: re add playlist
+			RPIPlayer.getInstance().getPlaylistController().addPlaylist(playlist);
 			txtPlaylistName.setText("");
 			playlistView.refreshPlaylists();
 		}
-		else {
-			//there is no selected client, for now do nothing
-		}
 	}
 
+	/** Handles save and or cancel being pressed, if saved is press it verifies the playlist then saves it,
+	 *  canel will clear all changes
+	 * 
+	 * @param e {@inheritDoc}
+	 */
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(butSave)) {

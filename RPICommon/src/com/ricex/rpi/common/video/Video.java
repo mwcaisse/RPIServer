@@ -5,7 +5,7 @@ import java.util.List;
 
 /** Interface representing a video, to be displayed
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

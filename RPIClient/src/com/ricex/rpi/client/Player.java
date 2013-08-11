@@ -8,7 +8,7 @@ import java.util.List;
 
 /** The wrapper around the thread that will run the omx process
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

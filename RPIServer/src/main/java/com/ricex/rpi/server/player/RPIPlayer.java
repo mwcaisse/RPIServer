@@ -27,7 +27,7 @@ import com.ricex.rpi.server.client.RPIClient;
  *   Launches the PlayerUI as well as the servers
  *   Uses Java Swing for th UI
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

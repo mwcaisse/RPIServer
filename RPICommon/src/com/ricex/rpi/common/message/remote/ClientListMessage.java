@@ -9,7 +9,7 @@ import com.ricex.rpi.common.message.IMessage;
 
 /** Sends back a list of all the currently connected RPI Clients
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

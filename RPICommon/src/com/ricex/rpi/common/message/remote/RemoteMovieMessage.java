@@ -6,7 +6,7 @@ import com.ricex.rpi.common.message.MovieMessage.Command;
 
 /** A movie message send by the remote, that includes the ID of the client to send the message
  * to
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

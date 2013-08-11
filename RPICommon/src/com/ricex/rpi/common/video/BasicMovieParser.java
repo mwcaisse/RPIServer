@@ -7,7 +7,7 @@ import java.io.FileFilter;
 /**
  * Parses the movies from the given base folder
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  * 
  */
 

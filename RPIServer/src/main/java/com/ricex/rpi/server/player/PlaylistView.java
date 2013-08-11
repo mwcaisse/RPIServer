@@ -16,7 +16,7 @@ import com.ricex.rpi.common.video.Video;
 
 /** View for displaying the list of playlists as well as creating new playlists
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 
@@ -36,7 +36,6 @@ public class PlaylistView extends JPanel implements ListSelectionListener, Playa
 
 	/** The View for creating a new playlist */
 	private JPanel createPlaylistView;
-
 
 	/** Creates a new instance of the playlist view
 	 */
@@ -96,6 +95,10 @@ public class PlaylistView extends JPanel implements ListSelectionListener, Playa
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		Playlist selectedPlaylist = playlistList.getSelectedValue();
@@ -108,6 +111,8 @@ public class PlaylistView extends JPanel implements ListSelectionListener, Playa
 		}
 	}
 
+	/** Refrehes the list of playlists */
+	
 	public void refreshPlaylists() {		
 		populatePlaylistModel(RPIPlayer.getInstance().getPlaylistController());
 	}

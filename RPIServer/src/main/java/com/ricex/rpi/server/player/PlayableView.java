@@ -4,7 +4,7 @@ import com.ricex.rpi.common.Playlist;
 
 /** An interface for defining a view that has a playable playlist
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

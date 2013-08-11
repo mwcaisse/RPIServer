@@ -13,7 +13,7 @@ import com.ricex.rpi.server.client.RemoteClient;
 
 /** The server that listens for connections from RPIRemotes, and creates threads to respond to them
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

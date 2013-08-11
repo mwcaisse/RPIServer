@@ -6,7 +6,7 @@ import com.ricex.rpi.common.PlayerModule;
 
 /** Message used to start playing a given movie
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 public class MovieMessage implements IMessage {

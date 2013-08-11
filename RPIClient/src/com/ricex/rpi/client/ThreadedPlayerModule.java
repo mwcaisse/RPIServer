@@ -12,7 +12,7 @@ import com.ricex.rpi.common.message.StatusMessage;
  *  
  *  Only one video is allowed to be played at a time.
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  * 
  */
 

@@ -19,7 +19,7 @@ import com.ricex.rpi.server.client.RPIClient;
 
 /** The pane for the window controls
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

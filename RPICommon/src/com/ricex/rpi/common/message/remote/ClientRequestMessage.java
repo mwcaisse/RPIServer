@@ -4,7 +4,7 @@ import com.ricex.rpi.common.message.IMessage;
 
 /** A request message that will send back a list of RPI Clients
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

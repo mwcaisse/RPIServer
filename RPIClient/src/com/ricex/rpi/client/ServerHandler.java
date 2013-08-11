@@ -17,7 +17,7 @@ import com.ricex.rpi.common.message.StatusRequestMessage;
 /**
  * Server handler, contols all interact with the server
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  * 
  */
 

@@ -12,7 +12,7 @@ import com.ricex.rpi.server.client.handler.RPIClientHandler;
 
 /** A client that is connected to the server
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

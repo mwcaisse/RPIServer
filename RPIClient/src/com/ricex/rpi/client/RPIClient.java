@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 /**
  * RPI client that connects to the server
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  * 
  */
 

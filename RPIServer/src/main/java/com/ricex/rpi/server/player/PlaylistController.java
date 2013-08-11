@@ -9,13 +9,13 @@ import com.ricex.rpi.common.Playlist;
 
 /** Maintains a list of playlists
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 
 public class PlaylistController {
 
-	/** The list fo play lists */
+	/** The list of play lists */
 	private Map<String, Playlist> playlists;
 
 	/** Creates a new instance of playlist controller */

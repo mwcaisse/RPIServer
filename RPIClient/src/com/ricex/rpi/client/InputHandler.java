@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 /** Thread for handling the user input for the client
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

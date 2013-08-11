@@ -16,7 +16,7 @@ import com.ricex.rpi.server.client.ClientConnectionListener;
 /**
  * A server module
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  * 
  */
 

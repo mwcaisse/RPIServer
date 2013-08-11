@@ -5,7 +5,7 @@ import java.util.List;
 
 /** Class representing a movie, its file and information about it
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

@@ -11,7 +11,7 @@ import com.ricex.rpi.server.client.RPIClient;
 
 /** Interface between the GUI and the Server
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

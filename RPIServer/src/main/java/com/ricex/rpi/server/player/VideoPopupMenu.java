@@ -13,7 +13,7 @@ import com.ricex.rpi.common.video.Video;
 
 /** Popup menu created on a Video in the Tree view
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

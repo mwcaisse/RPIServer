@@ -2,7 +2,7 @@ package com.ricex.rpi.common.message;
 
 /** A message used by the server to give a client a specified name
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 

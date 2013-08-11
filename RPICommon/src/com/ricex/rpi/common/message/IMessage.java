@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /** Interface representing a message sent between server and client 
  * 
- * @author Mitchell
+ * @author Mitchell Caisse
  *
  */
 
