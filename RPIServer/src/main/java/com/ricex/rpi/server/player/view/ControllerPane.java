@@ -1,4 +1,4 @@
-package com.ricex.rpi.server.player;
+package com.ricex.rpi.server.player.view;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -16,6 +16,7 @@ import com.ricex.rpi.server.client.ClientChangeEvent;
 import com.ricex.rpi.server.client.ClientChangeListener;
 import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
+import com.ricex.rpi.server.player.RPIPlayer;
 
 /** The pane for the window controls
  * 

@@ -1,4 +1,4 @@
-package com.ricex.rpi.server.player;
+package com.ricex.rpi.server.player.view.playlist;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -13,6 +13,9 @@ import javax.swing.event.ListSelectionListener;
 
 import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Video;
+import com.ricex.rpi.server.player.PlaylistController;
+import com.ricex.rpi.server.player.RPIPlayer;
+import com.ricex.rpi.server.player.view.PlayableView;
 
 /** View for displaying the list of playlists as well as creating new playlists
  * 

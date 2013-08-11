@@ -1,4 +1,4 @@
-package com.ricex.rpi.server.player;
+package com.ricex.rpi.server.player.view.video;
 
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
@@ -14,6 +14,8 @@ import javax.swing.tree.TreePath;
 import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.server.client.RPIClient;
+import com.ricex.rpi.server.player.RPIPlayer;
+import com.ricex.rpi.server.player.view.PlayableView;
 
 /** View that will display a tree of the videos for the active clietn
  * 

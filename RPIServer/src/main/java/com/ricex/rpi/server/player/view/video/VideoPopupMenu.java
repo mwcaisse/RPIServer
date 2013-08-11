@@ -1,4 +1,4 @@
-package com.ricex.rpi.server.player;
+package com.ricex.rpi.server.player.view.video;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +10,7 @@ import javax.swing.JPopupMenu;
 
 import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Video;
+import com.ricex.rpi.server.player.RPIPlayer;
 
 /** Popup menu created on a Video in the Tree view
  * 

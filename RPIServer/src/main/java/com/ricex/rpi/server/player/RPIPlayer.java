@@ -21,6 +21,10 @@ import com.ricex.rpi.server.RPIServerProperties;
 import com.ricex.rpi.server.RemoteServer;
 import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
+import com.ricex.rpi.server.player.view.ControllerPane;
+import com.ricex.rpi.server.player.view.client.ClientTableView;
+import com.ricex.rpi.server.player.view.playlist.PlaylistView;
+import com.ricex.rpi.server.player.view.video.VideoTreeView;
 
 /** The RPIPlayer
  * 

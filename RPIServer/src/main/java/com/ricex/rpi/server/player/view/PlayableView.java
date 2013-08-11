@@ -1,4 +1,4 @@
-package com.ricex.rpi.server.player;
+package com.ricex.rpi.server.player.view;
 
 import com.ricex.rpi.common.Playlist;
 
