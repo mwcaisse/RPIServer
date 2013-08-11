@@ -191,13 +191,17 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
-		/* TODO: re implement the combo box pressing.
-		//check to make sure an active client exists
-		if (RPIPlayer.getInstance().activeClientExists()) {
+
+		if (source.equals(cbxActiveClient)) {
+			// update the active client to the selected item
+			RPIPlayer.getInstance().setActiveClient((RPIClient)cbxActiveClient.getSelectedItem());
+		}
+		else if (RPIPlayer.getInstance().activeClientExists()) {
 			ClientPlayerModule playerModule = RPIPlayer.getInstance().getActiveClient().getPlayerModule();
 			
 			if (source.equals(butPlay)) {
-				if (playableView != null) {
+				// TODO: is this check necesary? play should be disabled if playable view is null
+				if (playableView != null) {				
 					playerModule.play(playableView.getPlaylistToPlay());
 				}
 			}
@@ -226,7 +230,6 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 				playerModule.nextChapter();
 			}
 		}
-		*/
 		
 	}
 
@@ -243,15 +246,11 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 	public void updatePlayableView(Component playableView) {
 		if (playableView instanceof PlayableView) {
 			this.playableView = (PlayableView)playableView;
-			butPlay.setEnabled(true);
-			System.out.println("Updatying playable view to NOT null");
 		}
 		else {
 			this.playableView = null;
-			butPlay.setEnabled(false);
-			System.out.println("Updatying playable view to NULL");
 		}		
-		//butPlay.setEnabled(playableView != null);
+		butPlay.setEnabled(playableView != null);
 	}
 	
 }

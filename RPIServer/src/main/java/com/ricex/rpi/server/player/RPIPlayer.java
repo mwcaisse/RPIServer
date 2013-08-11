@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -32,7 +31,7 @@ import com.ricex.rpi.server.client.RPIClient;
  *
  */
 
-public class RPIPlayer extends JFrame implements ClientConnectionListener<RPIClient> {
+public class RPIPlayer extends JFrame {
 
 	/** The singleton instance of this class */
 	private static RPIPlayer _instance;
@@ -83,8 +82,8 @@ public class RPIPlayer extends JFrame implements ClientConnectionListener<RPICli
 	/** The root directory / parsed videos of this player */
 	private Video rootDirectory;
 
-	/** The list of active clients */
-	private List<RPIClient> activeClients;
+	/** The currently active client */
+	private RPIClient activeClient;
 	
 	/** The parser to use when parsing the mo vies */
 	private MovieParser movieParser;
@@ -94,7 +93,6 @@ public class RPIPlayer extends JFrame implements ClientConnectionListener<RPICli
 
 	private RPIPlayer() {
 		playlistController = new PlaylistController();
-		activeClients = new ArrayList<RPIClient>();
 		movieParser = new BasicMovieParser();		
 		parseRootDirectory();
 	}
@@ -223,29 +221,29 @@ public class RPIPlayer extends JFrame implements ClientConnectionListener<RPICli
 	public Video getRootDirectory() {
 		return rootDirectory;
 	}
-
-	/** Returns the list of currently active clients
+	
+	/** Determines whether or not an active client exists
 	 * 
-	 * @return
+	 * @return True if there is an active client, false if not
 	 */
-
-	public List<RPIClient> getActiveClients() {
-		return activeClients;
+	
+	public boolean activeClientExists() {
+		return activeClient != null;
 	}
 
-	/** Temporary method to set a client to active when it joins
-	 * TODO: Remove these methods and replace with a acive client UI
+	
+	/**
+	 * @return the activeClient
 	 */
-
-	@Override
-	public void clientConnected(RPIClient client) {
-		activeClients.add(client);
-
+	public RPIClient getActiveClient() {
+		return activeClient;
 	}
 
-	@Override
-	public void clientDisconnected(RPIClient client) {
-		activeClients.remove(client);
-
+	
+	/**
+	 * @param activeClient the activeClient to set
+	 */
+	public void setActiveClient(RPIClient activeClient) {
+		this.activeClient = activeClient;
 	}
 }
