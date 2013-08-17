@@ -3,7 +3,6 @@ package com.ricex.rpi.server.player;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,8 +18,8 @@ import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.server.RPIServer;
 import com.ricex.rpi.server.RPIServerProperties;
 import com.ricex.rpi.server.RemoteServer;
-import com.ricex.rpi.server.client.ClientConnectionListener;
 import com.ricex.rpi.server.client.RPIClient;
+import com.ricex.rpi.server.imbdparser.IMDBVideoTreeView;
 import com.ricex.rpi.server.player.view.ControllerPane;
 import com.ricex.rpi.server.player.view.client.ClientTableView;
 import com.ricex.rpi.server.player.view.playlist.PlaylistView;
@@ -120,7 +119,7 @@ public class RPIPlayer extends JFrame {
 		contentPane.setLayout(layout);
 		tabbedPane = new JTabbedPane();
 
-		videoTreeView = new VideoTreeView();
+		videoTreeView = new IMDBVideoTreeView();
 		playlistView = new PlaylistView();
 		clientTableView = new ClientTableView();
 		controllerPane = new ControllerPane();

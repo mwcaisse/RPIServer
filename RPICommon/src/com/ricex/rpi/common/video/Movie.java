@@ -12,10 +12,10 @@ import java.util.List;
 public class Movie implements Video {
 	
 	/** The name of this movie  */
-	private final String name;
+	protected final String name;
 	
 	/** The path to this video file */
-	private final String filePath;	
+	protected final String filePath;	
 	
 	/** Creates a new movie with the given file path */
 	

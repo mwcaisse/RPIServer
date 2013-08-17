@@ -77,8 +77,7 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 		butSeekRightFast = new JButton(">>");		
 		butLastChapter = new JButton("|<<");
 		butNextChapter = new JButton(">>|");	
-		
-		butPlay.setEnabled(false);
+
 		//create the activeCLient combo box and model
 		activeClientModel = new DefaultComboBoxModel<RPIClient>();
 		
