@@ -20,6 +20,9 @@ import com.ricex.rpi.server.player.view.PlayableView;
 /** View for displaying the list of playlists as well as creating new playlists
  * 
  * TODO: have the playlist view refresh when it is open / selected
+ * TODO: No way to see the status of the playlist on the UI
+ * TODO: Pressing play during playlist will moe it to the next item 
+ * 
  * @author Mitchell Caisse
  *
  */

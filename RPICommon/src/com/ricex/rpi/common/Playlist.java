@@ -9,6 +9,7 @@ import com.ricex.rpi.common.video.Video;
 /** Play list class which represents a series of movies to play in sequence on a certian device
  * 
  * @author Mitchell Caisse
+ * 
  *
  */
 
