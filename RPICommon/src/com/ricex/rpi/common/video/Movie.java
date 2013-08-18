@@ -12,10 +12,18 @@ import java.util.List;
 public class Movie implements Video {
 	
 	/** The name of this movie  */
-	protected final String name;
+	protected String name;
 	
 	/** The path to this video file */
-	protected final String filePath;	
+	protected String filePath;	
+	
+	/** Creates a new movie 
+	 * 
+	 */
+	
+	public Movie() {
+		
+	}
 	
 	/** Creates a new movie with the given file path */
 	
@@ -44,13 +52,36 @@ public class Movie implements Video {
 		
 	public String toString() {
 		return name;
-	}
-	
+	}	
+
 	public boolean isDirectory() {
 		return false;
 	}
+
 	
 	public String getName() {
 		return name;
 	}
+	
+	/**
+	 * @return the filePath
+	 */
+	public String getFilePath() {
+		return filePath;
+	}
+	
+	/**
+	 * @param filePath the filePath to set
+	 */
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+	
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}	
+	
 }

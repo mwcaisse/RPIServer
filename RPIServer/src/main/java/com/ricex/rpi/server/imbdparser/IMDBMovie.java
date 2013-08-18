@@ -21,8 +21,11 @@ public class IMDBMovie extends Movie {
 	/** The list of actors in the movie and thier parts */
 	protected List<String> actors;
 	
-	public IMDBMovie(String movieName, String filePath) {
-		super(movieName, filePath);
+	/** Creates a new IMDB movie
+	 * 
+	 */
+	
+	public IMDBMovie() {
 	}
 	
 	/**

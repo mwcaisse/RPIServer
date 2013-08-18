@@ -3,10 +3,14 @@ package com.ricex.rpi.server.imbdparser;
 import java.io.File;
 import java.io.FileFilter;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
 import com.ricex.rpi.common.video.Directory;
 import com.ricex.rpi.common.video.Movie;
 import com.ricex.rpi.common.video.MovieParser;
 import com.ricex.rpi.common.video.Video;
+import com.ricex.rpi.server.imbdparser.util.XMLUtil;
 
 /**
  * Movie parser that reads data from XML meta file, as well as attempting to
@@ -57,7 +61,8 @@ public class IMDBMovieParser implements MovieParser {
 			return parseDirectory(rootDir);
 		}
 		else {
-			return parseFile(rootDir);
+			//TODO: implement this
+			return parseFile(rootDir, null);
 		}
 	}
 
@@ -81,30 +86,64 @@ public class IMDBMovieParser implements MovieParser {
 
 		return root;
 	}
+		
+	/** Returns the value of the property in for the file
+	 * 
+	 * @param xmlDocument The xmlDocument to parse the property from
+	 * @param fileName The name of the movie file to fetch the property for
+	 * @param propertyName The name of the property to fetch
+	 * @return The value of the property, or null if it does not exist
+	 */
+	
+	private String getVideoProperty(Document xmlDocument,String fileName, String propertyName) {
+		String propteryValue = null;
+		//fetch the property from the xml
+		NodeList nodes = XMLUtil.INSTANCE.getXMLObject("/videos/video[@filename='" + fileName + "']/" + propertyName, xmlDocument);
+		//check to make sure the property exists
+		if (nodes != null && nodes.getLength() == 1) {
+			//if it does set its value
+			propteryValue = nodes.item(0).getFirstChild().getNodeValue();
+		}		
+		return propteryValue;
+	}
+	
+	/** Determines if video properties for the video with the 
+	 * 		given file name exist
+	 * @param xmlDocument The xml document to check if properties exist
+	 * @param fileName The name of the file to check
+	 * @return True if the properties exist, false otherwise
+	 */
+	
+	private boolean videoPropertiesExist(Document xmlDocument, String fileName) {
+		NodeList nodes = XMLUtil.INSTANCE.getXMLObject("/videos/video[@filename='" + fileName + "']", xmlDocument);
+		return (nodes != null && nodes.getLength() > 0);
+	}
 
-	/** Returns the Movie representing the given File */
+	/** Parses the movie information for the given file, if it exists
+	 * 
+	 * @param file The file to parse
+	 * @param directoryConfig The Document containing the xml config for the directory
+	 * 		containing the movie to parse
+	 * @return The movie representing the given file
+	 */
 
-	private Movie parseFile(File file) {
-		return new Movie(parseMovieName(file.getName()), getRelativeFilePath(file));
+	private Movie parseFile(File file, Document directoryConfig) {
+		IMDBMovie movie = new IMDBMovie();
+		String fileName = file.getName();
+		if (videoPropertiesExist(directoryConfig, fileName)) {
+			movie.setName(getVideoProperty(directoryConfig, fileName, "name"));
+			movie.setReleaseDate(getVideoProperty(directoryConfig, fileName, "releaseDate"));
+			movie.setDescription(getVideoProperty(directoryConfig, fileName, "description"));
+		}
+		else {
+			System.out.println("No properties for file " + fileName + " exist.");
+		}
+		
+		return movie;
 	}
 
 	private String getRelativeFilePath(File file) {
 		return baseFile.toURI().relativize(file.toURI()).getPath();
-	}
-
-	/**
-	 * Parses the name of the movie from the file name
-	 * 
-	 * @param fileName
-	 *            The name of the file
-	 * @return The name of the movie, or the name of the file if movie name
-	 *         could not be parsed
-	 */
-
-	private String parseMovieName(String fileName) {
-		int lastDot = fileName.lastIndexOf(".");
-		String name = fileName.substring(0, lastDot);
-		return name;
 	}
 
 	private class MovieFileFilter implements FileFilter {
@@ -125,5 +164,5 @@ public class IMDBMovieParser implements MovieParser {
 		}
 
 	}
-
+	
 }
