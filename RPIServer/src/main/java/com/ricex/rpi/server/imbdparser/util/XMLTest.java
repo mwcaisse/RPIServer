@@ -17,7 +17,8 @@ public class XMLTest {
 		
 		Document document = util.getXMLDocument(xmlFile);
 		
-		NodeList nodes = util.getXMLObject("/videos/video[@filename='Airplane.avi']/*", document);		
+		//NodeList nodes = util.getXMLObject("/videos/video[@filename='Airplane.avi']/*", document);		
+		NodeList nodes = util.getXMLObject("/videos/video[@filename='Transporter.mkv']/*", document);	
 		
 		for (int i=0;i<nodes.getLength();i++) {
 			Node node = nodes.item(i);

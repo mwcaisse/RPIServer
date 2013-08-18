@@ -120,10 +120,25 @@ public class IMDBMovieParser implements MovieParser {
 	 * @param fileName The name of the file
 	 * @return The properties map, or null if none exist
 	 */
-	
-	private Map<String, String> getMovieProperties(Document directoryConfig, String fileName) {
+	//Doesnt work if there is a quote in the file name.. -.-
+	private Map<String, String> getMovieProperties(Document directoryConfig, String fileName) {	
 		NodeList nodes = XMLUtil.INSTANCE.getXMLObject("/videos/video[@filename='" + fileName + "']/*",directoryConfig);
-		return nodes == null ? null : XMLUtil.INSTANCE.getXMLElementMap(nodes);
+		if (nodes == null || nodes.getLength() == 0) {
+			return null;
+		}
+		else {
+			return XMLUtil.INSTANCE.getXMLElementMap(nodes);
+		}
+	}
+	
+	/** Checks the file name for any illegal characters, such as quotes
+	 * 
+	 * @param fileName The file name to check
+	 * @return True if no illegal characters were found, false otherwise
+	 */
+	
+	private boolean checkFileName(String fileName) {
+		return !(fileName.contains("\"") || fileName.contains("'"));
 	}
 
 	/** Parses the movie information for the given file, if it exists
@@ -138,7 +153,13 @@ public class IMDBMovieParser implements MovieParser {
 		IMDBMovie movie = new IMDBMovie();
 		String fileName = file.getName();
 		movie.setName(fileName);
-		if (directoryConfig != null) {
+		if (directoryConfig == null ) {
+			//dont log, as this is logged previously
+		}
+		else if (!checkFileName(fileName)) {
+			System.out.println("Illegal characters in file name: " + fileName);
+		}
+		else {
 			Map<String, String> movieProperties = getMovieProperties(directoryConfig, file.getName());
 			if (movieProperties == null) {
 				System.out.println("No properties for file " + fileName + " exist.");
