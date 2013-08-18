@@ -17,16 +17,12 @@ public class XMLTest {
 		
 		Document document = util.getXMLDocument(xmlFile);
 		
-		NodeList nodes = util.getXMLObject("/videos/video[@filename='Airplane.avi']/name", document);		
-		System.out.println("NodeName: name value: " + nodes.item(0).getFirstChild().getNodeValue());
+		NodeList nodes = util.getXMLObject("/videos/video[@filename='Airplane.avi']/*", document);		
 		
-		nodes = util.getXMLObject("/videos/video[@filename='Airplane.avi']/description", document);		
-		System.out.println("NodeName: name value: " + nodes.item(0).getFirstChild().getNodeValue());
-		
-		nodes = util.getXMLObject("/videos/video[@filename='Airplane.avi']/year", document);		
-		System.out.println("NodeName: year value: " + nodes.item(0).getFirstChild().getNodeValue());
-		
-		
+		for (int i=0;i<nodes.getLength();i++) {
+			Node node = nodes.item(i);
+			System.out.println(node.getNodeName() + " " + node.getFirstChild().getNodeValue());
+		}		
 	
 	}
 }

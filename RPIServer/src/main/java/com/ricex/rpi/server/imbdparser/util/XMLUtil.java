@@ -2,6 +2,8 @@ package com.ricex.rpi.server.imbdparser.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -13,6 +15,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -81,6 +84,22 @@ public enum XMLUtil {
 		}
 		
 		return results;
+	}
+	
+	/** Parses a map containing all the properties and thier values in the node list
+	 * 	representing the element to parse
+	 * 
+	 * @param nodes The node list represneting the element
+	 * @return The map containing the properties
+	 */
+	
+	public Map<String, String> getXMLElementMap(NodeList nodes) {
+		Map<String, String> properties = new HashMap<String, String>();
+		for (int i=0;i<nodes.getLength();i++) {
+			Node node = nodes.item(i);
+			properties.put(node.getNodeName(), node.getFirstChild().getNodeValue());
+		}	
+		return properties;
 	}
 	
 }

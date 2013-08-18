@@ -12,13 +12,13 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.ricex.rpi.common.video.BasicMovieParser;
 import com.ricex.rpi.common.video.MovieParser;
 import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.server.RPIServer;
 import com.ricex.rpi.server.RPIServerProperties;
 import com.ricex.rpi.server.RemoteServer;
 import com.ricex.rpi.server.client.RPIClient;
+import com.ricex.rpi.server.imbdparser.IMDBMovieParser;
 import com.ricex.rpi.server.imbdparser.IMDBVideoTreeView;
 import com.ricex.rpi.server.player.view.ControllerPane;
 import com.ricex.rpi.server.player.view.client.ClientTableView;
@@ -96,7 +96,7 @@ public class RPIPlayer extends JFrame {
 
 	private RPIPlayer() {
 		playlistController = new PlaylistController();
-		movieParser = new BasicMovieParser();		
+		movieParser = new IMDBMovieParser();		
 		parseRootDirectory();
 	}
 

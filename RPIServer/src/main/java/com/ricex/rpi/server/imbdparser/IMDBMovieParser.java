@@ -2,6 +2,8 @@ package com.ricex.rpi.server.imbdparser;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.util.Map;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -74,49 +76,54 @@ public class IMDBMovieParser implements MovieParser {
 
 	private Directory parseDirectory(File dir) {
 		Directory root = new Directory(dir.getName());
+		
+		Document directoryConfig = getDirectoryConfig(dir);
 
 		for (File file : dir.listFiles(movieFilter)) {
 			if (file.isDirectory()) {
 				root.addChild(parseDirectory(file));
 			}
 			else {
-				root.addChild(parseFile(file));
+				root.addChild(parseFile(file, directoryConfig));
 			}
 		}
 
 		return root;
 	}
-		
-	/** Returns the value of the property in for the file
+	
+	/** Parses the xml file containing the configuration in the directory
 	 * 
-	 * @param xmlDocument The xmlDocument to parse the property from
-	 * @param fileName The name of the movie file to fetch the property for
-	 * @param propertyName The name of the property to fetch
-	 * @return The value of the property, or null if it does not exist
+	 * @param directory The directory to parse the configuration for
+	 * @return The document representing the configuration
 	 */
 	
-	private String getVideoProperty(Document xmlDocument,String fileName, String propertyName) {
-		String propteryValue = null;
-		//fetch the property from the xml
-		NodeList nodes = XMLUtil.INSTANCE.getXMLObject("/videos/video[@filename='" + fileName + "']/" + propertyName, xmlDocument);
-		//check to make sure the property exists
-		if (nodes != null && nodes.getLength() == 1) {
-			//if it does set its value
-			propteryValue = nodes.item(0).getFirstChild().getNodeValue();
-		}		
-		return propteryValue;
+	private Document getDirectoryConfig(File directory) {
+		File[] configFiles = directory.listFiles(new FilenameFilter() {			
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.equals("rpiplayer.xml");
+			}
+		});		
+		Document xmlDocument = null;		
+		if (configFiles.length > 0) {
+			xmlDocument = XMLUtil.INSTANCE.getXMLDocument(configFiles[0]);
+		}	
+		else {
+			System.out.println("No directory config exists for directory: " + directory.getName());
+		}
+		return xmlDocument;
 	}
 	
-	/** Determines if video properties for the video with the 
-	 * 		given file name exist
-	 * @param xmlDocument The xml document to check if properties exist
-	 * @param fileName The name of the file to check
-	 * @return True if the properties exist, false otherwise
+	/** Fetches the Properties map for a movie file
+	 * 
+	 * @param directoryConfig The configuration for the directory the file is in
+	 * @param fileName The name of the file
+	 * @return The properties map, or null if none exist
 	 */
 	
-	private boolean videoPropertiesExist(Document xmlDocument, String fileName) {
-		NodeList nodes = XMLUtil.INSTANCE.getXMLObject("/videos/video[@filename='" + fileName + "']", xmlDocument);
-		return (nodes != null && nodes.getLength() > 0);
+	private Map<String, String> getMovieProperties(Document directoryConfig, String fileName) {
+		NodeList nodes = XMLUtil.INSTANCE.getXMLObject("/videos/video[@filename='" + fileName + "']/*",directoryConfig);
+		return nodes == null ? null : XMLUtil.INSTANCE.getXMLElementMap(nodes);
 	}
 
 	/** Parses the movie information for the given file, if it exists
@@ -130,15 +137,18 @@ public class IMDBMovieParser implements MovieParser {
 	private Movie parseFile(File file, Document directoryConfig) {
 		IMDBMovie movie = new IMDBMovie();
 		String fileName = file.getName();
-		if (videoPropertiesExist(directoryConfig, fileName)) {
-			movie.setName(getVideoProperty(directoryConfig, fileName, "name"));
-			movie.setReleaseDate(getVideoProperty(directoryConfig, fileName, "releaseDate"));
-			movie.setDescription(getVideoProperty(directoryConfig, fileName, "description"));
+		movie.setName(fileName);
+		if (directoryConfig != null) {
+			Map<String, String> movieProperties = getMovieProperties(directoryConfig, file.getName());
+			if (movieProperties == null) {
+				System.out.println("No properties for file " + fileName + " exist.");
+			}
+			else {
+				movie.setName(movieProperties.get("name"));
+				movie.setDescription(movieProperties.get("description"));
+				movie.setReleaseDate(movieProperties.get("releaseDate"));
+			}	
 		}
-		else {
-			System.out.println("No properties for file " + fileName + " exist.");
-		}
-		
 		return movie;
 	}
 
