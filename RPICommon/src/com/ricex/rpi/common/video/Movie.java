@@ -6,6 +6,8 @@ import java.util.List;
 /** Class representing a movie, its file and information about it
  * 
  * @author Mitchell Caisse
+ * 
+ * TODO: Might want to create a sub interface for Movie, to make this more typesafe
  *
  */
 

@@ -116,6 +116,7 @@ public class VideoTreeView extends JPanel implements PlayableView {
 
 	protected class TreeViewMouseListener extends MouseAdapter {
 
+		//TODO: refactor to allow multiple selection
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (e.getButton() == MouseEvent.BUTTON3) {

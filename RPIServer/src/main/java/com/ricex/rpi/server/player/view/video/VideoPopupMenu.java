@@ -61,36 +61,6 @@ public class VideoPopupMenu extends JPopupMenu implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Playlist playlist = new Playlist();
 		playlist.addItem(video);
-		//TODO:
-		//RPIPlayer.getInstance().getActiveClient().getPlayerModule().play(playlist);
-	}
-	
-	private class PlaylistMenuItem extends JMenuItem implements ActionListener {
-
-		/** The playlist to add the video to */
-		private Playlist playlist;
-		
-		/** The video to add to the play list */
-		private Video video;
-		
-		/**Creates a new playlist menu item
-		 * 
-		 * @param playlist The playlist to draw / add to
-		 * @param video The video to add to the playlist
-		 */
-		
-		private PlaylistMenuItem(Playlist playlist, Video video) {
-			super(playlist.getName());
-			this.playlist = playlist;
-			this.video = video;
-			
-			addActionListener(this);
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			playlist.addItem(video);
-		}
-		
+		RPIPlayer.getInstance().getActiveClient().getPlayerModule().play(playlist);
 	}
 }

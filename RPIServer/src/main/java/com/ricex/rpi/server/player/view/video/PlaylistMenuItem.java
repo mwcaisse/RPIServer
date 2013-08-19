@@ -60,9 +60,7 @@ public class PlaylistMenuItem extends JMenuItem implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//add each video to the playlist
-		for (Video video : videos) {
-			playlist.addItem(video);
-		}
+		playlist.addAll(videos);
 	}
 	
 }

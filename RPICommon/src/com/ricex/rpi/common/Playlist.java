@@ -60,6 +60,15 @@ public class Playlist implements Serializable {
 	public void addItem(Video item) {
 		items.add(item);
 	}
+	
+	/** Adds the given list of videos to the play list
+	 * 
+	 * @param videos The videos to add
+	 */
+	
+	public void addAll(List<Video> videos) {
+		items.addAll(videos);
+	}
 
 	/** Removes the given item
 	 * 
