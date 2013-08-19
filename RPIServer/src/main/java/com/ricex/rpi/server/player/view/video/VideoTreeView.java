@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -22,7 +23,6 @@ import com.ricex.rpi.server.player.view.PlayableView;
  * @author Mitchell Caisse
  * 
  * TODO: Add right clicking to directory, to add all sub movies to a playlist
- * 	--POSSIBLY DONE, NOT TEST
  * 
  * TODO: Enable adding multiple videos to the playlist
  *
@@ -31,10 +31,10 @@ import com.ricex.rpi.server.player.view.PlayableView;
 public class VideoTreeView extends JPanel implements PlayableView {
 
 	/** The tree containing the list of videos */
-	protected JTree videoTree;
+	private JTree videoTree;
 
 	/** The tree model for the tree view */
-	protected DefaultTreeModel treeModel;
+	private DefaultTreeModel treeModel;
 
 	/** The currently active client */
 	protected RPIClient activeClient;
@@ -138,11 +138,48 @@ public class VideoTreeView extends JPanel implements PlayableView {
 	public Playlist getPlaylistToPlay() {
 		Playlist playlist = new Playlist();
 		if (videoTree.getSelectionPath() != null) {
-			Video selectedVideo = (Video) ((DefaultMutableTreeNode)videoTree.getSelectionPath().getLastPathComponent()).getUserObject();
+			Video selectedVideo = getSelectedVideo();
 			playlist.addItem(selectedVideo);
 		}
 		return playlist;
 
+	}
+	
+	/** Returns the currently selected video
+	 * 
+	 * @return The selected video
+	 */
+	
+	protected Video getSelectedVideo() {
+		return  (Video) ((DefaultMutableTreeNode)videoTree.getSelectionPath().getLastPathComponent()).getUserObject();
+	}
+	
+	/** Checks if more than one video is selected in the Video Tree.
+	 *  Will return false if 0 or 1 movies are selected
+	 * 
+	 * @return True if more than one video is selected, false otherwise.
+	 */
+	
+	protected boolean multipleVideosSelected() {
+		return videoTree.getSelectionCount() > 1;
+	}
+	
+	/** Adds the given tree selection listener as a listener on the video tree
+	 * 
+	 * @param listener The listener to add
+	 */
+	
+	protected void addTreeSelectionListener(TreeSelectionListener listener) {
+		videoTree.addTreeSelectionListener(listener);
+	}
+	
+	/** Removes the given tree selection listener from the video tree
+	 * 
+	 * @param listener The listener to remove
+	 */
+	
+	protected void removeTreeSelectionListener(TreeSelectionListener listener) {
+		videoTree.removeTreeSelectionListener(listener);
 	}
 
 }

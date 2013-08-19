@@ -19,7 +19,8 @@ public class IMDBMovie extends Movie {
 	protected String releaseDate;
 	
 	/** The list of actors in the movie and thier parts */
-	protected List<String> actors;
+	protected List<String> actors;	
+
 	
 	/** Creates a new IMDB movie
 	 * 
