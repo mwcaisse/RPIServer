@@ -57,7 +57,7 @@ public class IMDBVideoTreeView extends VideoTreeView implements TreeSelectionLis
 		
 		//initialize the labels for displaying the movie information
 		labMovieName = new JLabel("Airplane!");		
-		labMovieDescription = new JLabel(concatHtml("An airplane crew takes ill. Surely the only person capable of landing the plane is an ex-pilot afraid to fly. But don't call him Shirley."));		
+		labMovieDescription = new JLabel(concatWrappingHtml("An airplane crew takes ill. Surely the only person capable of landing the plane is an ex-pilot afraid to fly. But don't call him Shirley."));		
 		labMovieReleaseDate = new JLabel("2 July 1980 (USA)");
 		
 		labMovieDescription.setMaximumSize(new Dimension(100, 25));
@@ -100,8 +100,8 @@ public class IMDBVideoTreeView extends VideoTreeView implements TreeSelectionLis
 			addMovieInformation((IMDBMovie) video);
 		}
 		else {
-			log.error("IMDBVideoTreeView is being used without IMDBMovieParser, will not have any movie information");
-			
+			clearMovieInformation();
+			labMovieName.setText(concatWrappingHtml("IMDBMovieTreeView must also be used with IMDBMovieParser, otherwise no information will be found"));			
 		}
 	}
 	
@@ -117,7 +117,7 @@ public class IMDBVideoTreeView extends VideoTreeView implements TreeSelectionLis
 		}
 		else {
 			labMovieName.setText(movie.getName());
-			labMovieDescription.setText(concatHtml(movie.getDescription()));
+			labMovieDescription.setText(concatWrappingHtml(movie.getDescription()));
 			labMovieReleaseDate.setText(movie.getReleaseDate());
 		}
 	}
@@ -128,7 +128,7 @@ public class IMDBVideoTreeView extends VideoTreeView implements TreeSelectionLis
 	 * @return The string with the html
 	 */
 	
-	private String concatHtml(String str) {
+	private String concatWrappingHtml(String str) {
 		return "<html><body><p>" + str + "</p></body></html>";
 	}
 	
