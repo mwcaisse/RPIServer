@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionListener;
@@ -122,13 +123,26 @@ public class VideoTreeView extends JPanel implements PlayableView {
 				videoTree.setSelectionPath(selectedPath); // set the selected path of the tree, so right click vissualy selects
 				if (selectedPath != null && videoTree.getSelectionCount() == 1) { //only do this is selection count is 1
 					Video selectedItem = (Video)((DefaultMutableTreeNode)selectedPath.getLastPathComponent()).getUserObject();
-					if (!selectedItem.isDirectory()) {
-						VideoPopupMenu menu = new VideoPopupMenu(selectedItem);
-						menu.show(videoTree, e.getX(), e.getY());
-					}
+					createPopupMenu(selectedItem).show(videoTree, e.getX(), e.getY());
 				}
 			}
 		}
+	}
+	
+	/** Creates a popup menu for the selected video
+	 * 
+	 * @param video The video to create the popup menu for
+	 */
+	
+	private JPopupMenu createPopupMenu(Video video) {
+		JPopupMenu menu;
+		if (video.isDirectory()) {
+			menu = new DirectoryPopupMenu(video);
+		}
+		else {
+			menu = new VideoPopupMenu(video);
+		}		
+		return menu;
 	}
 
 	/** Return the playlist to play
