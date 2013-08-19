@@ -12,6 +12,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ricex.rpi.common.video.MovieParser;
 import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.server.RPIServer;
@@ -36,6 +39,8 @@ import com.ricex.rpi.server.player.view.video.VideoTreeView;
 
 public class RPIPlayer extends JFrame {
 
+	private static final Logger log = LoggerFactory.getLogger(RPIPlayer.class);
+	
 	/** The singleton instance of this class */
 	private static RPIPlayer _instance;
 
@@ -171,7 +176,7 @@ public class RPIPlayer extends JFrame {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}
 		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-			System.out.println("Could not set the look and feel to System look and feel");
+			log.error("Could not set the look and feel to system look and feel", e);
 		}
 	}
 

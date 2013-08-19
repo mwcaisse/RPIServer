@@ -5,6 +5,8 @@ import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -24,6 +26,8 @@ import com.ricex.rpi.server.imbdparser.util.XMLUtil;
  */
 
 public class IMDBMovieParser implements MovieParser {
+	
+	private static final Logger log = LoggerFactory.getLogger(IMDBMovieParser.class);
 
 	private static final String[] acceptedFileNames = { "avi", "mkv", "mp4" };
 
@@ -63,7 +67,6 @@ public class IMDBMovieParser implements MovieParser {
 			return parseDirectory(rootDir);
 		}
 		else {
-			//TODO: implement this
 			return parseFile(rootDir, null);
 		}
 	}
@@ -108,8 +111,8 @@ public class IMDBMovieParser implements MovieParser {
 		if (configFiles.length > 0) {
 			xmlDocument = XMLUtil.INSTANCE.getXMLDocument(configFiles[0]);
 		}	
-		else {
-			System.out.println("No directory config exists for directory: " + directory.getName());
+		else {	
+			log.info("No directory config exists for directory {}", directory.getName());
 		}
 		return xmlDocument;
 	}
@@ -157,12 +160,12 @@ public class IMDBMovieParser implements MovieParser {
 			//dont log, as this is logged previously
 		}
 		else if (!checkFileName(fileName)) {
-			System.out.println("Illegal characters in file name: " + fileName);
+			log.warn("Illegal characters in file name {}" , fileName);
 		}
 		else {
 			Map<String, String> movieProperties = getMovieProperties(directoryConfig, file.getName());
 			if (movieProperties == null) {
-				System.out.println("No properties for file " + fileName + " exist.");
+				log.info("No properties for file {} exist", fileName);
 			}
 			else {
 				movie.setName(movieProperties.get("name"));

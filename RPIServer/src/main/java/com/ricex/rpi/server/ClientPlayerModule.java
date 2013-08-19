@@ -1,5 +1,8 @@
 package com.ricex.rpi.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.common.message.IMessage;
@@ -17,6 +20,8 @@ import com.ricex.rpi.server.client.RPIClient;
 
 public class ClientPlayerModule implements ClientChangeListener<RPIClient> {
 
+	private static final Logger log = LoggerFactory.getLogger(ClientPlayerModule.class);
+	
 	/** The client to send the commands to */
 	private RPIClient client;
 
@@ -126,7 +131,7 @@ public class ClientPlayerModule implements ClientChangeListener<RPIClient> {
 
 	private void sendMessage(IMessage message) {
 		if (!client.sendMessage(message)) {
-			System.out.println("Client PlayerModule failed to send message");
+			log.error("Client playermodule failed to send message");
 		}
 	}
 

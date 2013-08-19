@@ -39,7 +39,7 @@ public abstract class RPIProperties {
 			fis.close();
 		}
 		catch (IOException e) {
-			System.out.println("Unable to create properties. IOException");
+			//System.out.println("Unable to create properties. IOException");
 			e.printStackTrace();
 		}
 	}

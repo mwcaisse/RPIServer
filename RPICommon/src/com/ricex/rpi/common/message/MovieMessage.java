@@ -81,7 +81,6 @@ public class MovieMessage implements IMessage {
 			playerModule.volumeUp();
 			break;
 		default:
-			System.out.println("UNSUPPORTED OPERATION");
 			break;		
 		}	
 	}

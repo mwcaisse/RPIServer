@@ -5,12 +5,19 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.server.client.Client;
+import com.ricex.rpi.server.imbdparser.IMDBMovieParser;
 
 
 public abstract class ClientHandler<T extends Client> implements Runnable {
 
+	private static final Logger log = LoggerFactory.getLogger(ClientHandler.class);
+
+	
 	/** The client that this handler is for */
 	final protected T client;
 	
@@ -35,7 +42,7 @@ public abstract class ClientHandler<T extends Client> implements Runnable {
 			outStream = new ObjectOutputStream(client.getSocket().getOutputStream());
 		}
 		catch (IOException e) {
-			System.out.println("Error creating output stream");
+			log.error("Unable to create client output stream", e);
 		}	
 	}
 	
@@ -45,7 +52,7 @@ public abstract class ClientHandler<T extends Client> implements Runnable {
 			inStream = new ObjectInputStream(client.getSocket().getInputStream());
 		}
 		catch (IOException e) {
-			System.out.println("Error opening the inputstream for the client, leaving run thread");
+			log.error("Unable to create input stream for the client", e);
 			return;
 		}
 		
@@ -56,19 +63,17 @@ public abstract class ClientHandler<T extends Client> implements Runnable {
 				processMessage((IMessage) inputObject);
 			}
 			catch (EOFException e) {
-				System.out.println("The stream has ended");
-				e.printStackTrace();
+				log.warn("The input stream of the client has ended", e);
 				break;
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				log.error("Error while listening for message", e);
 			}
 			catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				log.error("Received unsupported class", e);
 			}
 		}	
-
-		System.out.println("ClientHandler, we left server loop");		
+		log.debug("ClientHandler has left server loop");
 		client.disconnect();
 	}
 	

@@ -9,9 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.server.client.Client;
 import com.ricex.rpi.server.client.ClientConnectionListener;
+import com.ricex.rpi.server.client.handler.RPIClientHandler;
 
 /**
  * A server module
@@ -26,6 +30,8 @@ import com.ricex.rpi.server.client.ClientConnectionListener;
 
 public abstract class Server<T extends Client> implements Runnable {
 
+	private static final Logger log = LoggerFactory.getLogger(Server.class);
+	
 	/** The name of the server to use when printing out details */
 	private final String name;
 	
@@ -66,13 +72,12 @@ public abstract class Server<T extends Client> implements Runnable {
 			
 		}
 		catch (IOException e) {
-			System.out.println("Error starting the server");
-			e.printStackTrace();
+			log.error("Unable to start server with name {}", name, e);
 			return;
 		}
 		running = true;
 		
-		System.out.println(name + " Server Started");
+		log.info("{} Server started", name);
 		
 		// listen for conenctions to the server
 		while (running) {			
@@ -85,7 +90,7 @@ public abstract class Server<T extends Client> implements Runnable {
 	
 				// wait for connections
 				Socket clientSocket = socket.accept();
-				System.out.println("User connected to " + name + " server");
+				log.info("User connected to {} server", name);
 	
 				// check if server is not full
 				if (connectedClients.size() < maxConnections) {
@@ -95,8 +100,9 @@ public abstract class Server<T extends Client> implements Runnable {
 					notifyConnectionListeners(true, rPIClient);
 				}
 				else {
-					System.out.println(name + " Server: No more connections allowed");
+					log.info("No more connections allow to server {}", name);
 					// we are at max connections.
+					//TODO: why is this using a print writer.
 					PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
 					out.println("No more connections allowed, sorry. Come back later.");
 					out.close();
@@ -104,13 +110,12 @@ public abstract class Server<T extends Client> implements Runnable {
 				}
 			}
 			catch (IOException e) {
-				System.out.println(name + " Server error");
-				e.printStackTrace();
+				log.error("A server error has occured on server {}", name, e);
 			}		
 		}
 		/*
 		 *  disconnectClients();
-		 *	System.out.println(name + " Server Stopped");
+		 *	log.info("Server {} has stopped", name);
 		 */
 	}
 
@@ -227,7 +232,7 @@ public abstract class Server<T extends Client> implements Runnable {
 	 */
 	
 	public synchronized void shutdown() {
-		System.out.println(name + " shutting down");
+		log.info("Server {} is shutting down", name);
 		running = false;
 	}
 }

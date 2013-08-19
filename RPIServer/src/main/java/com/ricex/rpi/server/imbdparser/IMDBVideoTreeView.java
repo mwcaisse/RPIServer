@@ -52,10 +52,6 @@ public class IMDBVideoTreeView extends VideoTreeView {
 		
 		labMovieDescription.setMaximumSize(new Dimension(100, 25));
 		
-		System.out.println(labMovieDescription.getPreferredSize().width);
-		
-		System.out.println("Width?L " + getPreferredSize().width);
-		
 		SpringLayout layout = new SpringLayout();
 		
 		layout.putConstraint(SpringLayout.WEST, labMovieName, HORIZONTAL_PADDING, SpringLayout.WEST, sidePanel);
