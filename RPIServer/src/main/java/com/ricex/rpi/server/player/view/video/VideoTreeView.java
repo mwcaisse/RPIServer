@@ -34,7 +34,7 @@ import com.ricex.rpi.server.player.view.PlayableView;
 public class VideoTreeView extends JPanel implements PlayableView {
 
 	/** Logger */
-	private static final Logger log = LoggerFactory.getLogger(RPIPlayer.class);
+	private static final Logger log = LoggerFactory.getLogger(VideoTreeView.class);
 	
 	/** The tree containing the list of videos */
 	protected JTree videoTree;

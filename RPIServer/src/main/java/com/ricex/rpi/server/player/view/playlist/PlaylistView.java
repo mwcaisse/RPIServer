@@ -108,13 +108,18 @@ public class PlaylistView extends JPanel implements ListSelectionListener, Playa
 	
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		Playlist selectedPlaylist = playlistList.getSelectedValue();
-		if (selectedPlaylist == null) {
-			return; //TODO: implement what happens when this is null
-		}
-		playlistItemModel.clear();
-		for (Video video : selectedPlaylist.getItems()) {
-			playlistItemModel.addElement(video);
+		refreshPlaylistItems();
+	}
+	
+	
+	
+	public void refreshPlaylistItems() {
+		Playlist selectedPlaylist = getSelectedPlaylist();
+		if (selectedPlaylist != null) {		
+			playlistItemModel.clear();
+			for (Video video : selectedPlaylist.getItems()) {
+				playlistItemModel.addElement(video);
+			}
 		}
 	}
 
@@ -122,6 +127,28 @@ public class PlaylistView extends JPanel implements ListSelectionListener, Playa
 	
 	public void refreshPlaylists() {		
 		populatePlaylistModel(RPIPlayer.getInstance().getPlaylistController());
+	}
+	
+	/** Refreshes the list of playlists and the list of videos
+	 * 
+	 */
+	
+	public void refresh() {
+		Playlist selectedPlaylist = getSelectedPlaylist();
+		refreshPlaylists();
+		if (selectedPlaylist != null) {
+			playlistList.setSelectedValue(selectedPlaylist, true);
+		}
+		refreshPlaylistItems();
+	}
+	
+	/** Returns the currently selected playlist 
+	 * 
+	 * @return The selected playlist
+	 */
+	
+	private Playlist getSelectedPlaylist() {
+		return playlistList.getSelectedValue();
 	}
 
 	/** Returns the selected playlist

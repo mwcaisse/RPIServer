@@ -140,6 +140,10 @@ public class RPIPlayer extends JFrame {
 			public void stateChanged(ChangeEvent e) {
 				Component selectedComponent = tabbedPane.getSelectedComponent();
 				controllerPane.updatePlayableView(selectedComponent);
+				if (selectedComponent.equals(playlistView)) {
+					//TODO: Re-implement this, add a tab interface with refresh method
+					playlistView.refresh();
+				}
 			}
 
 		});

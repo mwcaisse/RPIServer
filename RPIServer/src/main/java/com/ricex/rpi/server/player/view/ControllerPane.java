@@ -9,6 +9,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.server.ClientPlayerModule;
 import com.ricex.rpi.server.RPIServer;
@@ -27,6 +30,9 @@ import com.ricex.rpi.server.player.RPIPlayer;
 public class ControllerPane extends JPanel implements ClientChangeListener<RPIClient>, ActionListener, 
 		ClientConnectionListener<RPIClient>{
 
+	/** Logger */
+	private static final Logger log = LoggerFactory.getLogger(ControllerPane.class);
+	
 	/** Button to play the selected video / playlist */
 	private JButton butPlay;
 	
@@ -243,14 +249,19 @@ public class ControllerPane extends JPanel implements ClientChangeListener<RPICl
 		activeClientModel.removeElement(client);
 	}
 	
+	/** Updates the current playable view
+	 * 
+	 * @param playableView The new playable view
+	 */
+	
 	public void updatePlayableView(Component playableView) {
 		if (playableView instanceof PlayableView) {
 			this.playableView = (PlayableView)playableView;
 		}
 		else {
 			this.playableView = null;
-		}		
-		butPlay.setEnabled(playableView != null);
+		}	
+		butPlay.setEnabled(this.playableView != null);
 	}
 	
 }
