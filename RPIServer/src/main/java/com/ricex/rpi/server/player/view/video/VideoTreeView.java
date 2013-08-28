@@ -3,6 +3,8 @@ package com.ricex.rpi.server.player.view.video;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -12,6 +14,9 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Video;
@@ -31,6 +36,9 @@ import com.ricex.rpi.server.player.view.PlayableView;
 
 public class VideoTreeView extends JPanel implements PlayableView {
 
+	/** Logger */
+	private static final Logger log = LoggerFactory.getLogger(RPIPlayer.class);
+	
 	/** The tree containing the list of videos */
 	private JTree videoTree;
 
@@ -120,14 +128,102 @@ public class VideoTreeView extends JPanel implements PlayableView {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (e.getButton() == MouseEvent.BUTTON3) {
+				
+				rightMouseClicked(e.getX(), e.getY());
+				
+				//if none is selected, use selection path
+				/*
 				TreePath selectedPath = videoTree.getPathForLocation(e.getX(), e.getY());
 				videoTree.setSelectionPath(selectedPath); // set the selected path of the tree, so right click vissualy selects
 				if (selectedPath != null && videoTree.getSelectionCount() == 1) { //only do this is selection count is 1
 					Video selectedItem = (Video)((DefaultMutableTreeNode)selectedPath.getLastPathComponent()).getUserObject();
 					createPopupMenu(selectedItem).show(videoTree, e.getX(), e.getY());
+				}*/
+			}
+		}
+	}
+	
+	/** The right mouse button was pressed, at the given location
+	 * 
+	 * @param x The x location that was clicked
+	 * @param y The y location that was clicked
+	 * 
+	 * TODO: refactor this method
+	 * 
+	 */
+	
+	protected void rightMouseClicked(int x, int y) {
+		int selectionCount = videoTree.getSelectionModel().getSelectionCount();
+		TreePath rightClickPath = videoTree.getPathForLocation(x,y);
+		
+		JPopupMenu popupMenu = null;
+		
+		log.info("SelectionCount: {} rightClickpath: {}", selectionCount, rightClickPath);
+		
+		if (selectionCount > 1) {
+			log.info("Selection count is greater than 1");
+			//more than one item was selected
+			List<Video> selectedVideos = getVideosFromTreePaths(videoTree.getSelectionModel().getSelectionPaths());
+			if (rightClickPath == null) {
+				log.info("Nothing was right clicked on, creating a multiple popup menu");
+				popupMenu = createPopupMenu(selectedVideos);				
+			}
+			else {
+				//user right clicked somewhere
+				log.info("A video was right clicked on ");
+				Video rightClickVideo = (Video) ((DefaultMutableTreeNode)rightClickPath.getLastPathComponent()).getUserObject();
+				if (selectedVideos.contains(rightClickVideo)) {
+					log.info("Creating a popup menu for the selected videos");
+					popupMenu = createPopupMenu(selectedVideos);	
+				}
+				else {
+					log.info("Creating a popup menu for the video right clicked on");
+					videoTree.setSelectionPath(rightClickPath);
+					popupMenu = createPopupMenu(rightClickVideo);
 				}
 			}
 		}
+		else if (selectionCount == 1) {
+			//one video was selected
+			if (rightClickPath != null) {
+				Video rightClickVideo = (Video) ((DefaultMutableTreeNode)rightClickPath.getLastPathComponent()).getUserObject();
+				videoTree.setSelectionPath(rightClickPath);
+				popupMenu = createPopupMenu(rightClickVideo);
+			}
+			else {
+				popupMenu = createPopupMenu(getSelectedVideo());
+			}
+		}
+		else {
+			//selection count is 0
+			if (rightClickPath != null) {
+				Video rightClickVideo = (Video) ((DefaultMutableTreeNode)rightClickPath.getLastPathComponent()).getUserObject();
+				videoTree.setSelectionPath(rightClickPath);
+				popupMenu = createPopupMenu(rightClickVideo);
+			}
+		}
+		
+		if (popupMenu != null) {
+			log.info("Showing popup menu at {},{}", x, y);
+			popupMenu.show(videoTree, x, y);
+		}
+	}
+	
+	/** Puts all of the videos in the tree paths in a list, ignoring directories
+	 * 
+	 * @param treePaths The array of tree paths
+	 * @return a list of videos in the tree paths
+	 */
+	
+	private List<Video> getVideosFromTreePaths(TreePath[] treePaths) {
+		List<Video> videos = new ArrayList<Video>();
+		for (TreePath path : treePaths) {
+			Video toAdd = (Video) ((DefaultMutableTreeNode)path.getLastPathComponent()).getUserObject();
+			if (!toAdd.isDirectory()) {
+				videos.add(toAdd);	
+			}
+		}
+		return videos;
 	}
 	
 	/** Creates a popup menu for the selected video
@@ -144,6 +240,16 @@ public class VideoTreeView extends JPanel implements PlayableView {
 			menu = new VideoPopupMenu(video);
 		}		
 		return menu;
+	}
+	
+	/** Creates a popup menu for the list of selected videos
+	 * 
+	 * @param videos The videos to create the popup menu for
+	 * @return The popup menu
+	 */
+	
+	private JPopupMenu createPopupMenu(List<Video> videos) {
+		return new MultipleVideoPopupMenu(videos);
 	}
 
 	/** Return the playlist to play
