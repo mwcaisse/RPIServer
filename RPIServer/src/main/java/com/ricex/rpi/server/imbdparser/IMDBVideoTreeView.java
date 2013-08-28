@@ -5,6 +5,8 @@ import java.awt.Dimension;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.SpringLayout;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -51,7 +53,33 @@ public class IMDBVideoTreeView extends VideoTreeView implements TreeSelectionLis
 	 *  video
 	 */
 	
-	public IMDBVideoTreeView() {
+	public IMDBVideoTreeView() {		
+		// add ourselves as a selection listener to the tree
+		addTreeSelectionListener(this);
+	}
+	
+	/** Adds the components to the view and sets the view layout
+	 * 
+	 */
+	
+	protected void addComponents() {
+		JScrollPane scrollPane = new JScrollPane();
+		//scrollPane.getViewport().setLayout(new BorderLayout());
+		scrollPane.getViewport().add(videoTree);
+		setLayout(new BorderLayout());
+		
+		initializeSidePanel();
+		
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPane, sidePanel);
+		
+		add(splitPane, BorderLayout.CENTER);
+	}
+	
+	/** Initializes the side panel
+	 * 
+	 */
+	
+	private void initializeSidePanel() {
 		sidePanel = new JPanel();
 		sidePanel.setPreferredSize(new Dimension(300, 100));
 		
@@ -60,8 +88,7 @@ public class IMDBVideoTreeView extends VideoTreeView implements TreeSelectionLis
 		labMovieDescription = new JLabel(concatWrappingHtml("An airplane crew takes ill. Surely the only person capable of landing the plane is an ex-pilot afraid to fly. But don't call him Shirley."));		
 		labMovieReleaseDate = new JLabel("2 July 1980 (USA)");
 		
-		labMovieDescription.setMaximumSize(new Dimension(100, 25));
-		
+		labMovieDescription.setMaximumSize(new Dimension(100, 25));		
 		SpringLayout layout = new SpringLayout();
 		
 		layout.putConstraint(SpringLayout.WEST, labMovieName, HORIZONTAL_PADDING, SpringLayout.WEST, sidePanel);
@@ -75,17 +102,12 @@ public class IMDBVideoTreeView extends VideoTreeView implements TreeSelectionLis
 		layout.putConstraint(SpringLayout.NORTH, labMovieDescription, VERTICAL_PADDING , SpringLayout.SOUTH, labMovieReleaseDate);
 		layout.putConstraint(SpringLayout.EAST, labMovieDescription, -2 * HORIZONTAL_PADDING , SpringLayout.EAST, sidePanel);
 		
-		sidePanel.setLayout(layout);
-		
+		sidePanel.setLayout(layout);		
 		sidePanel.add(labMovieName);
 		sidePanel.add(labMovieDescription);
 		sidePanel.add(labMovieReleaseDate);	
-		
-		add(sidePanel, BorderLayout.EAST);
-		
-		// add ourselves as a selection listener to the tree
-		addTreeSelectionListener(this);
 	}
+
 	
 	/** Updates the movie information in the pane, with the in formation from the 
 	 *  video

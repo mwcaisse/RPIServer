@@ -6,6 +6,7 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -142,7 +143,7 @@ public class RPIPlayer extends JFrame {
 			}
 
 		});
-
+		
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		contentPane.add(controllerPane, BorderLayout.SOUTH);
 

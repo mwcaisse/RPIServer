@@ -26,11 +26,8 @@ import com.ricex.rpi.server.player.view.PlayableView;
 
 /** View that will display a tree of the videos for the active clietn
  * 
- * @author Mitchell Caisse
- * 
- * TODO: Add right clicking to directory, to add all sub movies to a playlist
- * 
- * TODO: Enable adding multiple videos to the playlist
+ * @author Mitchell Caisse 
+
  *
  */
 
@@ -40,7 +37,7 @@ public class VideoTreeView extends JPanel implements PlayableView {
 	private static final Logger log = LoggerFactory.getLogger(RPIPlayer.class);
 	
 	/** The tree containing the list of videos */
-	private JTree videoTree;
+	protected JTree videoTree;
 
 	/** The tree model for the tree view */
 	private DefaultTreeModel treeModel;
@@ -57,18 +54,22 @@ public class VideoTreeView extends JPanel implements PlayableView {
 		videoTree = new JTree(treeModel);
 
 		// if an active client exists, update the tree view with its videos
-
 		updateTree(RPIPlayer.getInstance().getRootDirectory());
-
+		videoTree.addMouseListener(new TreeViewMouseListener());
+		
+		addComponents();
+	}
+	
+	/** Adds the components to the view and sets the view layout
+	 * 
+	 */
+	
+	protected void addComponents() {
 		JScrollPane scrollPane = new JScrollPane();
-
 		//scrollPane.getViewport().setLayout(new BorderLayout());
 		scrollPane.getViewport().add(videoTree);
-
 		setLayout(new BorderLayout());
 		add(scrollPane, BorderLayout.CENTER);
-
-		videoTree.addMouseListener(new TreeViewMouseListener());
 	}
 
 	/** Creates the tree view from the given rootDirectory
