@@ -3,6 +3,7 @@ package com.ricex.rpi.server;
 import com.ricex.rpi.common.PlayerModule;
 import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.common.message.StatusMessage;
+import com.ricex.rpi.server.client.RemoteClient;
 
 /**
  *  The player module for RPIClient
@@ -29,9 +30,6 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	
 	/** The string representing the currently playing file */
 	private String filePlaying;	
-	
-	/** The handler for communicating with the server */
-	private ServerHandler handler;
 
 	/** Monitor used to stop this thread while it is waiting for movie to complete */
 	private Object stopMonitor;
@@ -39,10 +37,12 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	/** Monitor used to lock on status changes */
 	private Object statusLock;
 	
+	private Server<RemoteClient> remoteServer;
+	
 	/** Creates a new ThreadedPlayerModule with the given ServerHandler */
 	
-	public ThreadedPlayerModule(ServerHandler handler) {
-		this.handler = handler;
+	public ThreadedPlayerModule(Server<RemoteClient> remoteServer) {
+		this.remoteServer = remoteServer;
 		filePlaying = "";
 		
 		player = new Player();
@@ -60,7 +60,7 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 			System.out.println("We have Updated the status to: " + newStatus);
 		}
 		System.out.println("About to send message to server");
-		handler.sendMessage(new StatusMessage(status));		
+		remoteServer.sendToAllClients(new StatusMessage(status));		
 	}	
 
 	/**

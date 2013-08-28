@@ -47,8 +47,8 @@ public class Player implements Runnable {
 		movieProcess = null;
 		listeners = new ArrayList<PlayerCompleteListener>();
 		
-		baseDir = RPIClientProperties.getInstance().getBaseDir();
-		baseCommand = RPIClientProperties.getInstance().getBaseCommand();
+		baseDir = RPIServerProperties.getInstance().getBaseDir();
+		baseCommand = RPIServerProperties.getInstance().getBaseCommand();
 		
 	}
 	

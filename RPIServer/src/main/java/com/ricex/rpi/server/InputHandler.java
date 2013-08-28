@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import com.ricex.rpi.server.client.RemoteClient;
+
 /** Thread for handling the user input for the client
  * 
  * @author Mitchell Caisse
@@ -11,9 +13,9 @@ import java.io.InputStreamReader;
  */
 
 public class InputHandler implements Runnable {
-
-	/** The rpi client */
-	private RPIClient client;
+	
+	/** The remote server */
+	private Server<RemoteClient> remoteServer;
 	
 	/** Indicates whether or not the input handler should continue running */
 	private boolean running;
@@ -23,7 +25,7 @@ public class InputHandler implements Runnable {
 	 */
 	
 	public InputHandler() {
-		client = new RPIClient();
+		remoteServer = RemoteServer.getInstance();
 		running = true;
 	}
 	
@@ -31,7 +33,7 @@ public class InputHandler implements Runnable {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
 		System.out.println("Welcome to RPIClient!");
-		System.out.println("Usage: c - connect to server \n\t d - disconnect from server \n\t q - quit \n\t s - status");
+		System.out.println("Usage: start - start server to server \n\t stop - stop server \n\t quit - quit \n\t status - status");
 		System.out.print("RPI>");
 		
 		while (running) {
@@ -66,29 +68,22 @@ public class InputHandler implements Runnable {
 	 */
 	
 	private void processInput(String line) throws IOException {
-		if (line.toLowerCase().startsWith("c")) {
-			if (!client.isConnected()) {
-				//only re-connect to the server if we are not already connected
-				client.connectToServer();
-			}
+		if (line.toLowerCase().startsWith("start")) {
+			remoteServer.startServer();
 		}
-		else if (line.startsWith("d")) {
-			client.disconnectFromServer();
-			System.out.println("We have disconnected from the server");
+		else if (line.startsWith("stop")) {
+			remoteServer.stopServer();
 		}
-		else if (line.startsWith("q")) {
-			if (client.isConnected()) {
-				client.disconnectFromServer();
-			}
+		else if (line.startsWith("quit")) {
 			running = false;
 		}
-		else if (line.startsWith("s")) {
-			if (client.isConnected()) {
-				System.out.println("We are currently connected to server: " + client.getServerInfo());
+		else if (line.startsWith("status")) {
+			if (remoteServer.isRunning()) {
+				System.out.println("Server is running");
 			}
 			else {
-				System.out.println("We are not currently connected to any server");
-			}	
+				System.out.println("Server is not running");
+			}
 		}
 	}
 }

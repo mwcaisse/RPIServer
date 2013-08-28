@@ -7,25 +7,7 @@ import java.util.Properties;
 
 public abstract class RPIProperties {
 
-	/** key for the RPI Port */
-	private static final String RPI_PORT = "rpi_port";
-	
-	/** Key for the remote port */
-	private static final String REMOTE_PORT = "remote_port";
-	
-	/** Key for the server IP */
-	private static final String SERVER_IP = "server_ip";
-	
-	/** Keys for the client and sever base dirs */
-	private static final String CLIENT_BASE_DIR = "client_base_dir";
-	private static final String SERVER_BASE_DIR = "server_base_dir";
-	
-	/** Key for the base command */
-	private static final String BASE_COMMAND = "base_command";
-	
-	/** Key for maximum number of server connections */
-	private static final String SERVER_MAX_CONNECTIONS = "server_max_connections";	
-	
+	/** The properties store */
 	private Properties properties;
 	
 	/** Protected constructor for the singleton instance
