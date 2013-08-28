@@ -1,4 +1,4 @@
-package com.ricex.rpi.client;
+package com.ricex.rpi.server;
 
 /** Listeners to the player thread, to be notified when the player has finished player
  * 

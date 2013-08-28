@@ -1,4 +1,4 @@
-package com.ricex.rpi.client;
+package com.ricex.rpi.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;

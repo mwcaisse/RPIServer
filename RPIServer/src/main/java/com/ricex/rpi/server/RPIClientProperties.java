@@ -1,4 +1,4 @@
-package com.ricex.rpi.client;
+package com.ricex.rpi.server;
 
 import com.ricex.rpi.common.RPIProperties;
 
