@@ -19,10 +19,8 @@ public interface PlayerModule {
 	
 	public void stop();
 	
-	/** Pauses / resumes the currently playing movie
-	 * 
-	 */
-	
+	/** Pauses / resumes the currently playing movie */
+		
 	public void pause();
 	
 	/** Move to the next chapter */
@@ -64,4 +62,18 @@ public interface PlayerModule {
 	/** Returns a string representing the file that is being played */
 	
 	public String getFilePlaying();
+	
+	/** Adds the given PlayerModuleStatusListener
+	 * 
+	 * @param listener The listener to add
+	 */
+	
+	public void addPlayerModuleStatusListener(PlayerModuleStatusListener listener);
+	
+	/** Removes the given PlayerModuleStatusListener
+	 * 
+	 * @param listener The listener to remove
+	 */
+	
+	public void removePlayerModuleStatusListener(PlayerModuleStatusListener listener);
 }

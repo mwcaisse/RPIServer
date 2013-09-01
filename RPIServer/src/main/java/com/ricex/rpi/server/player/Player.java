@@ -1,10 +1,12 @@
-package com.ricex.rpi.server;
+package com.ricex.rpi.server.player;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.ricex.rpi.server.RPIServerProperties;
 
 /** The wrapper around the thread that will run the omx process
  * 

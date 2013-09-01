@@ -1,9 +1,11 @@
-package com.ricex.rpi.server;
+package com.ricex.rpi.server.player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.ricex.rpi.common.PlayerModule;
+import com.ricex.rpi.common.PlayerModuleStatusListener;
 import com.ricex.rpi.common.RPIStatus;
-import com.ricex.rpi.common.message.update.StatusMessage;
-import com.ricex.rpi.server.client.RemoteClient;
 
 /**
  *  The player module for RPIClient
@@ -37,6 +39,9 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	/** Monitor used to lock on status changes */
 	private Object statusLock;
 	
+	/** List of status listeners */
+	private List<PlayerModuleStatusListener> listeners;
+	
 	
 	/** Creates a new ThreadedPlayerModule with the given ServerHandler */
 	
@@ -48,18 +53,16 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 		
 		stopMonitor = new Object();
 		statusLock = new Object();
+		
+		listeners = new ArrayList<PlayerModuleStatusListener>();
 	}
 	
 	protected void updateStatus(RPIStatus newStatus) {
 		System.out.println("UpdateStatus called: " + newStatus);
 		synchronized(statusLock) {
 			status = newStatus;
-			//send the updated status to the server
-			System.out.println("We have Updated the status to: " + newStatus);
 		}
-		System.out.println("About to send message to server");
-		//TODO: replace this
-		//remoteServer.sendToAllClients(new StatusMessage(status));		
+		notifyListenersOfStatus(newStatus);
 	}	
 
 	/**
@@ -224,5 +227,32 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 		synchronized(stopMonitor) {
 			stopMonitor.notify(); //notify the thread that it is safe to resume
 		}
+	}
+	
+	/** Notifies the listeners that the status of the Player has changed
+	 * 
+	 * @param status The new status
+	 */
+	
+	public void notifyListenersOfStatus(RPIStatus status) {
+		for (PlayerModuleStatusListener listener : listeners) {
+			listener.statusUpdated(this,  status);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	
+	public void addPlayerModuleStatusListener(PlayerModuleStatusListener listener) {
+		listeners.add(listener);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	
+	public void removePlayerModuleStatusListener(PlayerModuleStatusListener listener) {
+		listeners.remove(listener);
 	}
 }

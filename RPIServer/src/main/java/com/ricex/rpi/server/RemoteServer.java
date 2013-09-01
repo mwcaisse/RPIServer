@@ -3,7 +3,6 @@ package com.ricex.rpi.server;
 import java.net.Socket;
 
 import com.ricex.rpi.server.client.RemoteClient;
-import com.ricex.rpi.server.client.handler.RPIPlayerService;
 
 /** The server that listens for connections from RPIRemotes, and creates threads to respond to them
  * 
@@ -14,10 +13,7 @@ import com.ricex.rpi.server.client.handler.RPIPlayerService;
 public class RemoteServer extends Server<RemoteClient> {
 
 	/** The singleton instance of this server */
-	private static RemoteServer _instance;
-	
-	/** The RPIPlayer service that interfaces between the server and RPI player */
-	protected RPIPlayerService playerService;
+	private static RemoteServer _instance;	
 
 	/** Returns the singleton instance */
 
@@ -28,11 +24,14 @@ public class RemoteServer extends Server<RemoteClient> {
 		return _instance;
 	}
 
+	/** The RPI Player for this server */
+	protected RPIPlayer player;
+	
 	/** Creates a new Remote Server */
 
 	private RemoteServer() {
 		super(RPIServerProperties.getInstance().getServerPort(), RPIServerProperties.getInstance().getMaxConnections(), "RemoteServer");
-		playerService = new RPIPlayerService(this);
+		player = new RPIPlayer(this);
 	}
 
 	/**
@@ -41,7 +40,7 @@ public class RemoteServer extends Server<RemoteClient> {
 
 	@Override
 	protected RemoteClient createClient(Socket socket) {
-		RemoteClient client = new RemoteClient(this, getNextId(), socket);
+		RemoteClient client = new RemoteClient(this, getNextId(), socket, player);
 		return client;
 	}
 }
