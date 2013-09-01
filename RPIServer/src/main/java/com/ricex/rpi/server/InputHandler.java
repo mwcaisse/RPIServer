@@ -14,6 +14,16 @@ import com.ricex.rpi.server.client.RemoteClient;
 
 public class InputHandler implements Runnable {
 	
+	/** The main method that launches the InputHandler for the server
+	 * 
+	 * @param args Command line argument
+	 */
+	
+	public static void main(String[] args) {
+		InputHandler handler = new InputHandler();
+		handler.run();
+	}
+	
 	/** The remote server */
 	private Server<RemoteClient> remoteServer;
 	
