@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.common.message.NameMessage;
 import com.ricex.rpi.common.message.QuitMessage;
-import com.ricex.rpi.common.message.StatusMessage;
+import com.ricex.rpi.common.message.update.StatusMessage;
 import com.ricex.rpi.remote.client.RPIClient;
 
 public class RPIClientHandler extends ClientHandler<RPIClient> {

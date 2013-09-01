@@ -2,7 +2,7 @@ package com.ricex.rpi.server;
 
 import com.ricex.rpi.common.PlayerModule;
 import com.ricex.rpi.common.RPIStatus;
-import com.ricex.rpi.common.message.StatusMessage;
+import com.ricex.rpi.common.message.update.StatusMessage;
 import com.ricex.rpi.server.client.RemoteClient;
 
 /**

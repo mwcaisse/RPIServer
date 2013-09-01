@@ -4,7 +4,7 @@ import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.common.message.MovieMessage;
 import com.ricex.rpi.common.message.MovieMessage.Command;
 import com.ricex.rpi.common.message.QuitMessage;
-import com.ricex.rpi.common.message.remote.RemoteMovieMessage;
+import com.ricex.rpi.common.message.request.RemoteMovieMessage;
 import com.ricex.rpi.remote.RPIServer;
 import com.ricex.rpi.remote.client.RPIClient;
 import com.ricex.rpi.remote.client.RemoteClient;

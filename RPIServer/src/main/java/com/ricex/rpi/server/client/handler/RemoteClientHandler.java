@@ -1,8 +1,10 @@
 package com.ricex.rpi.server.client.handler;
 
 import com.ricex.rpi.common.message.IMessage;
+import com.ricex.rpi.common.message.MovieMessage;
 import com.ricex.rpi.common.message.QuitMessage;
-import com.ricex.rpi.common.message.remote.RemoteMovieMessage;
+import com.ricex.rpi.common.message.request.DirectoryRequestMessage;
+import com.ricex.rpi.common.message.request.StatusRequestMessage;
 import com.ricex.rpi.server.client.RemoteClient;
 
 
@@ -19,20 +21,19 @@ public class RemoteClientHandler extends ClientHandler<RemoteClient> {
 	 */
 
 	protected void processMessage(IMessage message) {
-		if (message instanceof RemoteMovieMessage) {
-			RemoteMovieMessage rmsg = (RemoteMovieMessage) message;
-			/* TODO: Re-implement this
-			if (rmsg.getCommand() == Command.PLAY) {
-				//lets play the given playlist
-				client.getPlayerModule().play(rmsg.getPlaylist());
-			}
-			else {
-				//if it is not play message, create a new movie message and sent it to the client
-				MovieMessage msg = new MovieMessage(rmsg.getCommand());
-				client.sendMessage(msg);
-			}
-			*/
+		
+		//listen to messages receive from the Remotes..
+		
+		if (message instanceof MovieMessage) {
+			MovieMessage movieMessage = (MovieMessage) message;
+			//handle the movie message
 		}
+		else if (message instanceof StatusRequestMessage) {
+			
+		}
+		else if (message instanceof DirectoryRequestMessage) {
+			
+		}	
 		else if (message instanceof QuitMessage) {
 			client.setConnected(false); // client is disconnecting
 		}
