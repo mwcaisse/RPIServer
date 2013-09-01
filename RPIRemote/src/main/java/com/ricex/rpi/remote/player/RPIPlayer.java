@@ -6,7 +6,6 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -20,7 +19,6 @@ import com.ricex.rpi.common.video.MovieParser;
 import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.remote.RPIServer;
 import com.ricex.rpi.remote.RPIServerProperties;
-import com.ricex.rpi.remote.RemoteServer;
 import com.ricex.rpi.remote.client.RPIClient;
 import com.ricex.rpi.remote.imbdparser.IMDBMovieParser;
 import com.ricex.rpi.remote.imbdparser.IMDBVideoTreeView;
@@ -166,7 +164,6 @@ public class RPIPlayer extends JFrame {
 			@Override
 			public void run() {
 				RPIServer.getInstance().shutdown();
-				RemoteServer.getInstance().shutdown();
 			}
 
 		});
@@ -191,7 +188,6 @@ public class RPIPlayer extends JFrame {
 
 	private void startServers() {
 		clientServerThread = new Thread(RPIServer.getInstance());
-		remoteServerThread = new Thread(RemoteServer.getInstance());
 
 		clientServerThread.setDaemon(true);
 		remoteServerThread.setDaemon(true);

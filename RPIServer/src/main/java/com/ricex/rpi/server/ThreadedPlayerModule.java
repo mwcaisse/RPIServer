@@ -37,12 +37,10 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 	/** Monitor used to lock on status changes */
 	private Object statusLock;
 	
-	//private Server<RemoteClient> remoteServer;
 	
 	/** Creates a new ThreadedPlayerModule with the given ServerHandler */
 	
-	public ThreadedPlayerModule(Server<RemoteClient> remoteServer) {
-		//this.remoteServer = remoteServer;
+	public ThreadedPlayerModule() {
 		filePlaying = "";
 		
 		player = new Player();
@@ -60,7 +58,8 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 			System.out.println("We have Updated the status to: " + newStatus);
 		}
 		System.out.println("About to send message to server");
-		remoteServer.sendToAllClients(new StatusMessage(status));		
+		//TODO: replace this
+		//remoteServer.sendToAllClients(new StatusMessage(status));		
 	}	
 
 	/**
