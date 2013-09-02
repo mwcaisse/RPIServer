@@ -10,7 +10,7 @@ import javax.swing.JPopupMenu;
 
 import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Video;
-import com.ricex.rpi.remote.player.RPIPlayer;
+import com.ricex.rpi.remote.player.RPIRemote;
 
 /**
  * Popup menu create in VideoTreeView when multiple videos are selected
@@ -49,7 +49,7 @@ public class MultipleVideoPopupMenu extends JPopupMenu implements ActionListener
 	protected void initializePlayItem() {
 		playItems = new JMenuItem("Play videos");
 		playItems.addActionListener(this);
-		if (RPIPlayer.getInstance().activeClientExists()) {
+		if (RPIRemote.getInstance().activePlayerExists()) {
 			add(playItems);
 		}
 	}	
@@ -59,7 +59,7 @@ public class MultipleVideoPopupMenu extends JPopupMenu implements ActionListener
 	 */
 	
 	protected void initializePlaylistItem() {
-		List<Playlist> playlists = RPIPlayer.getInstance().getPlaylistController().getAllPlaylists();
+		List<Playlist> playlists = RPIRemote.getInstance().getPlaylistController().getAllPlaylists();
 		// if playlists exist
 		if (!playlists.isEmpty()) {
 			addItemsToPlaylist = new JMenu("Add to playlist");

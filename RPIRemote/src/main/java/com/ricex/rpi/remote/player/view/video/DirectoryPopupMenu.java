@@ -10,7 +10,7 @@ import javax.swing.JPopupMenu;
 
 import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Video;
-import com.ricex.rpi.remote.player.RPIPlayer;
+import com.ricex.rpi.remote.player.RPIRemote;
 
 
 public class DirectoryPopupMenu extends JPopupMenu implements ActionListener {
@@ -33,7 +33,7 @@ public class DirectoryPopupMenu extends JPopupMenu implements ActionListener {
 		if (video.isDirectory()) {
 			List<Video> subVideos = getSubVideos(video);
 			//add the play list menu items
-			List<Playlist> playlists = RPIPlayer.getInstance().getPlaylistController().getAllPlaylists();
+			List<Playlist> playlists = RPIRemote.getInstance().getPlaylistController().getAllPlaylists();
 			//if there are playlists and subVideos, add the menu items
 			if (!playlists.isEmpty() && !subVideos.isEmpty()) {
 				itemAddToPlaylist = new JMenu("Add all to playlist");		

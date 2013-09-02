@@ -10,7 +10,7 @@ import javax.swing.JPopupMenu;
 
 import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Video;
-import com.ricex.rpi.remote.player.RPIPlayer;
+import com.ricex.rpi.remote.player.RPIRemote;
 
 /** Popup menu created on a Video in the Tree view
  * 
@@ -41,12 +41,12 @@ public class VideoPopupMenu extends JPopupMenu implements ActionListener {
 		itemPlay.addActionListener(this);
 		
 		//add the play item if active client exists
-		if (RPIPlayer.getInstance().activeClientExists()) {
+		if (RPIRemote.getInstance().activePlayerExists()) {
 			add(itemPlay);
 		}		
 
 		//add the play list menu items
-		List<Playlist> playlists = RPIPlayer.getInstance().getPlaylistController().getAllPlaylists();		
+		List<Playlist> playlists = RPIRemote.getInstance().getPlaylistController().getAllPlaylists();		
 		if (!playlists.isEmpty()) {
 			itemAddToPlaylist = new JMenu("Add to playlist");		
 			for (Playlist playlist : playlists) {
@@ -61,6 +61,6 @@ public class VideoPopupMenu extends JPopupMenu implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Playlist playlist = new Playlist();
 		playlist.addItem(video);
-		RPIPlayer.getInstance().getActiveClient().getPlayerModule().play(playlist);
+		RPIRemote.getInstance().getActivePlayer().getPlayerModule().play(playlist);
 	}
 }

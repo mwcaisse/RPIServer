@@ -14,7 +14,7 @@ import javax.swing.event.ListSelectionListener;
 import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.remote.player.PlaylistController;
-import com.ricex.rpi.remote.player.RPIPlayer;
+import com.ricex.rpi.remote.player.RPIRemote;
 import com.ricex.rpi.remote.player.view.PlayableView;
 
 /** View for displaying the list of playlists as well as creating new playlists
@@ -55,7 +55,7 @@ public class PlaylistView extends JPanel implements ListSelectionListener, Playa
 		createPlaylistView = new CreatePlaylistView(this);
 
 		//if there is an active client, populate its playlists
-		populatePlaylistModel(RPIPlayer.getInstance().getPlaylistController());
+		populatePlaylistModel(RPIRemote.getInstance().getPlaylistController());
 
 
 		//create the playlists
@@ -126,7 +126,7 @@ public class PlaylistView extends JPanel implements ListSelectionListener, Playa
 	/** Refrehes the list of playlists */
 	
 	public void refreshPlaylists() {		
-		populatePlaylistModel(RPIPlayer.getInstance().getPlaylistController());
+		populatePlaylistModel(RPIRemote.getInstance().getPlaylistController());
 	}
 	
 	/** Refreshes the list of playlists and the list of videos

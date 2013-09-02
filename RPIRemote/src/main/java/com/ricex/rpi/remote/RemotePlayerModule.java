@@ -8,9 +8,6 @@ import com.ricex.rpi.common.RPIStatus;
 import com.ricex.rpi.common.message.IMessage;
 import com.ricex.rpi.common.message.MovieMessage;
 import com.ricex.rpi.common.video.Video;
-import com.ricex.rpi.remote.client.ClientChangeEvent;
-import com.ricex.rpi.remote.client.ClientChangeListener;
-import com.ricex.rpi.remote.client.RPIClient;
 
 /** Interface between the GUI and the Server
  * 
@@ -18,22 +15,21 @@ import com.ricex.rpi.remote.client.RPIClient;
  *
  */
 
-public class ClientPlayerModule implements ClientChangeListener<RPIClient> {
+public class RemotePlayerModule implements RPIPlayerChangeListener {
 
-	private static final Logger log = LoggerFactory.getLogger(ClientPlayerModule.class);
+	private static final Logger log = LoggerFactory.getLogger(RemotePlayerModule.class);
 	
 	/** The client to send the commands to */
-	private RPIClient client;
+	private RPIPlayer player;
 
 	/** The currently playing playlist */
 	private Playlist playlist;
 
 	/** Creates a new ServerPlayerModule with the given client */
-	public ClientPlayerModule(RPIClient client) {
-		this.client = client;
-		client.addChangeListener(this);
+	public RemotePlayerModule(RPIPlayer player) {
+		this.player = player;
+		player.addChangeListener(this);
 	}
-
 
 
 	/** Starts playing the given play list
@@ -130,17 +126,18 @@ public class ClientPlayerModule implements ClientChangeListener<RPIClient> {
 	 */
 
 	private void sendMessage(IMessage message) {
-		if (!client.sendMessage(message)) {
+		/* TODO: re-implement this, player module will not use player to send the message anymore
+		 * if (!player.sendMessage(message)) {
 			log.error("Client playermodule failed to send message");
-		}
+		}*/
 	}
 
 
 
 	@Override
-	public void clientChanged(ClientChangeEvent<RPIClient> changeEvent) {
-		if (changeEvent.getEventType() == ClientChangeEvent.EVENT_STATUS_CHANGE) {
-			if (client.getStatus().getStatus() == RPIStatus.IDLE) {
+	public void playerChanged(RPIPlayerChangeEvent changeEvent) {
+		if (changeEvent.getEventType() == RPIPlayerChangeEvent.EVENT_STATUS_CHANGE) {
+			if (player.getStatus().getStatus() == RPIStatus.IDLE) {
 				playVideo(playlist.getNextItem());
 			}
 		}

@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory;
 
 import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Video;
-import com.ricex.rpi.remote.client.RPIClient;
-import com.ricex.rpi.remote.player.RPIPlayer;
+import com.ricex.rpi.remote.RPIPlayer;
+import com.ricex.rpi.remote.player.RPIRemote;
 import com.ricex.rpi.remote.player.view.PlayableView;
 
 /** View that will display a tree of the videos for the active clietn
@@ -43,7 +43,7 @@ public class VideoTreeView extends JPanel implements PlayableView {
 	private DefaultTreeModel treeModel;
 
 	/** The currently active client */
-	protected RPIClient activeClient;
+	protected RPIPlayer activePlayer;
 
 	/** Creates a new instance of VideoTreeView
 	 * 
@@ -54,7 +54,7 @@ public class VideoTreeView extends JPanel implements PlayableView {
 		videoTree = new JTree(treeModel);
 
 		// if an active client exists, update the tree view with its videos
-		updateTree(RPIPlayer.getInstance().getRootDirectory());
+		updateTree(RPIRemote.getInstance().getRootDirectory());
 		videoTree.addMouseListener(new TreeViewMouseListener());
 		
 		addComponents();

@@ -15,16 +15,14 @@ import javax.swing.event.ChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ricex.rpi.common.imbdparser.IMDBMovieParser;
 import com.ricex.rpi.common.video.MovieParser;
 import com.ricex.rpi.common.video.Video;
-import com.ricex.rpi.remote.RPIServer;
+import com.ricex.rpi.remote.RPIPlayer;
 import com.ricex.rpi.remote.RPIServerProperties;
-import com.ricex.rpi.remote.client.RPIClient;
-import com.ricex.rpi.remote.imbdparser.IMDBMovieParser;
-import com.ricex.rpi.remote.imbdparser.IMDBVideoTreeView;
 import com.ricex.rpi.remote.player.view.ControllerPane;
-import com.ricex.rpi.remote.player.view.client.ClientTableView;
 import com.ricex.rpi.remote.player.view.playlist.PlaylistView;
+import com.ricex.rpi.remote.player.view.video.IMDBVideoTreeView;
 import com.ricex.rpi.remote.player.view.video.VideoTreeView;
 
 /** The RPIPlayer
@@ -36,16 +34,18 @@ import com.ricex.rpi.remote.player.view.video.VideoTreeView;
  *
  */
 
-public class RPIPlayer extends JFrame {
+public class RPIRemote extends JFrame {
 
-	private static final Logger log = LoggerFactory.getLogger(RPIPlayer.class);
+	private static final long serialVersionUID = 1L;
+
+	private static final Logger log = LoggerFactory.getLogger(RPIRemote.class);
 	
 	/** The singleton instance of this class */
-	private static RPIPlayer _instance;
+	private static RPIRemote _instance;
 
-	public static RPIPlayer getInstance() {
+	public static RPIRemote getInstance() {
 		if (_instance == null) {
-			_instance = new RPIPlayer();
+			_instance = new RPIRemote();
 		}
 		return _instance;
 	}
@@ -56,8 +56,7 @@ public class RPIPlayer extends JFrame {
 	 */
 
 	public static void main(String[] args) {
-		RPIPlayer player = getInstance();
-		player.startServers();
+		RPIRemote player = getInstance();
 		player.initializeWindow();
 		player.setVisible(true);
 	}
@@ -71,17 +70,8 @@ public class RPIPlayer extends JFrame {
 	/** The view for displaying playlists */
 	private PlaylistView playlistView;
 
-	/** The list view for displaying the connected clients */
-	private ClientTableView clientTableView;
-
 	/** The view for the controller pane */
 	private ControllerPane controllerPane;
-
-	/** The thread for the RPI client server to run in */
-	private Thread clientServerThread;
-
-	/** The thread for the remote server to run in */
-	private Thread remoteServerThread;
 
 	/** The playlist controller for this player */
 	private PlaylistController playlistController;
@@ -89,8 +79,8 @@ public class RPIPlayer extends JFrame {
 	/** The root directory / parsed videos of this player */
 	private Video rootDirectory;
 
-	/** The currently active client */
-	private RPIClient activeClient;
+	/** The player the we are connected to */
+	private RPIPlayer activePlayer;
 	
 	/** The parser to use when parsing the mo vies */
 	private MovieParser movieParser;
@@ -98,7 +88,7 @@ public class RPIPlayer extends JFrame {
 	/** Creates a new instance of RPI Player
 	 */
 
-	private RPIPlayer() {
+	private RPIRemote() {
 		playlistController = new PlaylistController();
 		movieParser = new IMDBMovieParser();		
 		parseRootDirectory();
@@ -125,12 +115,10 @@ public class RPIPlayer extends JFrame {
 
 		videoTreeView = new IMDBVideoTreeView();
 		playlistView = new PlaylistView();
-		clientTableView = new ClientTableView();
 		controllerPane = new ControllerPane();
 
 		tabbedPane.add("Videos", videoTreeView);
 		tabbedPane.add("Playlists", playlistView);
-		tabbedPane.add("Clients", clientTableView);
 
 		tabbedPane.addChangeListener(new ChangeListener() {
 
@@ -163,7 +151,7 @@ public class RPIPlayer extends JFrame {
 
 			@Override
 			public void run() {
-				RPIServer.getInstance().shutdown();
+				//TODO: add server disconection hook
 			}
 
 		});
@@ -173,27 +161,13 @@ public class RPIPlayer extends JFrame {
 	 * 
 	 */
 
-	private void setSystemLookAndFeel() {
+	protected void setSystemLookAndFeel() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}
 		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
 			log.error("Could not set the look and feel to system look and feel", e);
 		}
-	}
-
-	/** Start the servers
-	 * 
-	 */
-
-	private void startServers() {
-		clientServerThread = new Thread(RPIServer.getInstance());
-
-		clientServerThread.setDaemon(true);
-		remoteServerThread.setDaemon(true);
-
-		clientServerThread.start();
-		remoteServerThread.start();
 	}
 	
 	/** Parses the root directory for videos
@@ -236,23 +210,23 @@ public class RPIPlayer extends JFrame {
 	 * @return True if there is an active client, false if not
 	 */
 	
-	public boolean activeClientExists() {
-		return activeClient != null;
+	public boolean activePlayerExists() {
+		return activePlayer != null;
 	}
 
 	
 	/**
-	 * @return the activeClient
+	 * @return the activePlayer
 	 */
-	public RPIClient getActiveClient() {
-		return activeClient;
+	public RPIPlayer getActivePlayer() {
+		return activePlayer;
 	}
 
 	
 	/**
-	 * @param activeClient the activeClient to set
+	 * @param activePlayer the activePlayer to set
 	 */
-	public void setActiveClient(RPIClient activeClient) {
-		this.activeClient = activeClient;
+	public void setActivePlayer(RPIPlayer activePlayer) {
+		this.activePlayer = activePlayer;
 	}
 }

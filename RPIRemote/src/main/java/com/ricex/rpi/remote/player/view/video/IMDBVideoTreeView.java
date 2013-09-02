@@ -1,4 +1,4 @@
-package com.ricex.rpi.remote.imbdparser;
+package com.ricex.rpi.remote.player.view.video;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -14,8 +14,8 @@ import javax.swing.event.TreeSelectionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ricex.rpi.common.imbdparser.IMDBMovie;
 import com.ricex.rpi.common.video.Video;
-import com.ricex.rpi.remote.player.view.video.VideoTreeView;
 
 /**  IMDB Video Tree View
  * 

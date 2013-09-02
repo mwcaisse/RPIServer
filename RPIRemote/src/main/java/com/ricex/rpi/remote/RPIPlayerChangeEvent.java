@@ -1,7 +1,8 @@
-package com.ricex.rpi.remote.client;
+package com.ricex.rpi.remote;
 
 
-public class ClientChangeEvent<T extends Client> {
+
+public class RPIPlayerChangeEvent {
 
 	/** The name of the client changed */
 	public static final int EVENT_NAME_CHANGE = 159;
@@ -10,19 +11,19 @@ public class ClientChangeEvent<T extends Client> {
 	public static final int EVENT_STATUS_CHANGE = EVENT_NAME_CHANGE + 1;
 
 	/** The client that triggered the change event */
-	private final T source;
+	private final RPIPlayer source;
 
 	/** The type of event that occured */
 	private final int eventType;
 
-	public ClientChangeEvent(T source, int eventType) {
+	public RPIPlayerChangeEvent(RPIPlayer source, int eventType) {
 		this.source = source;
 		this.eventType = eventType;
 	}
 
 	/** Returns the source that triggered the change event */
 
-	public T getSource() {
+	public RPIPlayer getSource() {
 		return source;
 	}
 

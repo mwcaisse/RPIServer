@@ -4,19 +4,14 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import com.ricex.rpi.common.Playlist;
-import com.ricex.rpi.remote.RPIServer;
-import com.ricex.rpi.remote.client.ClientConnectionListener;
-import com.ricex.rpi.remote.client.RPIClient;
-import com.ricex.rpi.remote.player.RPIPlayer;
+import com.ricex.rpi.remote.player.RPIRemote;
 
 /** Class for displaying the controls to create a playlist
  * 
@@ -96,7 +91,7 @@ public class CreatePlaylistView extends JPanel implements ActionListener {
 		if (!name.trim().isEmpty()) { 
 			//if the user entered a name, add the playlist
 			Playlist playlist = new Playlist(name);
-			RPIPlayer.getInstance().getPlaylistController().addPlaylist(playlist);
+			RPIRemote.getInstance().getPlaylistController().addPlaylist(playlist);
 			txtPlaylistName.setText("");
 			playlistView.refreshPlaylists();
 		}
