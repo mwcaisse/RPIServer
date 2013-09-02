@@ -20,9 +20,6 @@ import com.ricex.rpi.common.RPIStatus;
  */
 
 public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListener {
-
-	/** The singleton instance of this class */
-	private static ThreadedPlayerModule _instance;
 	
 	/** The player that this class uses */
 	private Player player;
@@ -158,13 +155,6 @@ public class ThreadedPlayerModule implements PlayerModule, PlayerCompleteListene
 			player.writeToProcess("-");
 		}
 	}
-	
-	/** Constants for the key codes for seeking */
-	
-	private final int KEY_LEFT = 0x5b44;
-	private final int KEY_RIGHT = 0x5b43;
-	private final int KEY_UP = 0x5b41;
-	private final int KEY_DOWN = 0x5b42;
 	
 	/** Seek forward 30 seconds */
 	

@@ -178,11 +178,6 @@ public abstract class Server<T extends Client> implements Runnable {
 
 	}
 
-	private synchronized void disconnectClients() {
-		for (T client : connectedClients.values()) {
-			client.close();
-		}
-	}
 
 	/**
 	 * Returns the list of connected clients

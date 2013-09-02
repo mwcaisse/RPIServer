@@ -38,10 +38,8 @@ public class Player implements Runnable {
 	private final String baseDir;
 	
 	/** The base of the command for running the movies */
-	private final String baseCommand;
-	
-	/** The movie file that is being played */
-	private String movieFile;
+	private final String baseCommand;	
+
 	
 	/** Create the player module. */	
 	public  Player() {
@@ -57,7 +55,6 @@ public class Player implements Runnable {
 	/** Sets the command of the player */
 	
 	public void setMovieFile(String movieFile) {
-		this.movieFile = movieFile;
 		this.command = baseCommand + " " + baseDir + movieFile.trim();
 	}
 	
