@@ -1,4 +1,5 @@
-package com.ricex.rpi.remote;
+package com.ricex.rpi.remote.player;
+
 
 
 /** Listens for changes from the RPI server

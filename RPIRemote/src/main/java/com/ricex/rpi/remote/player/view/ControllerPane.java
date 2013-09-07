@@ -11,10 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ricex.rpi.common.RPIStatus;
-import com.ricex.rpi.remote.RPIPlayerChangeEvent;
-import com.ricex.rpi.remote.RPIPlayerChangeListener;
-import com.ricex.rpi.remote.RemotePlayerModule;
+import com.ricex.rpi.remote.player.RPIPlayerChangeEvent;
+import com.ricex.rpi.remote.player.RPIPlayerChangeListener;
 import com.ricex.rpi.remote.player.RPIRemote;
+import com.ricex.rpi.remote.player.RemotePlayerModule;
 
 /** The pane for the window controls
  * 

@@ -32,7 +32,7 @@ public class RPIServerProperties extends RPIProperties {
 	 *  Calls the super constructor to load the properties in "./rpi_server.conf"
 	 */
 	private RPIServerProperties() {
-		super("./rpi_server.conf");
+		super("./rpi_remote.conf");
 	}
 	
 	/** Returns the port for the RaspberryPi clients to connect to */	

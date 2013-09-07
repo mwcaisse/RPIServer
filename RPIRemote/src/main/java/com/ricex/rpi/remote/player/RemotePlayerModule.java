@@ -1,4 +1,4 @@
-package com.ricex.rpi.remote;
+package com.ricex.rpi.remote.player;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

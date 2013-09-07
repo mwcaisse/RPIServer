@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ricex.rpi.common.Playlist;
 import com.ricex.rpi.common.video.Video;
-import com.ricex.rpi.remote.RPIPlayer;
+import com.ricex.rpi.remote.player.RPIPlayer;
 import com.ricex.rpi.remote.player.RPIRemote;
 import com.ricex.rpi.remote.player.view.PlayableView;
 

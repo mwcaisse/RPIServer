@@ -43,8 +43,8 @@ public class RPIPlayer implements PlayerModuleStatusListener {
 	/** Creates a new RPI Player with the given player module and movie parser
 	 * 
 	 * @param server The server that is running
-	 * @param playerModule The player module to use with this player
-	 * @param movieParser The movie parser to use with this player
+	 * @param playerModule The player module to use with this player	 * 
+	 * @param movieParser The movie parser to use with this player 
 	 */
 	
 	public RPIPlayer(Server<?> server, PlayerModule playerModule, MovieParser movieParser) {

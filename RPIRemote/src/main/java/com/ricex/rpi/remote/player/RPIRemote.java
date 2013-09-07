@@ -15,11 +15,7 @@ import javax.swing.event.ChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ricex.rpi.common.imbdparser.IMDBMovieParser;
-import com.ricex.rpi.common.video.MovieParser;
 import com.ricex.rpi.common.video.Video;
-import com.ricex.rpi.remote.RPIPlayer;
-import com.ricex.rpi.remote.RPIServerProperties;
 import com.ricex.rpi.remote.player.view.ControllerPane;
 import com.ricex.rpi.remote.player.view.playlist.PlaylistView;
 import com.ricex.rpi.remote.player.view.video.IMDBVideoTreeView;
@@ -80,18 +76,13 @@ public class RPIRemote extends JFrame {
 	private Video rootDirectory;
 
 	/** The player the we are connected to */
-	private RPIPlayer activePlayer;
-	
-	/** The parser to use when parsing the mo vies */
-	private MovieParser movieParser;
+	private RPIPlayer activePlayer;	
 
 	/** Creates a new instance of RPI Player
 	 */
 
 	private RPIRemote() {
 		playlistController = new PlaylistController();
-		movieParser = new IMDBMovieParser();		
-		parseRootDirectory();
 	}
 
 	/** Initialize the RPIPlayer window
@@ -170,13 +161,6 @@ public class RPIRemote extends JFrame {
 		}
 	}
 	
-	/** Parses the root directory for videos
-	 * 
-	 */
-	
-	public void parseRootDirectory() {
-		rootDirectory = movieParser.parseVideos(RPIServerProperties.getInstance().getBaseDirectory());
-	}
 
 	/** Returns the currently displayed view
 	 * 

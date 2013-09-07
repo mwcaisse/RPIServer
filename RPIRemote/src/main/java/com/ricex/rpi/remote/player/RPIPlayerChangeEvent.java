@@ -1,4 +1,4 @@
-package com.ricex.rpi.remote;
+package com.ricex.rpi.remote.player;
 
 
 

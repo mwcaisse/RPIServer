@@ -1,8 +1,9 @@
-package com.ricex.rpi.remote;
+package com.ricex.rpi.remote.player;
 
 import java.util.List;
 
 import com.ricex.rpi.common.RPIStatus;
+import com.ricex.rpi.common.video.Video;
 
 /** Represents the RPIPlayer on the server
  * 
@@ -19,11 +20,16 @@ public class RPIPlayer {
 	/** The name of this RPI player */
 	protected String name;
 	
+	/** The directory listing of this player */
+	protected Video directoryListing;
+	
 	/** The player module for this RPI player */
 	protected RemotePlayerModule playerModule;
 	
 	/** The list of change listeners for this player */
-	protected List<RPIPlayerChangeListener> changeListeners;
+	private List<RPIPlayerChangeListener> changeListeners;
+	
+	
 	
 	/** Creates a new RPI Player 
 	 * 
@@ -71,6 +77,29 @@ public class RPIPlayer {
 		notifyChangeListeners(changeEvent);
 	}
 	
+	
+	
+	/**
+	 * @return the directoryListing
+	 */
+	public Video getDirectoryListing() {
+		return directoryListing;
+	}
+
+	/**
+	 * @param directoryListing the directoryListing to set
+	 */
+	public void setDirectoryListing(Video directoryListing) {
+		this.directoryListing = directoryListing;
+	}
+
+	/**
+	 * @param playerModule the playerModule to set
+	 */
+	public void setPlayerModule(RemotePlayerModule playerModule) {
+		this.playerModule = playerModule;
+	}
+
 	/** To string, returns the name of the player
 	 * 
 	 */
