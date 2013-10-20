@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import com.ricex.rpi.common.video.Video;
 import com.ricex.rpi.remote.player.view.ControllerPane;
 import com.ricex.rpi.remote.player.view.playlist.PlaylistView;
-import com.ricex.rpi.remote.player.view.video.IMDBVideoTreeView;
 import com.ricex.rpi.remote.player.view.video.VideoTreeView;
 
 /** The RPIPlayer
@@ -104,7 +103,7 @@ public class RPIRemote extends JFrame {
 		contentPane.setLayout(layout);
 		tabbedPane = new JTabbedPane();
 
-		videoTreeView = new IMDBVideoTreeView();
+		videoTreeView = new VideoTreeView();
 		playlistView = new PlaylistView();
 		controllerPane = new ControllerPane();
 
