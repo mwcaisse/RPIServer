@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ricex.rpi.common.video.Video;
+import com.ricex.rpi.remote.RPIClient;
 import com.ricex.rpi.remote.player.view.ControllerPane;
 import com.ricex.rpi.remote.player.view.playlist.PlaylistView;
 import com.ricex.rpi.remote.player.view.video.VideoTreeView;
@@ -23,7 +24,7 @@ import com.ricex.rpi.remote.player.view.video.VideoTreeView;
 /** The RPIPlayer
  * 
  *   Launches the PlayerUI as well as the servers
- *   Uses Java Swing for th UI
+ *   Uses Java Swing for the UI
  * 
  * @author Mitchell Caisse
  *
@@ -76,12 +77,16 @@ public class RPIRemote extends JFrame {
 
 	/** The player the we are connected to */
 	private RPIPlayer activePlayer;	
+	
+	/** The client that handles the connection to the server */
+	private RPIClient client;
 
 	/** Creates a new instance of RPI Player
 	 */
 
 	private RPIRemote() {
 		playlistController = new PlaylistController();
+		client = new RPIClient();
 	}
 
 	/** Initialize the RPIPlayer window
@@ -130,6 +135,15 @@ public class RPIRemote extends JFrame {
 		setContentPane(contentPane);
 
 		addShutdownHook();
+	}
+	
+	/** Connects to the server 
+	 * 
+	 * @return True if successful false otherwise
+	 */
+	
+	protected boolean connectToServer() {
+		return true;
 	}
 
 	/** Adds the shutdown hook for the program, that will shutdown both servers

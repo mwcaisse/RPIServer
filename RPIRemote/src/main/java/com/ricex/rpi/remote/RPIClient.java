@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ricex.rpi.remote.player.RPIPlayer;
+import com.ricex.rpi.remote.player.RPIRemote;
 
 /** Manages the connection to the server
  * 
@@ -14,6 +18,8 @@ import com.ricex.rpi.remote.player.RPIPlayer;
 
 public class RPIClient {
 
+	/** The logger */
+	private static final Logger log = LoggerFactory.getLogger(RPIRemote.class);
 	
 	/** The address of the server */
 	protected String serverAddress;
@@ -39,6 +45,8 @@ public class RPIClient {
 	
 	public RPIClient() {
 		connected = false;
+		serverAddress = RPIRemoteProperties.getInstance().getServerAddress();
+		serverPort = RPIRemoteProperties.getInstance().getRemotePort();
 	}
 
 	
@@ -52,20 +60,23 @@ public class RPIClient {
 			//only connect to the server if we are not currently connected
 			socket = new Socket(serverAddress, serverPort);
 			ServerHandler handler = new ServerHandler(socket);
+			startServerHandler();
 			return handler.getPlayer();			
 		}
 		return null;
 	}
 	
-	/** Creates a starts a server handler on the given socket
-	 * 
-	 * @param socket The socket to create the server handler for
+	/** Starts the server handler for this client, needs to be called after connected to server, and only once.
 	 */
 	
-	private void startServerHandler(Socket socket) throws IOException {
-		 handler = new ServerHandler(socket);
-		 serverHandlerThread = new Thread(handler);
-		 serverHandlerThread.start();
+	private void startServerHandler() {
+		if (serverHandlerThread == null && handler != null) {
+			serverHandlerThread = new Thread(handler);
+			serverHandlerThread.start();
+		}
+		else {
+			log.error("Unable to start the server handler, it is either already running or we are not connected to the server");
+		}
 	}
 	
 	/** Disconnects from the server
