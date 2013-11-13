@@ -15,9 +15,6 @@ public class BasicMovieParser implements MovieParser {
 
 	private static final String[] acceptedFileNames = { "avi", "mkv", "mp4" };
 
-	/** The base folder for the movies */
-	private String baseFolder;
-
 	/** The file representing the root dir */
 	private File baseFile;
 
@@ -27,23 +24,12 @@ public class BasicMovieParser implements MovieParser {
 	public BasicMovieParser() {
 		movieFilter = new MovieFileFilter();
 	}
-	
-	/** Sets the base folder to the given base folder
-	 * 
-	 * @param baseFolder
-	 */
-	
-	private void setBaseFolder(String baseFolder) {
-		this.baseFolder = baseFolder;
-		baseFile = new File(baseFolder);
-	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 
 	public Video parseVideos(String baseFolder) {
-		setBaseFolder(baseFolder);
 		File rootDir = baseFile;
 
 		if (rootDir.isDirectory()) {

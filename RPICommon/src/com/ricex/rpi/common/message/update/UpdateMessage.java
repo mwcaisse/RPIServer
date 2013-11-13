@@ -10,4 +10,9 @@ import com.ricex.rpi.common.message.IMessage;
 
 public abstract class UpdateMessage implements IMessage {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5377112941579801714L;
+
 }

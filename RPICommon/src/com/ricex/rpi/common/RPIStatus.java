@@ -4,6 +4,12 @@ import java.io.Serializable;
 
 public class RPIStatus implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 	/** Status constants */
 	public static final int PLAYING = 11587;
 	public static final int PAUSED = PLAYING + 1;

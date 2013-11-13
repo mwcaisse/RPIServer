@@ -15,6 +15,11 @@ import com.ricex.rpi.common.video.Video;
 
 public class Playlist implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/** The name of the play list */
 	private final String name;
 

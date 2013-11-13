@@ -9,6 +9,11 @@ package com.ricex.rpi.common.message;
 
 public class QuitMessage implements IMessage {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public QuitMessage() {
 		
 	}

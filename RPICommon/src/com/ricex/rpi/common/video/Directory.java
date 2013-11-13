@@ -5,6 +5,11 @@ import java.util.List;
 
 public class Directory implements Video {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7152244055944820407L;
+
 	/** Name of this directory */
 	private final String name;
 	

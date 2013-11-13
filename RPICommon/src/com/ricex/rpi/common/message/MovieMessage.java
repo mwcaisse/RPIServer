@@ -11,6 +11,11 @@ import com.ricex.rpi.common.PlayerModule;
  */
 public class MovieMessage implements IMessage {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public enum Command {
 		PLAY,  //START PLAYING
 		PAUSE, //PAUSE/RESUME PLAYING

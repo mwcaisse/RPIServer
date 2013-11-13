@@ -10,6 +10,11 @@ import com.ricex.rpi.common.video.Video;
 
 public class DirectoryMessage extends UpdateMessage {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -597409087011630141L;
+	
 	/** The root directory of the specified client */
 	private Video rootDirectory;
 	

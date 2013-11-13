@@ -152,11 +152,12 @@ public abstract class Server<T extends Client> implements Runnable {
 		}
 		/*
 		 *  disconnectClients();
-		 *	log.info("Server {} has stopped", name);
 		 */
+		log.info("Server {} has stopped", name);
+
 	}
 
-	/** Returns the next avaiable id */
+	/** Returns the next available id */
 
 	protected long getNextId() {
 		return prevId++; // return the id, and then increment counter

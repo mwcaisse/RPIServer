@@ -13,6 +13,11 @@ import java.util.List;
 
 public class Movie implements Video {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6838538945044284584L;
+
 	/** The name of this movie  */
 	protected String name;
 	

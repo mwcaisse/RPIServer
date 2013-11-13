@@ -8,4 +8,9 @@ package com.ricex.rpi.common.message.request;
 
 public class DirectoryRequestMessage extends RequestMessage {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6999924077346713559L;
+
 }

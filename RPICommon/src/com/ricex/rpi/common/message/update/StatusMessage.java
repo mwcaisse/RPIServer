@@ -10,6 +10,11 @@ import com.ricex.rpi.common.RPIStatus;
 
 public class StatusMessage extends UpdateMessage {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8029739762341331328L;
+	
 	/** The status of the RPI player */
 	private RPIStatus status;	
 
