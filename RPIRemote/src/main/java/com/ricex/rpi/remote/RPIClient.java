@@ -46,7 +46,7 @@ public class RPIClient {
 	public RPIClient() {
 		connected = false;
 		serverAddress = RPIRemoteProperties.getInstance().getServerAddress();
-		serverPort = RPIRemoteProperties.getInstance().getRemotePort();
+		serverPort = RPIRemoteProperties.getInstance().getServerPort();
 	}
 
 	

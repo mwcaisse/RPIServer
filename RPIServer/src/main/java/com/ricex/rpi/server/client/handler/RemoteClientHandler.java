@@ -10,6 +10,12 @@ import com.ricex.rpi.common.message.update.StatusMessage;
 import com.ricex.rpi.server.RPIPlayer;
 import com.ricex.rpi.server.client.RemoteClient;
 
+/** Remote Client handler, responsible for handling requests sent to the server by a Remote Client
+ * 	as well as sending messages to the client
+ * 
+ * @author Mitchell Caisse
+ *
+ */
 
 public class RemoteClientHandler extends ClientHandler<RemoteClient> {
 	

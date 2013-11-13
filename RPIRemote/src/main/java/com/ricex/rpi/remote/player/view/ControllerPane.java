@@ -16,7 +16,8 @@ import com.ricex.rpi.remote.player.RPIPlayerChangeListener;
 import com.ricex.rpi.remote.player.RPIRemote;
 import com.ricex.rpi.remote.player.RemotePlayerModule;
 
-/** The pane for the window controls
+/** The pane that displays server information as well as controls for interfacing
+ * 	with the server.
  * 
  * @author Mitchell Caisse
  *

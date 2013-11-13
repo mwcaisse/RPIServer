@@ -31,7 +31,7 @@ public abstract class RPIProperties {
 	 * @param key The key of the property to retreive
 	 * @return
 	 */
-	public String getProperty(String key) {
+	protected String getProperty(String key) {
 		return properties.getProperty(key);
 	}	
 	
@@ -42,7 +42,25 @@ public abstract class RPIProperties {
 	 * @return
 	 */
 	
-	public String getProperty(String key, String defaultValue) {
+	protected String getProperty(String key, String defaultValue) {
 		return properties.getProperty(key, defaultValue);
+	}
+	
+	/** Sets the property with the specified key to the specified value
+	 * 
+	 * @param key The key of the property
+	 * @param value The new value of the property
+	 */
+	
+	protected void setProperty(String key, String value) {
+		properties.setProperty(key, value);
+	}
+	
+	/** Save the given properties to file
+	 * TODO: implemented
+	 */
+	
+	public void saveProperties() {
+		
 	}
 }
